@@ -50,18 +50,18 @@
  * color scheme, typography, and general geometry (e.g., border-radius).
  */
 :root {
-  /* New Color Scheme */
-  --primary: #621717; /* Base primary color (e.g., for branding, main actions) */
-  --primary-light: #8a2c2c; /* Lighter shade of primary color (+30% lightness) */
-  --primary-lighter: #b34747; /* Even lighter shade of primary color (+50% lightness) */
-  --primary-dark: #450f0f; /* Darker shade of primary color (-30% lightness) */
-  --primary-darker: #2e0a0a; /* Even darker shade of primary color (-50% lightness) */
+  /* Wolf • Midnight • Moon palette */
+  --primary: #2e4a7f; /* Moonlit midnight blue (brand, main actions) */
+  --primary-light: #3e63b2; /* Lighter moonlit blue */
+  --primary-lighter: #6e8edc; /* Soft lunar glow */
+  --primary-dark: #1c2f4f; /* Deeper midnight */
+  --primary-darker: #101c30; /* Near-night indigo */
 
-  --secondary: #b84e1f; /* Base secondary color (e.g., for accents, secondary actions) */
-  --secondary-light: #e06b2d; /* Lighter shade of secondary color (+20% lightness) */
-  --secondary-lighter: #ff8c4d; /* Even lighter shade of secondary color (+40% lightness) */
-  --secondary-dark: #8a3a16; /* Darker shade of secondary color (-20% lightness) */
-  --secondary-darker: #5c260f; /* Even darker shade of secondary color (-40% lightness) */
+  --secondary: #9aa4b2; /* Wolf silver (accents, secondary actions) */
+  --secondary-light: #b4bdc9; /* Lighter wolf silver */
+  --secondary-lighter: #d7dce4; /* Pale moon silver */
+  --secondary-dark: #6f7784; /* Dark steel gray */
+  --secondary-darker: #505763; /* Charcoal steel */
 
   --foreground: #ffffff; /* Default text/icon color on dark backgrounds */
   --foreground-muted: #f0f0f0; /* Muted text/icon color for less emphasis */
@@ -753,25 +753,21 @@ html {
 @keyframes colorChange {
   0% {
     background-color: hsla(
-      0,
-      64%,
-      24%,
+      219, 
+      47%, 
+      34%,
       0.5
     ); /* Initial state: primary color at 50% opacity */
   }
   80% {
-    background-color: hsla(
-      0,
-      64%,
-      24%,
-      1
-    ); /* Intermediate state: primary color at 100% opacity */
+    background-color: #2e4a7f; /* Intermediate state: primary color at 100% opacity */
+
   }
   100% {
     background-color: hsla(
-      0,
-      64%,
-      24%,
+      219, 
+      47%, 
+      34%,
       0.5
     ); /* Final state: primary color at 50% opacity (loops back) */
   }

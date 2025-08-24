@@ -16,7 +16,7 @@
  */
 import React, { useEffect, useState } from "react";
 
-import { PrimaryLogo } from "src/assets";
+import PrimaryLogo from "src/assets/Primary.png";
 import { SupportedWallets } from "@eveworld/types";
 import LoadingAnimation from "src/components/creative/LoadingAnimation";
 import { Button } from "src/components/ui/Button";
@@ -47,10 +47,7 @@ interface ConnectWalletProps {
  * - **User Experience**: Provides visual feedback (LoadingAnimation) and clear calls to action for wallet interaction.
  */
 const ConnectWallet = React.memo(
-  ({
-    handleConnect,
-    availableWallets,
-  }: ConnectWalletProps): JSX.Element => {
+  ({ handleConnect, availableWallets }: ConnectWalletProps): JSX.Element => {
     const [isFrontierWallet, setIsFrontierWallet] = useState<boolean>(false);
 
     useEffect(() => {
@@ -82,11 +79,16 @@ const ConnectWallet = React.memo(
             }
           >
             <div className="flex items-center justify-center h-full w-full p-4">
-              <PrimaryLogo />
+              <img
+                src={PrimaryLogo}
+                alt="Algorithmic Warfare Logo"
+                className="max-h-full max-w-full object-contain"
+                draggable={false}
+              />
             </div>{" "}
             <div className="absolute flex items-center justify-center w-full  -bottom-4">
               <div className="mx-auto uppercase bg-black text-primary border-2 border-primary p-2 flex items-center justify-center text-lg font-bold">
-                Algorithmic Warfare
+                WOLF
               </div>
             </div>
           </div>{" "}
@@ -104,18 +106,6 @@ const ConnectWallet = React.memo(
               Connect with MetaMask
             </Button>
           ) : null}
-
-          <Button
-            variant="primary-link"
-            className="mx-auto"
-            onClick={() =>
-              window.open(
-                "https://symplectic.link/Algorithmic+Warfare%2C+Survival+in+Deprotocolized+Space"
-              )
-            }
-          >
-            Whitepaper
-          </Button>
         </div>
       </div>
     );

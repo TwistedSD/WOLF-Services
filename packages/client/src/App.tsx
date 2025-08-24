@@ -9,6 +9,7 @@ import ConnectWallet from "@/components/wallet/ConnectWallet";
 import { MudProvider } from "./providers/mud";
 
 import { Toaster } from "@/components/ui/Sonner";
+import SmartAssemblySelector from "@/components/assemblies/SmartAssemblySelector";
 
 const App = () => {
   const {
@@ -32,6 +33,7 @@ const App = () => {
   return (
     <React.Fragment>
       <MudProvider>
+        <SmartAssemblySelector />
         <Outlet />
       </MudProvider>
       <Toaster />

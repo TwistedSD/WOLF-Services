@@ -18,23 +18,26 @@
     "clean": "rimraf packages/*/node_modules && rimraf packages/*/dist && rimraf packages/*/build && rimraf packages/*/coverage && rimraf node_modules"
   },
   "dependencies": {
-    "@eveworld/utils": "0.0.10-patch-v2",
-    "@latticexyz/dev-tools": "^2.2.21"
+    "@eveworld/contexts": "^0.0.9",
+    "@eveworld/ui-components": "^0.0.12",
+    "@eveworld/utils": "0.0.12",
+    "@latticexyz/dev-tools": "^2.2.22"
   },
   "devDependencies": {
-    "@latticexyz/cli": "2.2.9",
-    "@latticexyz/explorer": "2.2.9",
-    "@types/debug": "4.1.7",
-    "@types/prettier": "2.7.2",
-    "@typescript-eslint/eslint-plugin": "5.46.1",
-    "@typescript-eslint/parser": "5.46.1",
-    "eslint": "9.28.0",
-    "mprocs": "^0.7.1",
+    "@latticexyz/cli": "2.2.22",
+    "@latticexyz/explorer": "2.2.22",
+    "@types/debug": "4.1.12",
+    "@types/prettier": "3.0.0",
+    "@typescript-eslint/eslint-plugin": "8.40.0",
+    "@typescript-eslint/parser": "8.40.0",
+    "eslint": "9.34.0",
+    "mprocs": "^0.7.3",
     "rimraf": "^6.0.1",
-    "typescript": "5.1.6"
+    "typescript": "5.9.2"
   },
   "engines": {
     "node": "18.x",
     "pnpm": ">=9.15.0"
-  }
+  },
+  "packageManager": "pnpm@9.15.9+sha512.68046141893c66fad01c079231128e9afb89ef87e2691d69e4d40eee228988295fd4682181bae55b58418c3a253bde65a505ec7c5f9403ece5cc3cd37dcf2531"
 }
