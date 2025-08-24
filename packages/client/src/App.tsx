@@ -9,7 +9,7 @@ import ConnectWallet from "@/components/wallet/ConnectWallet";
 import { MudProvider } from "./providers/mud";
 
 import { Toaster } from "@/components/ui/Sonner";
-import SmartAssemblySelector from "@/components/assemblies/SmartAssemblySelector";
+import SmartAssembliesAccordion from "@/components/assemblies/SmartAssembliesAccordion";
 
 const App = () => {
   const {
@@ -33,8 +33,10 @@ const App = () => {
   return (
     <React.Fragment>
       <MudProvider>
-        <SmartAssemblySelector />
-        <Outlet />
+        <div className="mx-auto w-full max-w-[75%] px-4">
+          <SmartAssembliesAccordion />
+          <Outlet />
+        </div>
       </MudProvider>
       <Toaster />
     </React.Fragment>

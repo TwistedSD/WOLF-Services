@@ -83,6 +83,8 @@
   --radius: 0.625rem; /* Base border-radius for UI elements */
 }
 
+/* (reverted) removed custom hover text color utility */
+
 /*
  * THEME INLINE (@theme inline)
  *
@@ -341,7 +343,7 @@
   ); /* Text color for accordion triggers */
   --accordion-trigger-bg: transparent; /* Background for accordion triggers */
   --accordion-trigger-hover-color: var(
-    --primary-light
+    --primary-lighter
   ); /* Text color on hover */
   --accordion-trigger-hover-bg: var(
     --background-light
@@ -695,8 +697,8 @@
  * General styles applied to the root HTML elements and common utility classes.
  */
 #react-root {
-  /* Applies Tailwind CSS classes for full screen height and semi-transparent background */
-  @apply h-screen bg-background/50;
+  /* Full screen height; transparent background */
+  @apply h-screen;
 }
 
 #react-root > div:first-child {
@@ -789,8 +791,8 @@ html {
  */
 @layer base {
   body {
-    /* Applies Tailwind CSS classes for font family, background color, text color, and minimum height */
-    @apply font-sometype bg-background text-foreground min-h-screen;
+    /* Applies Tailwind CSS classes for font family, background color (light), text color, and minimum height */
+    @apply font-sometype bg-background-light text-foreground min-h-screen;
     /* If you have a background image, apply it here */
     /* Example: background-image: url('/path/to/image.jpg'); */
     /* The other bg-* properties can be applied with Tailwind classes if preferred */

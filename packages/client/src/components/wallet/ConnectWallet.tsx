@@ -66,7 +66,7 @@ const ConnectWallet = React.memo(
       availableWallets.includes(SupportedWallets.ONEKEY);
 
     return (
-      <div className="h-screen max-w-[560px] mx-auto relative flex flex-col items-center justify-center">
+      <div className="h-screen mx-auto w-full max-w-[75%] relative flex flex-col items-center justify-center">
         <LoadingAnimation position="diagonal">
           <div
             className="border-2 border-primary h-[280px] w-[280px] relative cursor-pointer"
@@ -81,13 +81,13 @@ const ConnectWallet = React.memo(
             <div className="flex items-center justify-center h-full w-full p-4">
               <img
                 src={PrimaryLogo}
-                alt="Algorithmic Warfare Logo"
+                alt="WOLF Logo"
                 className="max-h-full max-w-full object-contain"
                 draggable={false}
               />
             </div>{" "}
             <div className="absolute flex items-center justify-center w-full  -bottom-4">
-              <div className="mx-auto uppercase bg-black text-primary border-2 border-primary p-2 flex items-center justify-center text-lg font-bold">
+              <div className="mx-auto uppercase bg-background-light text-primary border-2 border-primary p-2 flex items-center justify-center text-lg font-bold">
                 WOLF
               </div>
             </div>

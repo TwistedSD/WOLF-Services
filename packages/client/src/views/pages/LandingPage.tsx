@@ -1,5 +1,4 @@
 import React from "react";
-import TaskDashboard from "../layouts/TaskDashboardLayout";
 import { SyncLoader } from "@/components/mud/SyncLoader";
 import { useMud } from "@/providers/mud";
 
@@ -8,7 +7,8 @@ const LandingPage: React.FC = () => {
     sync: { syncedAtLeastOnce },
   } = useMud();
 
-  return <>{!syncedAtLeastOnce ? <SyncLoader /> : <TaskDashboard />}</>;
+  // Do not render the Task Dashboard after sync; leave the area empty.
+  return <>{!syncedAtLeastOnce ? <SyncLoader /> : null}</>;
 };
 
 export default React.memo(LandingPage);
