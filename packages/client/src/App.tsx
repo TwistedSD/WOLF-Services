@@ -10,6 +10,7 @@ import { MudProvider } from "./providers/mud";
 
 import { Toaster } from "@/components/ui/Sonner";
 import SmartAssembliesAccordion from "@/components/assemblies/SmartAssembliesAccordion";
+import SiteHeader from "@/components/layout/SiteHeader";
 
 const App = () => {
   const {
@@ -33,10 +34,7 @@ const App = () => {
   return (
     <React.Fragment>
       <MudProvider>
-        <div className="mx-auto w-full max-w-[75%] px-4">
-          <SmartAssembliesAccordion />
-          <Outlet />
-        </div>
+        <AppContent />
       </MudProvider>
       <Toaster />
     </React.Fragment>
@@ -44,3 +42,16 @@ const App = () => {
 };
 
 export default App;
+
+// Split out content area
+const AppContent: React.FC = () => {
+  return (
+    <div className="mx-auto w-full max-w-[75%] px-4">
+      {/* Global site header */}
+      <SiteHeader />
+
+      {/* Routed content area */}
+      <Outlet />
+    </div>
+  );
+};

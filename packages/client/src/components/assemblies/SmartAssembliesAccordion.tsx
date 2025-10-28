@@ -271,54 +271,6 @@ const SmartAssembliesAccordion: React.FC = () => {
 
   return (
     <div className="p-3 space-y-4" aria-live="polite">
-      {/* Header panel with logo + WOLF Services on left; Smart Character + Logout on right */}
-      <div
-        className="border rounded p-4 mb-6 flex items-center justify-between gap-4 min-h-[72px]"
-        style={{ borderColor: "var(--primary)" }}
-      >
-        <div className="flex items-center gap-3">
-          <img
-            src={PrimaryLogo}
-            alt="Logo"
-            className="h-12 w-12 object-contain"
-          />
-          <div className="text-base font-semibold">WOLF Services</div>
-        </div>
-        <div className="flex items-center gap-3">
-          {scLoading && (
-            <div className="text-sm text-muted-foreground">
-              Loading Smart Character…
-            </div>
-          )}
-          {!scLoading && scError && (
-            <div className="text-sm text-red-500">
-              Failed to load Smart Character: {scError}
-            </div>
-          )}
-          {!scLoading && !scError && characterId && (
-            <div className="text-sm">
-              Smart Character:{" "}
-              <span className="font-semibold">
-                {characterName ?? `#${characterId}`}
-              </span>
-            </div>
-          )}
-          {isConnected ? (
-            <Button
-              size="sm"
-              variant="ghost"
-              className="bg-primary-light border-2 border-primary text-white rounded-md"
-              onClick={() => handleDisconnect()}
-              title="Log out"
-              aria-label="Log out"
-            >
-              <LogOut className="size-4" />
-              <span className="sr-only">Log out</span>
-            </Button>
-          ) : null}
-        </div>
-      </div>
-
       {/* Assemblies accordions */}
       {!hasSelected && (
         <>

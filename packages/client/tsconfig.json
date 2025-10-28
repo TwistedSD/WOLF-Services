@@ -23,7 +23,7 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "jsxImportSource": "react",
-    "types": ["node", "vite-plugin-svgr/client", "vite/client"],
+  "types": ["node", "vite-plugin-svgr/client", "vite/client"],
 
     /* Linting */
     "strict": true,
