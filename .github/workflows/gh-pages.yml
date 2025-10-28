@@ -2,7 +2,7 @@ name: Deploy Client to GitHub Pages
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
   workflow_dispatch: {}
 
 permissions:
@@ -24,11 +24,11 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
 
-      - name: Setup Node.js
+      - name: Setup Node.js (Node 20)
         uses: actions/setup-node@v4
         with:
-          node-version: 18
-          cache: 'pnpm'
+          node-version: 20
+          cache: "pnpm"
 
       - name: Install dependencies (no frozen lockfile)
         run: pnpm install --no-frozen-lockfile
@@ -36,9 +36,9 @@ jobs:
       - name: Build client with repo base path
         working-directory: packages/client
         env:
-          VITE_CHAIN_ID: '695569'
-          VITE_GATEWAY_HTTP: 'https://blockchain-gateway-stillness.live.tech.evefrontier.com'
-          VITE_GATEWAY_WS: 'wss://blockchain-gateway-stillness.live.tech.evefrontier.com'
+          VITE_CHAIN_ID: "695569"
+          VITE_GATEWAY_HTTP: "https://blockchain-gateway-stillness.live.tech.evefrontier.com"
+          VITE_GATEWAY_WS: "wss://blockchain-gateway-stillness.live.tech.evefrontier.com"
           VITE_WORLD_API_HTTP: ${{ vars.VITE_WORLD_API_HTTP }}
           VITE_KILLMAILS_BASE: ${{ vars.VITE_KILLMAILS_BASE }}
           VITE_SMARTASSEMBLY_ID: ${{ vars.VITE_SMARTASSEMBLY_ID }}
