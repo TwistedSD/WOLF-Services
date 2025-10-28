@@ -30,8 +30,8 @@ jobs:
           node-version: 18
           cache: 'pnpm'
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Install dependencies (no frozen lockfile)
+        run: pnpm install --no-frozen-lockfile
 
       - name: Build client with repo base path
         working-directory: packages/client
