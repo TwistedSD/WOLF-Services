@@ -35,7 +35,8 @@ import {
   getContract,
   Chain,
 } from "viem";
-import ITaskSystemAbi from "contracts/out/ITaskSystem.sol/ITaskSystem.abi.json";
+// Use a local, versioned copy of the ABI to avoid relying on git-ignored contract build outputs during CI builds.
+import ITaskSystemAbi from "@/data/mud/abi/ITaskSystem.abi.json";
 import {
   contracts_mudWorldConfig,
   eveworld_mudWorldConfig,
