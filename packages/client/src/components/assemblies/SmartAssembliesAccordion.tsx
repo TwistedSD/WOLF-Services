@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useCallback, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
-import { useConnection } from "src/providers/wallet";
+import { useConnection } from "@/providers/wallet";
 import { useSmartCharacter } from "@/hooks/useSmartCharacter";
 import {
   useSmartAssemblies,
@@ -15,7 +15,7 @@ import {
 import { Button } from "@/components/ui/Button";
 import { Eye, LogOut } from "lucide-react";
 import SmartAssemblyInfoPanel from "./SmartAssemblyInfoPanel";
-import PrimaryLogo from "src/assets/Primary.png";
+import PrimaryLogo from "@/assets/primary.png";
 // Helper to format durations as d/h/m for compact display
 function formatDurationDHm(seconds?: number): string {
   if (seconds == null || !Number.isFinite(seconds)) return "-";

@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/Button";
 import { useConnection } from "@/providers/wallet";
 import { useSmartCharacter } from "@/hooks/useSmartCharacter";
 import { LogOut } from "lucide-react";
-import PrimaryLogo from "src/assets/Primary.png";
+import PrimaryLogo from "@/assets/primary.png";
 import { useNavigate } from "react-router-dom";
 
 function useConnectedAddress(): string | null {

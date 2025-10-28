@@ -16,10 +16,10 @@
  */
 import React, { useEffect, useState } from "react";
 
-import PrimaryLogo from "src/assets/Primary.png";
+import PrimaryLogo from "@/assets/primary.png";
 import { SupportedWallets } from "@eveworld/types";
-import LoadingAnimation from "src/components/creative/LoadingAnimation";
-import { Button } from "src/components/ui/Button";
+import LoadingAnimation from "@/components/creative/LoadingAnimation";
+import { Button } from "@/components/ui/Button";
 
 /**
  * @summary Props for the ConnectWallet component.
