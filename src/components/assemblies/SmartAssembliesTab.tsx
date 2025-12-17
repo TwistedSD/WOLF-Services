@@ -229,17 +229,17 @@ function formatStorageNumber(num: number): string {
   // EVE Frontier uses very large numbers, typically in the range of 10^20+
   // We'll convert to a sensible unit
   if (num >= 1e18) {
-    return (num / 1e18).toString();
+    return (num / 1e18).toFixed(0);
   } else if (num >= 1e15) {
-    return (num / 1e15).toString();
+    return (num / 1e15).toFixed(0);
   } else if (num >= 1e12) {
-    return (num / 1e12).toString();
+    return (num / 1e12).toFixed(0);
   } else if (num >= 1e9) {
-    return (num / 1e9).toString();
+    return (num / 1e9).toFixed(0);
   } else if (num >= 1e6) {
-    return (num / 1e6).toString();
+    return (num / 1e6).toFixed(0);
   } else if (num >= 1e3) {
-    return (num / 1e3).toString();
+    return (num / 1e3).toFixed(0);
   }
   return num.toFixed(0);
 }
