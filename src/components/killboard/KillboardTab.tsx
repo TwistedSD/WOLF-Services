@@ -224,7 +224,7 @@ const KillboardTabInner: React.FC = () => {
   }, [killmails]);
 
   return (
-    <div className="p-6 border-2 border-primary bg-background">
+    <div className="p-6 border-2 border-primary" style={{ backgroundColor: "var(--background-light)" }}>
       <div className="mb-4">
         <h2 className="text-2xl font-bold mb-4 text-primary">Killboard</h2>
 

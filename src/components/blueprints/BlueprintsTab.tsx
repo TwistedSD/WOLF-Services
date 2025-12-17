@@ -59,8 +59,8 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
   return (
     <div className="flex gap-4 h-[calc(100vh-200px)]">
       {/* Assembly Types List */}
-      <div className="w-64 border-2 overflow-y-auto" style={{ borderColor: "var(--primary)" }}>
-        <div className="px-3 py-2 border-b-2 bg-background" style={{ borderColor: "var(--primary)" }}>
+      <div className="w-64 border-2 overflow-y-auto" style={{ borderColor: "var(--primary)", backgroundColor: "var(--background-light)" }}>
+        <div className="px-3 py-2 border-b-2" style={{ borderColor: "var(--primary)", backgroundColor: "var(--background-lighter)" }}>
           <h3 className="text-sm font-semibold text-foreground">Assembly Types</h3>
         </div>
         {assembliesError ? (
@@ -91,8 +91,8 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
       </div>
 
       {/* Blueprints List */}
-      <div className="w-64 border-2 overflow-y-auto" style={{ borderColor: "var(--primary)" }}>
-        <div className="px-3 py-2 border-b-2 bg-background" style={{ borderColor: "var(--primary)" }}>
+      <div className="w-64 border-2 overflow-y-auto" style={{ borderColor: "var(--primary)", backgroundColor: "var(--background-light)" }}>
+        <div className="px-3 py-2 border-b-2" style={{ borderColor: "var(--primary)", backgroundColor: "var(--background-lighter)" }}>
           <h3 className="text-sm font-semibold text-foreground">Blueprints</h3>
         </div>
         {!selectedAssemblyId ? (
@@ -124,7 +124,7 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
       </div>
 
       {/* Blueprint Details */}
-      <div className="flex-1 border-2 overflow-y-auto" style={{ borderColor: "var(--primary)" }}>
+      <div className="flex-1 border-2 overflow-y-auto" style={{ borderColor: "var(--primary)", backgroundColor: "var(--background-light)" }}>
         {!selectedBlueprintId ? (
           <div className="p-6 text-center text-foreground-muted">
             Select a blueprint to view details
@@ -135,7 +135,7 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
           <div className="p-6 text-center text-foreground-muted">Loading...</div>
         ) : details ? (
           <div>
-            <div className="px-4 py-3 border-b-2 bg-background" style={{ borderColor: "var(--primary)" }}>
+            <div className="px-4 py-3 border-b-2" style={{ borderColor: "var(--primary)", backgroundColor: "var(--background-lighter)" }}>
               <h3 className="text-lg font-semibold text-foreground">
                 {details.products && details.products.length > 0 ? details.products[0].type_name : "Blueprint"}
               </h3>
@@ -147,7 +147,7 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
             {/* Input Materials */}
             {details.materials.length > 0 && (
               <div className="border-b-2" style={{ borderColor: "var(--primary)" }}>
-                <div className="px-3 py-2 bg-background-lighter">
+                <div className="px-3 py-2" style={{ backgroundColor: "var(--background-lighter)" }}>
                   <h4 className="text-xs font-semibold text-foreground-muted uppercase">Input Materials</h4>
                 </div>
                 {details.materials.map((material, idx) => (
@@ -159,7 +159,7 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
             {/* Output Materials */}
             {details.products.length > 0 && (
               <div className="border-b-2" style={{ borderColor: "var(--primary)" }}>
-                <div className="px-3 py-2 bg-background-lighter">
+                <div className="px-3 py-2" style={{ backgroundColor: "var(--background-lighter)" }}>
                   <h4 className="text-xs font-semibold text-foreground-muted uppercase">Output Materials</h4>
                 </div>
                 {details.products.map((material, idx) => (
@@ -170,7 +170,7 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
 
             {/* Base Materials Summary */}
             <div className="border-b-2" style={{ borderColor: "var(--primary)" }}>
-              <div className="px-3 py-2 bg-background-lighter">
+              <div className="px-3 py-2" style={{ backgroundColor: "var(--background-lighter)" }}>
                 <h4 className="text-xs font-semibold text-foreground-muted uppercase">Base Materials Required</h4>
               </div>
               <div className="p-3">
@@ -185,7 +185,7 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
 
             {/* Leftover Materials */}
             <div>
-              <div className="px-3 py-2 bg-background-lighter">
+              <div className="px-3 py-2" style={{ backgroundColor: "var(--background-lighter)" }}>
                 <h4 className="text-xs font-semibold text-foreground-muted uppercase">Leftover Materials</h4>
               </div>
               <div className="p-3 text-sm text-foreground-muted">
