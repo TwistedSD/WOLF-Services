@@ -78,16 +78,34 @@ export function useSmartAssemblies(params?: UseSmartAssembliesParams): UseSmartA
         const fetchOne = async (id: string): Promise<SmartAssembly | null> => {
           try {
             const r = await fetch(`${base}/${id}`, { signal: controller.signal });
-            if (!r.ok) return { id } as SmartAssembly;
+            if (!r.ok) {
+              console.warn(`[useSmartAssemblies] Failed to fetch assembly ${id}: ${r.status}`);
+              return null;
+            }
             const obj = await r.json();
             const s = (obj?.data ?? obj) as SmartAssembly;
-            return s?.id != null ? s : ({ id } as SmartAssembly);
-          } catch {
-            return { id } as SmartAssembly;
+            // Only return if we got actual data, not just an ID
+            if (s?.id != null && (s.name || s.type || s.assemblyType || s.smartAssemblyType)) {
+              return s;
+            }
+            console.warn(`[useSmartAssemblies] Incomplete data for assembly ${id}`);
+            return null;
+          } catch (e) {
+            if (!controller.signal.aborted) {
+              console.warn(`[useSmartAssemblies] Error fetching assembly ${id}:`, e);
+            }
+            return null;
           }
         };
         const results = await Promise.all(explicitIds.map(fetchOne));
-        return results.filter(Boolean) as SmartAssembly[];
+        const validResults = results.filter(Boolean) as SmartAssembly[];
+        // Only return if we got data for all requested IDs
+        if (validResults.length === explicitIds.length) {
+          return validResults;
+        }
+        // If we didn't get all assemblies, return null to try the filtered approach
+        console.warn(`[useSmartAssemblies] Only got ${validResults.length}/${explicitIds.length} assemblies`);
+        return null;
       };
 
       // Try filtered queries with ownerId or ownerAddress

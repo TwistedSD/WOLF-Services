@@ -218,18 +218,44 @@ function getAssemblyStatus(a: SmartAssembly): string {
   return isOnline ? "Online" : "Offline";
 }
 
-function getStorageInfo(storage: SmartAssembly): { current: number; max: number; percentage: number } {
+function formatStorageNumber(num: number): string {
+  if (num === 0) return "0";
+
+  // Convert from wei to a more readable format
+  // EVE Frontier uses very large numbers, typically in the range of 10^20+
+  // We'll convert to a sensible unit
+  if (num >= 1e18) {
+    return (num / 1e18).toFixed(2) + " E";
+  } else if (num >= 1e15) {
+    return (num / 1e15).toFixed(2) + " P";
+  } else if (num >= 1e12) {
+    return (num / 1e12).toFixed(2) + " T";
+  } else if (num >= 1e9) {
+    return (num / 1e9).toFixed(2) + " G";
+  } else if (num >= 1e6) {
+    return (num / 1e6).toFixed(2) + " M";
+  } else if (num >= 1e3) {
+    return (num / 1e3).toFixed(2) + " K";
+  }
+  return num.toFixed(0);
+}
+
+function getStorageInfo(storage: SmartAssembly): { current: string; max: string; percentage: number } {
   const s: any = storage as any;
 
   // API returns capacity in wei (very large numbers), convert to readable units
   const usedCapacity = s?.storage?.mainInventory?.usedCapacity ?? s?.storage?.used ?? s?.currentCapacity ?? 0;
   const capacity = s?.storage?.mainInventory?.capacity ?? s?.storage?.max ?? s?.maxCapacity ?? 1000;
 
-  const current = Number(usedCapacity);
-  const max = Number(capacity);
-  const percentage = max > 0 ? Math.round((current / max) * 100) : 0;
+  const currentNum = Number(usedCapacity);
+  const maxNum = Number(capacity);
+  const percentage = maxNum > 0 ? Math.round((currentNum / maxNum) * 100) : 0;
 
-  return { current, max, percentage };
+  return {
+    current: formatStorageNumber(currentNum),
+    max: formatStorageNumber(maxNum),
+    percentage
+  };
 }
 
 function getStorageItems(storage: SmartAssembly): Array<{ name: string; quantity: number }> {
