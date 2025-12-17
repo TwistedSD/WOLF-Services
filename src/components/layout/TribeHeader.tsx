@@ -35,7 +35,7 @@ export const TribeHeader: React.FC<TribeHeaderProps> = ({
           <img
             src={primaryLogo}
             alt="WOLF Tribe Logo"
-            className="h-16 w-16 object-contain"
+            className="h-24 w-24 object-contain"
           />
           <div>
             <div className="text-2xl font-bold text-primary">WOLF</div>
