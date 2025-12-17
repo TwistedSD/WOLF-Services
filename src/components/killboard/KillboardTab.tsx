@@ -13,12 +13,13 @@ type Killmail = {
 };
 
 const Col = {
-  time: "w-[12rem] whitespace-nowrap truncate",
-  system: "w-[14rem] whitespace-nowrap truncate",
-  player: "w-[16rem] whitespace-nowrap truncate",
+  time: "flex-1 whitespace-nowrap truncate",
+  system: "flex-1 whitespace-nowrap truncate",
+  killer: "flex-1 whitespace-nowrap truncate",
+  victim: "flex-1 whitespace-nowrap truncate",
 };
 const rowClass =
-  "flex gap-3 items-center border border-primary rounded-md px-3 py-2";
+  "flex gap-3 items-center border-2 border-background-light rounded-md px-3 py-2";
 
 interface RecentListProps {
   items: Killmail[];
@@ -27,12 +28,12 @@ interface RecentListProps {
 
 const RecentList = ({ items, getSystemName }: RecentListProps) => {
   return (
-    <div className="flex flex-col gap-px">
-      <div className="flex gap-3 text-sm font-semibold border-b border-primary pb-1 mb-px">
+    <div className="flex flex-col gap-2">
+      <div className="flex gap-3 text-sm font-semibold border-b-2 border-primary pb-2 mb-1 text-foreground">
         <div className={Col.time}>Time</div>
         <div className={Col.system}>System</div>
-        <div className={Col.player}>Killer</div>
-        <div className={Col.player}>Victim</div>
+        <div className={Col.killer}>Killer</div>
+        <div className={Col.victim}>Victim</div>
       </div>
       {items.map((km) => (
         <div key={km.id} className={rowClass}>
@@ -40,16 +41,16 @@ const RecentList = ({ items, getSystemName }: RecentListProps) => {
           <div className={Col.system}>
             {getSystemName(km.solarSystemId) ?? `#${km.solarSystemId}`}
           </div>
-          <div className={Col.player}>
+          <div className={Col.killer}>
             {km.killer?.name ?? km.killer?.id ?? km.killer?.address}
           </div>
-          <div className={Col.player}>
+          <div className={Col.victim}>
             {km.victim?.name ?? km.victim?.id ?? km.victim?.address}
           </div>
         </div>
       ))}
       {items.length === 0 && (
-        <div className="opacity-75 text-sm mt-2">No killmails found.</div>
+        <div className="opacity-75 text-sm mt-2 text-foreground-muted">No killmails found.</div>
       )}
     </div>
   );
@@ -74,7 +75,7 @@ const PlayersList = ({ rows, getSystemName, title }: PlayersListProps) => {
 
   return (
     <div className="flex flex-col gap-2">
-      <h3 className="text-lg font-semibold mb-2">{title}</h3>
+      <h3 className="text-lg font-semibold mb-2 text-primary">{title}</h3>
       {rows.map((r) => {
         const expanded = open === r.playerId;
         const items = expanded
@@ -85,17 +86,17 @@ const PlayersList = ({ rows, getSystemName, title }: PlayersListProps) => {
         return (
           <div
             key={r.playerId}
-            className="border border-primary rounded-md"
+            className="border-2 border-background-light rounded-md"
           >
             <button
-              className="w-full px-3 py-2 flex justify-between items-center"
+              className="w-full px-3 py-2 flex justify-between items-center hover:bg-background-lighter transition-colors text-foreground"
               onClick={() => setOpen(expanded ? null : r.playerId)}
             >
               <div className="font-semibold">{r.name || r.playerId}</div>
-              <div className="text-sm opacity-80">Total: {r.total}</div>
+              <div className="text-sm text-foreground-muted">Total: {r.total}</div>
             </button>
             {expanded && (
-              <div className="px-3 pb-3 flex flex-col gap-px">
+              <div className="px-3 pb-3 flex flex-col gap-2 border-t-2 border-background-light pt-3 mt-2">
                 {items.map((km) => (
                   <div key={km.id} className={rowClass}>
                     <div className={Col.time}>
@@ -115,7 +116,7 @@ const PlayersList = ({ rows, getSystemName, title }: PlayersListProps) => {
         );
       })}
       {rows.length === 0 && (
-        <div className="opacity-75 text-sm">No data found.</div>
+        <div className="opacity-75 text-sm text-foreground-muted">No data found.</div>
       )}
     </div>
   );
@@ -232,8 +233,8 @@ const KillboardTabInner: React.FC = () => {
           <button
             className={
               subTab === "recent"
-                ? "border-2 border-primary px-3 py-1 rounded-md text-white bg-primary"
-                : "border-2 border-background-light px-3 py-1 rounded-md hover:border-primary-lighter"
+                ? "border-2 border-primary px-4 py-2 text-white bg-primary font-semibold transition-colors"
+                : "border-2 border-background-light px-4 py-2 text-foreground hover:border-primary-lighter transition-colors"
             }
             onClick={() => setSubTab("recent")}
           >
@@ -242,8 +243,8 @@ const KillboardTabInner: React.FC = () => {
           <button
             className={
               subTab === "most-kills"
-                ? "border-2 border-primary px-3 py-1 rounded-md text-white bg-primary"
-                : "border-2 border-background-light px-3 py-1 rounded-md hover:border-primary-lighter"
+                ? "border-2 border-primary px-4 py-2 text-white bg-primary font-semibold transition-colors"
+                : "border-2 border-background-light px-4 py-2 text-foreground hover:border-primary-lighter transition-colors"
             }
             onClick={() => setSubTab("most-kills")}
           >
@@ -252,8 +253,8 @@ const KillboardTabInner: React.FC = () => {
           <button
             className={
               subTab === "most-losses"
-                ? "border-2 border-primary px-3 py-1 rounded-md text-white bg-primary"
-                : "border-2 border-background-light px-3 py-1 rounded-md hover:border-primary-lighter"
+                ? "border-2 border-primary px-4 py-2 text-white bg-primary font-semibold transition-colors"
+                : "border-2 border-background-light px-4 py-2 text-foreground hover:border-primary-lighter transition-colors"
             }
             onClick={() => setSubTab("most-losses")}
           >
@@ -264,13 +265,13 @@ const KillboardTabInner: React.FC = () => {
         {/* Refresh & Status */}
         <div className="flex items-center justify-between mb-4">
           <button
-            className="border-2 border-primary px-3 py-1 rounded-md text-white hover:bg-primary-light disabled:opacity-50"
+            className="border-2 border-primary px-4 py-2 text-white bg-primary hover:opacity-90 disabled:opacity-50 transition-opacity font-semibold"
             onClick={() => refresh()}
             disabled={loading}
           >
             {loading ? "Loading..." : "Refresh"}
           </button>
-          <div className="text-xs opacity-80">
+          <div className="text-xs text-foreground-muted">
             {error ? (
               <span className="text-error">Error: {error}</span>
             ) : lastUpdated ? (
