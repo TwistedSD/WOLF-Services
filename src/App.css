@@ -1,0 +1,257 @@
+/*
+ * App.css
+ *
+ * This file defines the global styles, custom properties (CSS variables),
+ * and component-specific theming for the application. It integrates
+ * Tailwind CSS and custom font definitions to establish a consistent
+ * visual language across the UI.
+ */
+
+/*
+ * IMPORTS
+ *
+ * Imports external stylesheets and utility frameworks.
+ */
+@import url("https://fonts.googleapis.com/css2?family=Sometype+Mono:wght@400;600;700&display=swap"); /* Google Font: Sometype Mono */
+@import "tailwindcss"; /* Tailwind CSS framework for utility-first styling */
+
+/*
+ * FONT-FACE DEFINITIONS
+ *
+ * Defines custom fonts used in the application, ensuring they are loaded
+ * and available for use via CSS `font-family` properties.
+ */
+@font-face {
+  font-family: "Disket";
+  font-style: normal;
+  font-weight: 500;
+  src: local(""),
+    url("/src/assets/fonts/disket-mono-regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Disket";
+  font-style: normal;
+  font-weight: 700;
+  src: local(""),
+    url("/src/assets/fonts/disket-mono-bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Favorit";
+  font-style: normal;
+  font-weight: 300;
+  src: local(""),
+    url("/src/assets/fonts/abc-favorit-mono-light.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Favorit";
+  font-style: normal;
+  font-weight: 400;
+  src: local(""),
+    url("/src/assets/fonts/abc-favorit-mono-book.otf") format("opentype");
+}
+
+/*
+ * ROOT CSS VARIABLES (:root)
+ *
+ * Defines global CSS variables (custom properties) that can be reused
+ * throughout the stylesheet. These variables control the application's
+ * color scheme, typography, and general geometry (e.g., border-radius).
+ */
+:root {
+  /* Wolf • Midnight • Moon palette */
+  --primary: #2e4a7f; /* Moonlit midnight blue (brand, main actions) */
+  --primary-light: #3e63b2; /* Lighter moonlit blue */
+  --primary-lighter: #6e8edc; /* Soft lunar glow */
+  --primary-dark: #1c2f4f; /* Deeper midnight */
+  --primary-darker: #101c30; /* Near-night indigo */
+
+  --secondary: #9aa4b2; /* Wolf silver (accents, secondary actions) */
+  --secondary-light: #b4bdc9; /* Lighter wolf silver */
+  --secondary-lighter: #d7dce4; /* Pale moon silver */
+  --secondary-dark: #6f7784; /* Dark steel gray */
+  --secondary-darker: #505763; /* Charcoal steel */
+
+  --foreground: #ffffff; /* Default text/icon color on dark backgrounds */
+  --foreground-muted: #f0f0f0; /* Muted text/icon color for less emphasis */
+  --background: #000000; /* Default background color */
+  --background-light: #1a1a1a; /* Lighter shade of background color */
+  --background-lighter: #333333; /* Even lighter shade of background color */
+
+  --success: #588157; /* Color for success messages/states (Green) */
+  --warning: #bc6c25; /* Color for warning messages/states (Amber) */
+  --error: #a42424; /* Color for error messages/states (Red) */
+  --info: #6b7a8f; /* Color for informational messages/states (Blue) */
+
+  /* FONT VARIABLES */
+  --font-sometype: "Sometype Mono", sans-serif; /* Font family for Sometype Mono */
+  --font-favorit: "Favorit", sans-serif; /* Font family for Favorit */
+  --font-disket: "Disket", sans-serif; /* Font family for Disket */
+
+  /* GEOMETRY VARIABLES */
+  --radius: 0; /* Base border-radius for UI elements */
+}
+
+/*
+ * THEME INLINE (@theme inline)
+ *
+ * This block defines a custom theme using CSS variables, often used in
+ * conjunction with theming libraries or frameworks to provide a structured
+ * way to manage design tokens for various UI components.
+ */
+@theme inline {
+  /* FONT VARIABLES (re-exported for theme consistency) */
+  --font-sometype: var(--font-sometype);
+  --font-favorit: var(--font-favorit);
+  --font-disket: var(--font-disket);
+
+  /* THEME COLOR VARIABLES (re-exported for theme consistency) */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-foreground-muted: var(--foreground-muted);
+  --color-background-light: var(--background-light);
+  --color-background-lighter: var(--background-lighter);
+  --color-primary: var(--primary);
+  --color-primary-light: var(--primary-light);
+  --color-primary-lighter: var(--primary-lighter);
+  --color-primary-dark: var(--primary-dark);
+  --color-primary-darker: var(--primary-darker);
+  --color-secondary: var(--secondary);
+  --color-secondary-light: var(--secondary-light);
+  --color-secondary-lighter: var(--secondary-lighter);
+  --color-secondary-dark: var(--secondary-dark);
+  --color-secondary-darker: var(--secondary-darker);
+
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+  --color-info: var(--info);
+
+  /* GEOMETRY VARIABLES (derived from base radius) */
+  --radius-sm: 0; /* Small border-radius */
+  --radius-md: 0; /* Medium border-radius */
+  --radius-lg: 0; /* Large border-radius (same as base) */
+  --radius-xl: 0; /* Extra large border-radius */
+}
+
+/*
+ * GLOBAL STYLES
+ *
+ * General styles applied to the root HTML elements and common utility classes.
+ */
+#react-root {
+  /* Full screen height; transparent background */
+  @apply h-screen;
+}
+
+#react-root > div:first-child {
+  /* Ensures the first child div of #react-root also takes full screen height */
+  @apply h-screen;
+}
+
+html {
+  /* Sets scrollbar width to thin for a more subtle appearance */
+  scrollbar-width: thin;
+  /* Defines custom scrollbar colors: primary color for thumb, transparent for track */
+  scrollbar-color: var(--primary) transparent;
+}
+
+/* Webkit Scrollbar Styles (for Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 10px; /* Width of the vertical scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  /* Applies a transparent background to the scrollbar track */
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  /* Styles the scrollbar thumb with primary background, rounded corners, and a border */
+  @apply bg-primary;
+  border-radius: var(--radius-lg); /* Applies a large border-radius */
+  border: 2px solid var(--background); /* Adds a 2px solid border with background color */
+}
+
+/* Focus Styles */
+*::focus,
+*::focus-visible {
+  outline: 2px solid var(--primary-light); /* Adds a 2px solid outline with a light primary color */
+  outline-offset: 2px; /* Offsets the outline by 2px from the element */
+  border-radius: var(
+    --radius-sm
+  ); /* Optional: rounds the outline corners for a softer look */
+}
+
+/* Selection Styles */
+*::selection {
+  /* Applies a semi-transparent foreground color as background for selected text */
+  @apply bg-foreground/30;
+}
+
+/*
+ * ANIMATIONS
+ *
+ * Defines keyframe animations used in the application.
+ */
+/* Loading Animation */
+@keyframes colorChange {
+  0% {
+    background-color: hsla(
+      219,
+      47%,
+      34%,
+      0.5
+    ); /* Initial state: primary color at 50% opacity */
+  }
+  80% {
+    background-color: #2e4a7f; /* Intermediate state: primary color at 100% opacity */
+
+  }
+  100% {
+    background-color: hsla(
+      219,
+      47%,
+      34%,
+      0.5
+    ); /* Final state: primary color at 50% opacity (loops back) */
+  }
+}
+
+.animated-box {
+  animation: colorChange 3s infinite; /* Applies the colorChange animation over 3 seconds, infinitely */
+  animation-timing-function: steps(
+    1,
+    end
+  ); /* Uses a step timing function for an abrupt change */
+}
+
+/*
+ * BASE LAYER STYLES (@layer base)
+ *
+ * Defines base styles for HTML elements, often used in conjunction with
+ * Tailwind CSS to set default typography and background properties.
+ */
+@layer base {
+  body {
+    font-family: var(--font-sometype);
+    background-color: var(--background-light);
+    color: var(--foreground);
+    min-height: 100vh;
+  }
+}
+
+/* Utility Classes */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
