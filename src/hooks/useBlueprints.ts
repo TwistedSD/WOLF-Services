@@ -3,24 +3,22 @@ import { useState, useEffect } from "react";
 const API_URL = import.meta.env.VITE_API_URL;
 
 export interface Assembly {
-  type_id: number;
-  type_name: string;
-  group_name: string | null;
-  icon_id: number | null;
-  icon_file: string | null;
+  facility_type_id: number;
+  facility_name: string;
+  facility_category: string;
+  input_capacity: number;
+  output_capacity: number;
+  blueprint_count: number;
+  sort_order: number;
 }
 
 export interface Blueprint {
   blueprint_id: number;
-  blueprint_type_id: number;
-  max_production_limit: number;
-  time_seconds: number;
-  product_type_id: number;
-  product_name: string;
-  product_category: string | null;
-  product_group: string | null;
-  product_icon_id: number;
-  product_icon_file: string;
+  primary_type_id: number;
+  primary_type_name: string;
+  run_time: number;
+  icon_id: number | null;
+  icon_file: string | null;
 }
 
 export interface Material {
@@ -29,17 +27,16 @@ export interface Material {
   quantity: number;
   icon_id: number | null;
   icon_file: string | null;
-  volume: number | null;
-  base_price: number;
 }
 
 export interface BlueprintDetails {
   blueprint_id: number;
-  blueprint_type_id: number;
-  time_seconds: number;
-  max_production_limit: number;
-  materials: Material[];
-  products: Material[];
+  primary_type_id: number;
+  primary_type_name: string;
+  run_time: number;
+  max_input_capacity: number;
+  inputs: Material[];
+  outputs: Material[];
 }
 
 export function useAssemblies() {
@@ -51,15 +48,15 @@ export function useAssemblies() {
     const fetchAssemblies = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch(`${API_URL}/api/assemblies`);
+        const response = await fetch(`${API_URL}/api/industry/facilities`);
         if (!response.ok) {
-          throw new Error(`Failed to fetch assemblies: ${response.status} ${response.statusText}`);
+          throw new Error(`Failed to fetch facilities: ${response.status} ${response.statusText}`);
         }
         const data = await response.json();
         setAssemblies(data);
         setError(null);
       } catch (err) {
-        console.error('Error fetching assemblies:', err);
+        console.error('Error fetching facilities:', err);
         setError(err instanceof Error ? err.message : "Unknown error");
       } finally {
         setIsLoading(false);
@@ -72,13 +69,13 @@ export function useAssemblies() {
   return { assemblies, isLoading, error };
 }
 
-export function useBlueprints(assemblyId: number | null) {
+export function useBlueprints(facilityId: number | null) {
   const [blueprints, setBlueprints] = useState<Blueprint[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!assemblyId) {
+    if (!facilityId) {
       setBlueprints([]);
       return;
     }
@@ -86,7 +83,7 @@ export function useBlueprints(assemblyId: number | null) {
     const fetchBlueprints = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch(`${API_URL}/api/assemblies/${assemblyId}/blueprints`);
+        const response = await fetch(`${API_URL}/api/industry/facilities/${facilityId}/blueprints`);
         if (!response.ok) {
           throw new Error(`Failed to fetch blueprints: ${response.status} ${response.statusText}`);
         }
@@ -102,7 +99,7 @@ export function useBlueprints(assemblyId: number | null) {
     };
 
     fetchBlueprints();
-  }, [assemblyId]);
+  }, [facilityId]);
 
   return { blueprints, isLoading, error };
 }
@@ -121,7 +118,7 @@ export function useBlueprintDetails(blueprintId: number | null) {
     const fetchDetails = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch(`${API_URL}/api/blueprints/${blueprintId}`);
+        const response = await fetch(`${API_URL}/api/industry/blueprints/${blueprintId}`);
         if (!response.ok) {
           throw new Error(`Failed to fetch blueprint details: ${response.status} ${response.statusText}`);
         }

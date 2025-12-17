@@ -33,16 +33,16 @@ const MaterialRow: React.FC<MaterialRowProps> = ({ material, depth }) => {
 
 export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
   const { assemblies, isLoading: loadingAssemblies, error: assembliesError } = useAssemblies();
-  const [selectedAssemblyId, setSelectedAssemblyId] = useState<number | null>(null);
+  const [selectedFacilityId, setSelectedFacilityId] = useState<number | null>(null);
   const [selectedBlueprintId, setSelectedBlueprintId] = useState<number | null>(null);
 
-  const { blueprints, isLoading: loadingBlueprints, error: blueprintsError } = useBlueprints(selectedAssemblyId);
+  const { blueprints, isLoading: loadingBlueprints, error: blueprintsError } = useBlueprints(selectedFacilityId);
   const { details, isLoading: loadingDetails, error: detailsError } = useBlueprintDetails(selectedBlueprintId);
 
-  // Calculate base materials from materials (inputs)
+  // Calculate base materials from inputs
   const baseMaterials: Record<string, number> = {};
-  if (details?.materials) {
-    details.materials.forEach((material) => {
+  if (details?.inputs) {
+    details.inputs.forEach((material) => {
       baseMaterials[material.type_name] = material.quantity;
     });
   }
@@ -69,21 +69,21 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
           <div className="p-3 text-sm text-foreground-muted">Loading...</div>
         ) : (
           <div>
-            {assemblies.map((assembly) => (
+            {assemblies.map((facility) => (
               <button
-                key={assembly.type_id}
+                key={facility.facility_type_id}
                 onClick={() => {
-                  setSelectedAssemblyId(assembly.type_id);
+                  setSelectedFacilityId(facility.facility_type_id);
                   setSelectedBlueprintId(null);
                 }}
                 className={`w-full px-3 py-2 text-left text-sm border-b transition-colors ${
-                  selectedAssemblyId === assembly.type_id
+                  selectedFacilityId === facility.facility_type_id
                     ? "bg-primary text-white"
                     : "text-foreground hover:bg-background-lighter"
                 }`}
                 style={{ borderColor: "var(--background-lighter)" }}
               >
-                {assembly.type_name}
+                {facility.facility_name}
               </button>
             ))}
           </div>
@@ -95,7 +95,7 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
         <div className="px-3 py-2 border-b-2" style={{ borderColor: "var(--primary)", backgroundColor: "var(--background-lighter)" }}>
           <h3 className="text-sm font-semibold text-foreground">Blueprints</h3>
         </div>
-        {!selectedAssemblyId ? (
+        {!selectedFacilityId ? (
           <div className="p-3 text-sm text-foreground-muted">
             Select an assembly type
           </div>
@@ -116,7 +116,7 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
                 }`}
                 style={{ borderColor: "var(--background-lighter)" }}
               >
-                {blueprint.product_name}
+                {blueprint.primary_type_name}
               </button>
             ))}
           </div>
@@ -137,32 +137,32 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
           <div>
             <div className="px-4 py-3 border-b-2" style={{ borderColor: "var(--primary)", backgroundColor: "var(--background-lighter)" }}>
               <h3 className="text-lg font-semibold text-foreground">
-                {details.products && details.products.length > 0 ? details.products[0].type_name : "Blueprint"}
+                {details.primary_type_name}
               </h3>
               <p className="text-xs text-foreground-muted mt-1">
-                Production Time: {formatDuration(details.time_seconds)}
+                Production Time: {formatDuration(details.run_time)}
               </p>
             </div>
 
             {/* Input Materials */}
-            {details.materials.length > 0 && (
+            {details.inputs.length > 0 && (
               <div className="border-b-2" style={{ borderColor: "var(--primary)" }}>
                 <div className="px-3 py-2" style={{ backgroundColor: "var(--background-lighter)" }}>
                   <h4 className="text-xs font-semibold text-foreground-muted uppercase">Input Materials</h4>
                 </div>
-                {details.materials.map((material, idx) => (
+                {details.inputs.map((material, idx) => (
                   <MaterialRow key={idx} material={material} depth={0} />
                 ))}
               </div>
             )}
 
             {/* Output Materials */}
-            {details.products.length > 0 && (
+            {details.outputs.length > 0 && (
               <div className="border-b-2" style={{ borderColor: "var(--primary)" }}>
                 <div className="px-3 py-2" style={{ backgroundColor: "var(--background-lighter)" }}>
                   <h4 className="text-xs font-semibold text-foreground-muted uppercase">Output Materials</h4>
                 </div>
-                {details.products.map((material, idx) => (
+                {details.outputs.map((material, idx) => (
                   <MaterialRow key={idx} material={material} depth={0} />
                 ))}
               </div>
