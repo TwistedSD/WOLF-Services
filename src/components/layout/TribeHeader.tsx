@@ -31,7 +31,7 @@ export const TribeHeader: React.FC<TribeHeaderProps> = ({
       {/* Header Row: Logo, Banner, Character Info */}
       <div className="flex items-center justify-between gap-6 mb-6">
         {/* Left: Logo & Title */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 self-center">
           <img
             src={primaryLogo}
             alt="WOLF Tribe Logo"
