@@ -20,8 +20,6 @@ export const TribeHeader: React.FC<TribeHeaderProps> = ({
     isLoading: tribeLoading,
   } = useTribeVerification(address);
 
-  const mapUrl = import.meta.env?.VITE_MAP_URL || "https://ef-map.com";
-
   return (
     <div
       className="mt-4 border-2 p-6 mb-6"
@@ -96,21 +94,6 @@ export const TribeHeader: React.FC<TribeHeaderProps> = ({
             <span className="sr-only">Disconnect</span>
           </button>
         </div>
-      </div>
-
-      {/* Link Bar */}
-      <div className="flex justify-end">
-        <button
-          aria-label="Open EF-Map"
-          onClick={() => window.open(mapUrl, '_blank', 'noopener,noreferrer')}
-          className="h-9 px-4 py-2 text-sm inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-all cursor-pointer outline-none border-2 text-white"
-          style={{
-            backgroundColor: 'var(--primary-light)',
-            borderColor: 'var(--primary)',
-          }}
-        >
-          EF-Map
-        </button>
       </div>
     </div>
   );
