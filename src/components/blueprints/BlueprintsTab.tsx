@@ -73,13 +73,31 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
     setMaterialTree(initialTree);
   }, [details]);
 
-  // Calculate base materials from inputs
-  const baseMaterials: Record<string, number> = {};
-  if (details?.inputs) {
-    details.inputs.forEach((material) => {
-      baseMaterials[material.type_name] = material.quantity;
-    });
-  }
+  // Calculate base materials by recursively traversing the tree
+  const calculateBaseMaterials = (materials: RecursiveMaterial[]): Record<string, number> => {
+    const baseMats: Record<string, number> = {};
+
+    const traverse = (material: RecursiveMaterial) => {
+      // If this material is expanded and has children, traverse them
+      if (material.isExpanded && material.children.length > 0) {
+        material.children.forEach(traverse);
+      }
+      // If this material is a base material (no blueprint to produce it) or not expanded
+      else if (material.isBaseMaterial || !material.isExpanded) {
+        // Add to base materials, aggregating quantities if already exists
+        if (baseMats[material.type_name]) {
+          baseMats[material.type_name] += material.quantity;
+        } else {
+          baseMats[material.type_name] = material.quantity;
+        }
+      }
+    };
+
+    materials.forEach(traverse);
+    return baseMats;
+  };
+
+  const baseMaterials = calculateBaseMaterials(materialTree);
 
   const formatDuration = (seconds: number): string => {
     const minutes = Math.floor(seconds / 60);
