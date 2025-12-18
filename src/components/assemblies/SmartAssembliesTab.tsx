@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { Eye } from "lucide-react";
+import { Eye, RefreshCw } from "lucide-react";
 import { useSmartCharacter } from "../../hooks/useSmartCharacter";
 import {
   useSmartAssemblies,
@@ -307,11 +307,39 @@ export const SmartAssembliesTab: React.FC<SmartAssembliesTabProps> = ({
     assemblies,
     isLoading: asmLoading,
     error: asmError,
+    refresh: refreshAssemblies,
   } = useSmartAssemblies({
     ownerId: characterId,
     ownerAddress: walletAddress,
     ids: assemblyIds,
   });
+
+  const [showDataDelay, setShowDataDelay] = useState(true);
+  const [refreshingNode, setRefreshingNode] = useState<string | null>(null);
+
+  // Give data a few seconds to load fully before showing "no assemblies" message
+  React.useEffect(() => {
+    if (!isLoading && assemblies.length === 0) {
+      const timer = setTimeout(() => {
+        setShowDataDelay(false);
+      }, 3000); // Wait 3 seconds for data to fully load
+      return () => clearTimeout(timer);
+    } else {
+      setShowDataDelay(false);
+    }
+  }, [isLoading, assemblies.length]);
+
+  const handleRefreshAll = () => {
+    refreshAssemblies();
+    setShowDataDelay(true);
+  };
+
+  const handleRefreshNode = async (nodeId: string) => {
+    setRefreshingNode(nodeId);
+    refreshAssemblies();
+    // Clear refreshing state after a delay
+    setTimeout(() => setRefreshingNode(null), 1000);
+  };
 
   const [openNodes, setOpenNodes] = useState<Set<string>>(new Set());
   const [openStorageItems, setOpenStorageItems] = useState<Set<string>>(
@@ -478,10 +506,12 @@ export const SmartAssembliesTab: React.FC<SmartAssembliesTabProps> = ({
   const isLoading = charLoading || asmLoading;
   const error = charError || asmError;
 
-  if (isLoading) {
+  if (isLoading || showDataDelay) {
     return (
       <div className="p-3">
-        <p className="text-foreground-muted text-sm">Loading assemblies…</p>
+        <p className="text-foreground-muted text-sm">
+          Loading assemblies… (this may take a few seconds)
+        </p>
       </div>
     );
   }
@@ -507,9 +537,33 @@ export const SmartAssembliesTab: React.FC<SmartAssembliesTabProps> = ({
 
   return (
     <div className="p-3 space-y-4">
+      {/* Refresh All Button */}
+      <div className="flex justify-end mb-2">
+        <button
+          onClick={handleRefreshAll}
+          disabled={isLoading}
+          className="flex items-center gap-2 px-3 py-2 text-sm bg-background-lighter hover:bg-background-hover border-2 transition-colors disabled:opacity-50"
+          style={{ borderColor: "var(--primary)" }}
+          title="Refresh all assemblies"
+        >
+          <RefreshCw size={16} className={isLoading ? "animate-spin" : ""} />
+          <span>Refresh All</span>
+        </button>
+      </div>
+
       {groups.length === 0 ? (
-        <div className="text-sm text-foreground-muted px-2 py-2">
-          No network nodes found
+        <div className="space-y-3">
+          <div className="text-sm text-foreground-muted px-2 py-2">
+            No network nodes found. Your assemblies may still be loading.
+          </div>
+          <button
+            onClick={handleRefreshAll}
+            className="w-full flex items-center justify-center gap-2 px-4 py-3 text-sm bg-background-lighter hover:bg-background-hover border-2 transition-colors"
+            style={{ borderColor: "var(--primary)" }}
+          >
+            <RefreshCw size={16} />
+            <span>Try Refreshing</span>
+          </button>
         </div>
       ) : (
         groups.map((group) => {
@@ -535,23 +589,39 @@ export const SmartAssembliesTab: React.FC<SmartAssembliesTabProps> = ({
               style={{ borderColor: "var(--primary)" }}
             >
               {/* Network Node Header */}
-              <button
-                onClick={() => toggleNode(group.id)}
-                className="w-full px-4 py-3 flex items-center justify-between text-left hover:bg-background-lighter transition-colors"
-              >
-                <span className="text-sm font-semibold text-foreground">
-                  {systemName}
-                </span>
-                <div className="flex items-center gap-4">
-                  <span className={`text-xs ${statusColor}`}>{status}</span>
-                  <span className="text-xs text-foreground-muted">
-                    Fuel: {timeText}
+              <div className="w-full px-4 py-3 flex items-center justify-between">
+                <button
+                  onClick={() => toggleNode(group.id)}
+                  className="flex-1 flex items-center justify-between text-left hover:bg-background-lighter transition-colors pr-2"
+                >
+                  <span className="text-sm font-semibold text-foreground">
+                    {systemName}
                   </span>
-                  <span className="text-foreground-muted">
-                    {isOpen ? "−" : "+"}
-                  </span>
-                </div>
-              </button>
+                  <div className="flex items-center gap-4">
+                    <span className={`text-xs ${statusColor}`}>{status}</span>
+                    <span className="text-xs text-foreground-muted">
+                      Fuel: {timeText}
+                    </span>
+                    <span className="text-foreground-muted">
+                      {isOpen ? "−" : "+"}
+                    </span>
+                  </div>
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleRefreshNode(group.id);
+                  }}
+                  disabled={refreshingNode === group.id}
+                  className="ml-2 p-2 hover:bg-background-lighter transition-colors disabled:opacity-50"
+                  title="Refresh this network node"
+                >
+                  <RefreshCw
+                    size={14}
+                    className={refreshingNode === group.id ? "animate-spin" : ""}
+                  />
+                </button>
+              </div>
 
               {isOpen && (
                 <div className="px-4 pb-3">

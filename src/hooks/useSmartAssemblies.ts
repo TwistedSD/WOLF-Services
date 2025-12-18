@@ -35,6 +35,7 @@ export type UseSmartAssembliesResult = {
   assemblies: SmartAssembly[];
   isLoading: boolean;
   error: string | null;
+  refresh: () => void;
 };
 
 function normalizeId(v: unknown): string | null {
@@ -51,11 +52,16 @@ export function useSmartAssemblies(params?: UseSmartAssembliesParams): UseSmartA
   const [assemblies, setAssemblies] = useState<SmartAssembly[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   const baseUrl = import.meta.env.VITE_WORLD_API_HTTP || import.meta.env.VITE_GATEWAY_HTTP;
   const ownerId = params?.ownerId != null ? normalizeId(params.ownerId) : null;
   const ownerAddress = params?.ownerAddress && params.ownerAddress.startsWith("0x") ? params.ownerAddress.toLowerCase() : null;
   const explicitIds = Array.isArray(params?.ids) ? params!.ids!.map((x) => normalizeId(x)!).filter(Boolean) : null;
+
+  const refresh = () => {
+    setRefreshTrigger(prev => prev + 1);
+  };
 
   useEffect(() => {
     if (!baseUrl) {
@@ -171,7 +177,7 @@ export function useSmartAssemblies(params?: UseSmartAssembliesParams): UseSmartA
 
     run();
     return () => controller.abort();
-  }, [baseUrl, ownerId, ownerAddress]);
+  }, [baseUrl, ownerId, ownerAddress, refreshTrigger]);
 
   // Keep a stable sorted list by name then id
   const sorted = useMemo(() => {
@@ -185,5 +191,5 @@ export function useSmartAssemblies(params?: UseSmartAssembliesParams): UseSmartA
     });
   }, [assemblies]);
 
-  return { assemblies: sorted, isLoading, error };
+  return { assemblies: sorted, isLoading, error, refresh };
 }
