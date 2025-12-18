@@ -314,20 +314,29 @@ export const SmartAssembliesTab: React.FC<SmartAssembliesTabProps> = ({
     ids: assemblyIds,
   });
 
-  const [showDataDelay, setShowDataDelay] = useState(true);
+  const [showDataDelay, setShowDataDelay] = useState(false);
   const [refreshingNode, setRefreshingNode] = useState<string | null>(null);
+  const [hasLoadedOnce, setHasLoadedOnce] = useState(false);
 
   // Give data a few seconds to load fully before showing "no assemblies" message
   React.useEffect(() => {
-    if (!isLoading && assemblies.length === 0) {
+    // Track that we've started loading at least once
+    if (isLoading) {
+      setHasLoadedOnce(true);
+    }
+
+    // Only apply delay after initial load completes with no data
+    if (!isLoading && hasLoadedOnce && assemblies.length === 0 && !showDataDelay) {
       const timer = setTimeout(() => {
         setShowDataDelay(false);
       }, 3000); // Wait 3 seconds for data to fully load
       return () => clearTimeout(timer);
-    } else {
+    }
+
+    if (assemblies.length > 0) {
       setShowDataDelay(false);
     }
-  }, [isLoading, assemblies.length]);
+  }, [isLoading, assemblies.length, hasLoadedOnce, showDataDelay]);
 
   const handleRefreshAll = () => {
     refreshAssemblies();
