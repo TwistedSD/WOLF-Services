@@ -316,6 +316,7 @@ export const SmartAssembliesTab: React.FC<SmartAssembliesTabProps> = ({
 
   const [showDataDelay, setShowDataDelay] = useState(false);
   const [refreshingNode, setRefreshingNode] = useState<string | null>(null);
+  const [refreshingStorage, setRefreshingStorage] = useState<string | null>(null);
   const [hasLoadedOnce, setHasLoadedOnce] = useState(false);
 
   // Combine loading states
@@ -351,6 +352,13 @@ export const SmartAssembliesTab: React.FC<SmartAssembliesTabProps> = ({
     refreshAssemblies();
     // Clear refreshing state after a delay
     setTimeout(() => setRefreshingNode(null), 1000);
+  };
+
+  const handleRefreshStorage = async (storageId: string) => {
+    setRefreshingStorage(storageId);
+    refreshAssemblies();
+    // Clear refreshing state after a delay
+    setTimeout(() => setRefreshingStorage(null), 1000);
   };
 
   const [openNodes, setOpenNodes] = useState<Set<string>>(new Set());
@@ -670,25 +678,39 @@ export const SmartAssembliesTab: React.FC<SmartAssembliesTabProps> = ({
 
                             return (
                               <div key={storageId} className="mb-2">
-                                <button
-                                  onClick={() => toggleStorageItems(storageId)}
-                                  className="w-full flex items-center justify-between px-3 py-2 border-2 hover:bg-background-lighter transition-colors"
-                                  style={{
-                                    borderColor: "var(--background-lighter)",
-                                  }}
-                                >
-                                  <span className="text-sm text-foreground">
-                                    {getTypeName(storage)}
-                                  </span>
-                                  <div className="flex items-center gap-3">
-                                    <span className="text-xs text-foreground-muted">
-                                      {percentage}% ({current}/{max})
+                                <div className="w-full flex items-center border-2" style={{ borderColor: "var(--background-lighter)" }}>
+                                  <button
+                                    onClick={() => toggleStorageItems(storageId)}
+                                    className="flex-1 flex items-center justify-between px-3 py-2 hover:bg-background-lighter transition-colors"
+                                  >
+                                    <span className="text-sm text-foreground">
+                                      {getTypeName(storage)}
                                     </span>
-                                    <span className={`text-xs ${statusColor}`}>
-                                      {storageStatus}
-                                    </span>
-                                  </div>
-                                </button>
+                                    <div className="flex items-center gap-3">
+                                      <span className="text-xs text-foreground-muted">
+                                        {percentage}% ({current}/{max})
+                                      </span>
+                                      <span className={`text-xs ${statusColor}`}>
+                                        {storageStatus}
+                                      </span>
+                                    </div>
+                                  </button>
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleRefreshStorage(storageId);
+                                    }}
+                                    disabled={refreshingStorage === storageId}
+                                    className="px-2 py-2 hover:bg-background-lighter transition-colors disabled:opacity-50 border-l-2"
+                                    style={{ borderColor: "var(--background-lighter)" }}
+                                    title="Refresh this storage"
+                                  >
+                                    <RefreshCw
+                                      size={14}
+                                      className={refreshingStorage === storageId ? "animate-spin" : ""}
+                                    />
+                                  </button>
+                                </div>
 
                                 {isStorageOpen && items.length > 0 && (
                                   <div
