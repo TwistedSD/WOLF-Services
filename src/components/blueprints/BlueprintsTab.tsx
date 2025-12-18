@@ -82,8 +82,8 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
       if (material.isExpanded && material.children.length > 0) {
         material.children.forEach(traverse);
       }
-      // If this material is a base material (no blueprint to produce it) or not expanded
-      else if (material.isBaseMaterial || !material.isExpanded) {
+      // Only count materials explicitly marked as base materials (no blueprints exist)
+      else if (material.isBaseMaterial) {
         // Add to base materials, aggregating quantities if already exists
         if (baseMats[material.type_name]) {
           baseMats[material.type_name] += material.quantity;
@@ -91,6 +91,8 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
           baseMats[material.type_name] = material.quantity;
         }
       }
+      // If not expanded yet, don't count it as a base material in the summary
+      // User needs to expand materials to see the true base materials
     };
 
     materials.forEach(traverse);
@@ -400,12 +402,18 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
                 <h4 className="text-xs font-semibold text-foreground-muted uppercase">Base Materials Required</h4>
               </div>
               <div className="p-3">
-                {Object.entries(baseMaterials).map(([name, quantity]) => (
-                  <div key={name} className="flex justify-between py-1 text-sm">
-                    <span className="text-foreground">{name}</span>
-                    <span className="text-foreground-muted">{quantity.toLocaleString()}</span>
-                  </div>
-                ))}
+                {Object.keys(baseMaterials).length === 0 ? (
+                  <p className="text-sm text-foreground-muted">
+                    Expand materials above to calculate base materials needed
+                  </p>
+                ) : (
+                  Object.entries(baseMaterials).map(([name, quantity]) => (
+                    <div key={name} className="flex justify-between py-1 text-sm">
+                      <span className="text-foreground">{name}</span>
+                      <span className="text-foreground-muted">{quantity.toLocaleString()}</span>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
 
