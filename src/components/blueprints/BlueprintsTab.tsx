@@ -45,32 +45,121 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
   // Recursive material tree state
   const [materialTree, setMaterialTree] = useState<RecursiveMaterial[]>([]);
   const [loadingMaterials, setLoadingMaterials] = useState<Set<number>>(new Set());
+  const [isCalculatingBaseMaterials, setIsCalculatingBaseMaterials] = useState(false);
 
-  // Initialize tree from blueprint details
+  // Initialize tree from blueprint details and auto-expand
   useEffect(() => {
     if (!details) {
       setMaterialTree([]);
+      setIsCalculatingBaseMaterials(false);
       return;
     }
 
-    const initialTree: RecursiveMaterial[] = details.inputs.map(input => ({
-      type_id: input.type_id,
-      type_name: input.type_name,
-      quantity: input.quantity,
-      icon_id: input.icon_id,
-      icon_file: input.icon_file,
-      depth: 0,
-      isExpanded: false,
-      isBaseMaterial: false,
-      selectedBlueprintId: null,
-      selectedFacilityId: null,
-      selectedFacilityName: null,
-      availableBlueprints: [],
-      children: [],
-      isLoading: false
-    }));
+    let isCancelled = false;
+    setIsCalculatingBaseMaterials(true);
 
-    setMaterialTree(initialTree);
+    // Recursive function to automatically expand all materials
+    const autoExpandMaterial = async (
+      typeId: number,
+      quantity: number,
+      depth: number
+    ): Promise<RecursiveMaterial | null> => {
+      if (isCancelled) return null;
+
+      try {
+        // Fetch blueprints for this material
+        const blueprintsResponse = await fetch(`${API_URL}/api/industry/types/${typeId}/blueprints`);
+        if (!blueprintsResponse.ok) throw new Error('Failed to fetch blueprints');
+        const blueprintOptions: BlueprintOption[] = await blueprintsResponse.json();
+
+        // If no blueprints exist, this is a base material
+        if (blueprintOptions.length === 0) {
+          return {
+            type_id: typeId,
+            type_name: '', // Will be filled from efficiency data or input
+            quantity,
+            icon_id: null,
+            icon_file: null,
+            depth,
+            isExpanded: false,
+            isBaseMaterial: true,
+            selectedBlueprintId: null,
+            selectedFacilityId: null,
+            selectedFacilityName: null,
+            availableBlueprints: [],
+            children: [],
+            isLoading: false
+          };
+        }
+
+        // Fetch optimal production path using efficiency API
+        const efficiencyResponse = await fetch(
+          `${API_URL}/api/industry/efficiency/${typeId}?quantity=${quantity}`
+        );
+        if (!efficiencyResponse.ok) throw new Error('Failed to fetch efficiency');
+        const efficiencyData: EfficiencyResult = await efficiencyResponse.json();
+
+        // Recursively expand all children
+        const childrenPromises = efficiencyData.children.map(child =>
+          autoExpandMaterial(child.type_id, child.quantity_needed, depth + 1)
+        );
+        const childrenResults = await Promise.all(childrenPromises);
+        const children = childrenResults.filter((c): c is RecursiveMaterial => c !== null);
+
+        return {
+          type_id: efficiencyData.type_id,
+          type_name: efficiencyData.type_name,
+          quantity: efficiencyData.quantity_needed,
+          icon_id: null,
+          icon_file: null,
+          depth,
+          isExpanded: true,
+          isBaseMaterial: children.length === 0,
+          selectedBlueprintId: efficiencyData.blueprint_id,
+          selectedFacilityId: efficiencyData.facility_type_id,
+          selectedFacilityName: efficiencyData.facility_name,
+          availableBlueprints: blueprintOptions,
+          children,
+          isLoading: false
+        };
+      } catch (error) {
+        console.error(`Error expanding material ${typeId}:`, error);
+        return null;
+      }
+    };
+
+    // Initialize and auto-expand all input materials
+    const initializeTree = async () => {
+      const materialsPromises = details.inputs.map(input =>
+        autoExpandMaterial(input.type_id, input.quantity, 0).then(material => {
+          // Fill in missing details from input if available
+          if (material && !material.type_name) {
+            return {
+              ...material,
+              type_name: input.type_name,
+              icon_id: input.icon_id,
+              icon_file: input.icon_file
+            };
+          }
+          return material;
+        })
+      );
+
+      const materialsResults = await Promise.all(materialsPromises);
+      const materials = materialsResults.filter((m): m is RecursiveMaterial => m !== null);
+
+      if (!isCancelled) {
+        setMaterialTree(materials);
+        setIsCalculatingBaseMaterials(false);
+      }
+    };
+
+    initializeTree();
+
+    // Cleanup function to prevent state updates after unmount
+    return () => {
+      isCancelled = true;
+    };
   }, [details]);
 
   // Calculate base materials by recursively traversing the tree
@@ -402,9 +491,13 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
                 <h4 className="text-xs font-semibold text-foreground-muted uppercase">Base Materials Required</h4>
               </div>
               <div className="p-3">
-                {Object.keys(baseMaterials).length === 0 ? (
+                {isCalculatingBaseMaterials ? (
                   <p className="text-sm text-foreground-muted">
-                    Expand materials above to calculate base materials needed
+                    Calculating base materials...
+                  </p>
+                ) : Object.keys(baseMaterials).length === 0 ? (
+                  <p className="text-sm text-foreground-muted">
+                    No base materials calculated
                   </p>
                 ) : (
                   Object.entries(baseMaterials).map(([name, quantity]) => (
