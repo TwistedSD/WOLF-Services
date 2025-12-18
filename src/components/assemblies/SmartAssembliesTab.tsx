@@ -318,6 +318,9 @@ export const SmartAssembliesTab: React.FC<SmartAssembliesTabProps> = ({
   const [refreshingNode, setRefreshingNode] = useState<string | null>(null);
   const [hasLoadedOnce, setHasLoadedOnce] = useState(false);
 
+  // Combine loading states
+  const isLoading = charLoading || asmLoading;
+
   // Give data a few seconds to load fully before showing "no assemblies" message
   React.useEffect(() => {
     // Track that we've started loading at least once
@@ -512,7 +515,6 @@ export const SmartAssembliesTab: React.FC<SmartAssembliesTabProps> = ({
     return groups;
   }, [assemblies]);
 
-  const isLoading = charLoading || asmLoading;
   const error = charError || asmError;
 
   if (isLoading || showDataDelay) {
