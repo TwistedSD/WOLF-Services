@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { useAssemblies, useBlueprints, useBlueprintDetails, type Material } from "../../hooks/useBlueprints";
+import React, { useState, useEffect } from "react";
+import { useAssemblies, useBlueprints, useBlueprintDetails, type Material, type BlueprintOption, type EfficiencyResult } from "../../hooks/useBlueprints";
+import { RecursiveMaterialRow, type RecursiveMaterial } from "./RecursiveMaterialRow";
 
 interface BlueprintsTabProps {
   walletAddress: string | null;
@@ -31,6 +32,8 @@ const MaterialRow: React.FC<MaterialRowProps> = ({ material, depth }) => {
   );
 };
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
   const { assemblies, isLoading: loadingAssemblies, error: assembliesError } = useAssemblies();
   const [selectedFacilityId, setSelectedFacilityId] = useState<number | null>(null);
@@ -38,6 +41,37 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
 
   const { blueprints, isLoading: loadingBlueprints, error: blueprintsError } = useBlueprints(selectedFacilityId);
   const { details, isLoading: loadingDetails, error: detailsError } = useBlueprintDetails(selectedBlueprintId);
+
+  // Recursive material tree state
+  const [materialTree, setMaterialTree] = useState<RecursiveMaterial[]>([]);
+  const [loadingMaterials, setLoadingMaterials] = useState<Set<number>>(new Set());
+
+  // Initialize tree from blueprint details
+  useEffect(() => {
+    if (!details) {
+      setMaterialTree([]);
+      return;
+    }
+
+    const initialTree: RecursiveMaterial[] = details.inputs.map(input => ({
+      type_id: input.type_id,
+      type_name: input.type_name,
+      quantity: input.quantity,
+      icon_id: input.icon_id,
+      icon_file: input.icon_file,
+      depth: 0,
+      isExpanded: false,
+      isBaseMaterial: false,
+      selectedBlueprintId: null,
+      selectedFacilityId: null,
+      selectedFacilityName: null,
+      availableBlueprints: [],
+      children: [],
+      isLoading: false
+    }));
+
+    setMaterialTree(initialTree);
+  }, [details]);
 
   // Calculate base materials from inputs
   const baseMaterials: Record<string, number> = {};
@@ -54,6 +88,175 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
       return `${minutes}m ${secs}s`;
     }
     return `${secs}s`;
+  };
+
+  // Helper: Transform EfficiencyResult to RecursiveMaterial
+  const transformToRecursiveMaterial = (node: EfficiencyResult, depth: number): RecursiveMaterial => {
+    return {
+      type_id: node.type_id,
+      type_name: node.type_name,
+      quantity: node.quantity_needed,
+      icon_id: null,
+      icon_file: null,
+      depth,
+      isExpanded: false,
+      isBaseMaterial: node.children.length === 0,
+      selectedBlueprintId: node.blueprint_id,
+      selectedFacilityId: node.facility_type_id,
+      selectedFacilityName: node.facility_name,
+      availableBlueprints: [],
+      children: node.children.map(child => transformToRecursiveMaterial(child, depth + 1)),
+      isLoading: false
+    };
+  };
+
+  // Helper: Find material in tree
+  const findMaterialInTree = (materials: RecursiveMaterial[], typeId: number): RecursiveMaterial | null => {
+    for (const material of materials) {
+      if (material.type_id === typeId) return material;
+      const found = findMaterialInTree(material.children, typeId);
+      if (found) return found;
+    }
+    return null;
+  };
+
+  // Helper: Update material in tree
+  const updateMaterialInTree = (
+    materials: RecursiveMaterial[],
+    typeId: number,
+    updates: Partial<RecursiveMaterial>
+  ): RecursiveMaterial[] => {
+    return materials.map(material => {
+      if (material.type_id === typeId) {
+        return { ...material, ...updates };
+      }
+      if (material.children.length > 0) {
+        return {
+          ...material,
+          children: updateMaterialInTree(material.children, typeId, updates)
+        };
+      }
+      return material;
+    });
+  };
+
+  // Handler: Expand/collapse material
+  const handleMaterialExpand = async (typeId: number) => {
+    const material = findMaterialInTree(materialTree, typeId);
+    if (!material) return;
+
+    // Toggle collapse if already expanded
+    if (material.isExpanded) {
+      setMaterialTree(prev => updateMaterialInTree(prev, typeId, { isExpanded: false }));
+      return;
+    }
+
+    // Set loading state
+    setMaterialTree(prev => updateMaterialInTree(prev, typeId, { isLoading: true }));
+    setLoadingMaterials(prev => new Set(prev).add(typeId));
+
+    try {
+      // Fetch blueprints for this material
+      const blueprintsResponse = await fetch(`${API_URL}/api/industry/types/${typeId}/blueprints`);
+      if (!blueprintsResponse.ok) throw new Error('Failed to fetch blueprints');
+      const blueprintOptions: BlueprintOption[] = await blueprintsResponse.json();
+
+      // Check if base material (no blueprints)
+      if (blueprintOptions.length === 0) {
+        setMaterialTree(prev => updateMaterialInTree(prev, typeId, {
+          isBaseMaterial: true,
+          isLoading: false
+        }));
+        setLoadingMaterials(prev => {
+          const next = new Set(prev);
+          next.delete(typeId);
+          return next;
+        });
+        return;
+      }
+
+      // Fetch optimal production path using efficiency API
+      const efficiencyResponse = await fetch(
+        `${API_URL}/api/industry/efficiency/${typeId}?quantity=${material.quantity}`
+      );
+      if (!efficiencyResponse.ok) throw new Error('Failed to fetch efficiency');
+      const efficiencyData: EfficiencyResult = await efficiencyResponse.json();
+
+      // Update tree with expansion
+      setMaterialTree(prev => updateMaterialInTree(prev, typeId, {
+        isExpanded: true,
+        isLoading: false,
+        isBaseMaterial: false,
+        selectedBlueprintId: efficiencyData.blueprint_id,
+        selectedFacilityId: efficiencyData.facility_type_id,
+        selectedFacilityName: efficiencyData.facility_name,
+        availableBlueprints: blueprintOptions,
+        children: efficiencyData.children.map(child => transformToRecursiveMaterial(child, material.depth + 1))
+      }));
+    } catch (error) {
+      console.error('Error expanding material:', error);
+      setMaterialTree(prev => updateMaterialInTree(prev, typeId, { isLoading: false }));
+    } finally {
+      setLoadingMaterials(prev => {
+        const next = new Set(prev);
+        next.delete(typeId);
+        return next;
+      });
+    }
+  };
+
+  // Handler: Blueprint selection change
+  const handleBlueprintChange = async (typeId: number, blueprintId: number) => {
+    const material = findMaterialInTree(materialTree, typeId);
+    if (!material) return;
+
+    // Set loading
+    setMaterialTree(prev => updateMaterialInTree(prev, typeId, { isLoading: true }));
+
+    try {
+      // Fetch new blueprint details
+      const response = await fetch(`${API_URL}/api/industry/blueprints/${blueprintId}`);
+      if (!response.ok) throw new Error('Failed to fetch blueprint details');
+      const blueprintDetails = await response.json();
+
+      // Find the facility from available blueprints
+      const selectedBlueprint = material.availableBlueprints.find(bp => bp.blueprint_id === blueprintId);
+
+      // Calculate runs needed
+      const outputItem = blueprintDetails.outputs.find((o: Material) => o.type_id === typeId);
+      const outputQty = outputItem?.quantity || 1;
+      const runsNeeded = Math.ceil(material.quantity / outputQty);
+
+      // Calculate new children with cascaded quantities
+      const newChildren: RecursiveMaterial[] = blueprintDetails.inputs.map((input: Material) => ({
+        type_id: input.type_id,
+        type_name: input.type_name,
+        quantity: input.quantity * runsNeeded,
+        icon_id: input.icon_id,
+        icon_file: input.icon_file,
+        depth: material.depth + 1,
+        isExpanded: false,
+        isBaseMaterial: false,
+        selectedBlueprintId: null,
+        selectedFacilityId: null,
+        selectedFacilityName: null,
+        availableBlueprints: [],
+        children: [],
+        isLoading: false
+      }));
+
+      // Update tree
+      setMaterialTree(prev => updateMaterialInTree(prev, typeId, {
+        selectedBlueprintId: blueprintId,
+        selectedFacilityId: selectedBlueprint?.facility_type_id || null,
+        selectedFacilityName: selectedBlueprint?.facility_name || null,
+        children: newChildren,
+        isLoading: false
+      }));
+    } catch (error) {
+      console.error('Error changing blueprint:', error);
+      setMaterialTree(prev => updateMaterialInTree(prev, typeId, { isLoading: false }));
+    }
   };
 
   return (
@@ -157,13 +360,18 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
             )}
 
             {/* Input Materials */}
-            {details.inputs.length > 0 && (
+            {materialTree.length > 0 && (
               <div className="border-b-2" style={{ borderColor: "var(--primary)" }}>
                 <div className="px-3 py-2" style={{ backgroundColor: "var(--background-lighter)" }}>
                   <h4 className="text-xs font-semibold text-foreground-muted uppercase">Input Materials</h4>
                 </div>
-                {details.inputs.map((material, idx) => (
-                  <MaterialRow key={idx} material={material} depth={0} />
+                {materialTree.map((material, idx) => (
+                  <RecursiveMaterialRow
+                    key={`${material.type_id}-${idx}`}
+                    material={material}
+                    onExpand={handleMaterialExpand}
+                    onBlueprintChange={handleBlueprintChange}
+                  />
                 ))}
               </div>
             )}

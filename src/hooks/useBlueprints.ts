@@ -138,3 +138,110 @@ export function useBlueprintDetails(blueprintId: number | null) {
 
   return { details, isLoading, error };
 }
+
+export interface BlueprintOption {
+  blueprint_id: number;
+  primary_type_id: number;
+  primary_type_name: string;
+  facility_type_id: number;
+  facility_name: string;
+  run_time: number;
+  icon_id: number | null;
+  icon_file: string | null;
+}
+
+export function useBlueprintsByType(typeId: number | null) {
+  const [blueprints, setBlueprints] = useState<BlueprintOption[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!typeId) {
+      setBlueprints([]);
+      return;
+    }
+
+    const fetchBlueprints = async () => {
+      try {
+        setIsLoading(true);
+        const response = await fetch(`${API_URL}/api/industry/types/${typeId}/blueprints`);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch blueprints: ${response.status} ${response.statusText}`);
+        }
+        const data = await response.json();
+        setBlueprints(data);
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching blueprints by type:', err);
+        setError(err instanceof Error ? err.message : "Unknown error");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchBlueprints();
+  }, [typeId]);
+
+  return { blueprints, isLoading, error };
+}
+
+export interface EfficiencyResult {
+  type_id: number;
+  type_name: string;
+  quantity_needed: number;
+  blueprint_id: number | null;
+  facility_type_id: number | null;
+  facility_name: string | null;
+  run_time: number;
+  total_production_time: number;
+  total_base_materials: number;
+  base_material_breakdown: { [typeId: number]: number };
+  base_material_names: { [typeId: number]: string };
+  children: EfficiencyResult[];
+}
+
+export function useMaterialEfficiency(
+  typeId: number | null,
+  quantity: number,
+  blueprintId?: number
+) {
+  const [efficiency, setEfficiency] = useState<EfficiencyResult | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!typeId || quantity <= 0) {
+      setEfficiency(null);
+      return;
+    }
+
+    const fetchEfficiency = async () => {
+      try {
+        setIsLoading(true);
+        const params = new URLSearchParams({
+          quantity: quantity.toString(),
+        });
+        if (blueprintId) {
+          params.append('blueprintId', blueprintId.toString());
+        }
+
+        const response = await fetch(`${API_URL}/api/industry/efficiency/${typeId}?${params}`);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch efficiency: ${response.status} ${response.statusText}`);
+        }
+        const data = await response.json();
+        setEfficiency(data);
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching efficiency:', err);
+        setError(err instanceof Error ? err.message : "Unknown error");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchEfficiency();
+  }, [typeId, quantity, blueprintId]);
+
+  return { efficiency, isLoading, error };
+}
