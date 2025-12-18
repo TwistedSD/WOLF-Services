@@ -58,7 +58,37 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
     let isCancelled = false;
     setIsCalculatingBaseMaterials(true);
 
-    // Recursive function to automatically expand all materials
+    // Helper to add delay between requests
+    const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+    // Fetch with retry and exponential backoff for rate limiting
+    const fetchWithRetry = async (url: string, maxRetries = 3): Promise<Response> => {
+      for (let attempt = 0; attempt < maxRetries; attempt++) {
+        if (isCancelled) throw new Error('Cancelled');
+
+        const response = await fetch(url);
+
+        // If successful, return immediately
+        if (response.ok) {
+          return response;
+        }
+
+        // If rate limited (429), wait and retry with exponential backoff
+        if (response.status === 429 && attempt < maxRetries - 1) {
+          const waitTime = Math.pow(2, attempt) * 1000; // 1s, 2s, 4s
+          console.log(`Rate limited, waiting ${waitTime}ms before retry ${attempt + 1}/${maxRetries}`);
+          await delay(waitTime);
+          continue;
+        }
+
+        // For other errors or final attempt, throw
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      throw new Error('Max retries exceeded');
+    };
+
+    // Recursive function to automatically expand all materials with throttling
     const autoExpandMaterial = async (
       typeId: number,
       quantity: number,
@@ -67,9 +97,11 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
       if (isCancelled) return null;
 
       try {
-        // Fetch blueprints for this material
-        const blueprintsResponse = await fetch(`${API_URL}/api/industry/types/${typeId}/blueprints`);
-        if (!blueprintsResponse.ok) throw new Error('Failed to fetch blueprints');
+        // Add small delay between requests to avoid rate limiting (100ms)
+        await delay(100);
+
+        // Fetch blueprints for this material with retry logic
+        const blueprintsResponse = await fetchWithRetry(`${API_URL}/api/industry/types/${typeId}/blueprints`);
         const blueprintOptions: BlueprintOption[] = await blueprintsResponse.json();
 
         // If no blueprints exist, this is a base material
@@ -92,19 +124,24 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
           };
         }
 
-        // Fetch optimal production path using efficiency API
-        const efficiencyResponse = await fetch(
+        // Add delay before next request
+        await delay(100);
+
+        // Fetch optimal production path using efficiency API with retry logic
+        const efficiencyResponse = await fetchWithRetry(
           `${API_URL}/api/industry/efficiency/${typeId}?quantity=${quantity}`
         );
-        if (!efficiencyResponse.ok) throw new Error('Failed to fetch efficiency');
         const efficiencyData: EfficiencyResult = await efficiencyResponse.json();
 
-        // Recursively expand all children
-        const childrenPromises = efficiencyData.children.map(child =>
-          autoExpandMaterial(child.type_id, child.quantity_needed, depth + 1)
-        );
-        const childrenResults = await Promise.all(childrenPromises);
-        const children = childrenResults.filter((c): c is RecursiveMaterial => c !== null);
+        // Recursively expand all children sequentially to avoid overwhelming the API
+        const children: RecursiveMaterial[] = [];
+        for (const child of efficiencyData.children) {
+          if (isCancelled) break;
+          const childMaterial = await autoExpandMaterial(child.type_id, child.quantity_needed, depth + 1);
+          if (childMaterial) {
+            children.push(childMaterial);
+          }
+        }
 
         return {
           type_id: efficiencyData.type_id,
