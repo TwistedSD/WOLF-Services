@@ -10,7 +10,7 @@ interface AggregatedByproduct extends Byproduct {
 }
 
 export const ProductionSummary: React.FC<ProductionSummaryProps> = ({ rootNode }) => {
-  const [openSections, setOpenSections] = useState<Set<string>>(new Set(["base", "byproducts"]));
+  const [openSections, setOpenSections] = useState<Set<string>>(new Set(["base", "excess"]));
 
   if (!rootNode) return null;
 
@@ -24,69 +24,32 @@ export const ProductionSummary: React.FC<ProductionSummaryProps> = ({ rootNode }
     setOpenSections(newSet);
   };
 
-  // Collect all byproducts from the tree
-  const collectByproducts = (node: ProductionNode): AggregatedByproduct[] => {
-    const allByproducts: Map<number, AggregatedByproduct> = new Map();
+  // Collect all excess materials (both byproducts and overproduction)
+  const collectAllExcess = (node: ProductionNode): Map<string, number> => {
+    const allExcess: Map<string, number> = new Map();
 
     const traverse = (n: ProductionNode) => {
-      // Add this node's byproducts
-      n.byproducts.forEach((bp) => {
-        const existing = allByproducts.get(bp.type_id);
-        if (existing) {
-          existing.quantity += bp.quantity;
-        } else {
-          allByproducts.set(bp.type_id, {
-            ...bp,
-            wasReused: false, // Will check later
-          });
-        }
-      });
-
-      // Check if this node reused materials (they came from byproducts)
-      if (n.quantity_from_excess_pool > 0) {
-        // Mark byproduct as reused if it exists
-        // Note: In real implementation, we'd need to track which specific byproduct was reused
-        // For now, we'll mark all byproducts as potentially reused
+      // Add overproduced materials (excess from this production step)
+      if (n.excess_quantity > 0) {
+        const current = allExcess.get(n.type_name) || 0;
+        allExcess.set(n.type_name, current + n.excess_quantity);
       }
+
+      // Add byproducts
+      n.byproducts.forEach((bp) => {
+        const current = allExcess.get(bp.type_name) || 0;
+        allExcess.set(bp.type_name, current + bp.quantity);
+      });
 
       // Traverse children
       n.inputs.forEach(traverse);
     };
 
     traverse(node);
-    return Array.from(allByproducts.values());
+    return allExcess;
   };
 
-  // Collect excess materials (materials that were overproduced)
-  const collectExcess = (node: ProductionNode): Map<string, number> => {
-    const excess: Map<string, number> = new Map();
-
-    const traverse = (n: ProductionNode) => {
-      if (n.excess_quantity > 0) {
-        const current = excess.get(n.type_name) || 0;
-        excess.set(n.type_name, current + n.excess_quantity);
-      }
-      n.inputs.forEach(traverse);
-    };
-
-    traverse(node);
-    return excess;
-  };
-
-  // Calculate total materials reused from excess pool
-  const calculateTotalReused = (node: ProductionNode): number => {
-    let total = 0;
-    const traverse = (n: ProductionNode) => {
-      total += n.quantity_from_excess_pool;
-      n.inputs.forEach(traverse);
-    };
-    traverse(node);
-    return total;
-  };
-
-  const byproducts = collectByproducts(rootNode);
-  const excess = collectExcess(rootNode);
-  const totalReused = calculateTotalReused(rootNode);
+  const allExcess = collectAllExcess(rootNode);
 
   const formatTime = (seconds: number): string => {
     const hours = Math.floor(seconds / 3600);
@@ -140,8 +103,8 @@ export const ProductionSummary: React.FC<ProductionSummaryProps> = ({ rootNode }
         )}
       </div>
 
-      {/* Excess Materials Section */}
-      {excess.size > 0 && (
+      {/* Excess Materials Section (includes both byproducts and overproduction) */}
+      {allExcess.size > 0 && (
         <div className="border-b" style={{ borderColor: "var(--background-lighter)" }}>
           <button
             onClick={() => toggleSection("excess")}
@@ -153,41 +116,10 @@ export const ProductionSummary: React.FC<ProductionSummaryProps> = ({ rootNode }
 
           {openSections.has("excess") && (
             <div className="px-3 pb-2">
-              {Array.from(excess.entries()).map(([name, quantity]) => (
+              {Array.from(allExcess.entries()).map(([name, quantity]) => (
                 <div key={name} className="flex justify-between py-1 text-sm">
                   <span className="text-foreground">{name}</span>
                   <span className="text-foreground-muted font-mono">{quantity.toLocaleString()}</span>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Byproducts Section */}
-      {byproducts.length > 0 && (
-        <div className="border-b" style={{ borderColor: "var(--background-lighter)" }}>
-          <button
-            onClick={() => toggleSection("byproducts")}
-            className="w-full flex items-center justify-between px-3 py-2 hover:bg-background-lighter transition-colors"
-          >
-            <span className="text-xs font-semibold text-foreground-muted uppercase">Byproducts Generated</span>
-            <span className="text-foreground-muted text-xs">{openSections.has("byproducts") ? "−" : "+"}</span>
-          </button>
-
-          {openSections.has("byproducts") && (
-            <div className="px-3 pb-2">
-              {byproducts.map((bp) => (
-                <div key={bp.type_id} className="flex justify-between items-center py-1 text-sm">
-                  <span className="text-foreground">{bp.type_name}</span>
-                  <div className="flex items-center gap-2">
-                    {bp.wasReused && (
-                      <span className="text-xs px-1.5 py-0.5 rounded" style={{ backgroundColor: "rgb(34 197 94)", color: "white" }}>
-                        ✓ Reused
-                      </span>
-                    )}
-                    <span className="text-foreground-muted font-mono">{bp.quantity.toLocaleString()}</span>
-                  </div>
                 </div>
               ))}
             </div>
