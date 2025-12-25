@@ -1,26 +1,28 @@
 import React, { useState } from "react";
-import { RotateCcw } from "lucide-react";
-import type { ProductionNode, BlueprintOptionSimple, Byproduct } from "../../hooks/useEfficiency";
+import type { ProductionNode, Byproduct } from "../../hooks/useEfficiency";
+import { useBlueprintOptions } from "../../hooks/useEfficiency";
 
 interface EnhancedMaterialRowProps {
   node: ProductionNode;
   depth: number;
   onBlueprintChange?: (typeId: number, blueprintId: number) => void;
-  blueprintOptions?: BlueprintOptionSimple[];
 }
 
 export const EnhancedMaterialRow: React.FC<EnhancedMaterialRowProps> = ({
   node,
   depth,
   onBlueprintChange,
-  blueprintOptions = [],
 }) => {
   const [isExpanded, setIsExpanded] = useState(depth === 0);
   const [showByproducts, setShowByproducts] = useState(false);
 
+  // Fetch blueprint options for this node if it has alternatives
+  const { options: blueprintOptions } = useBlueprintOptions(
+    node.alternative_blueprints > 1 ? node.type_id : null
+  );
+
   const indent = depth * 24;
   const isBaseMaterial = node.inputs.length === 0 && node.blueprint_id === null;
-  const hasExcessReuse = node.quantity_from_excess_pool > 0;
   const hasByproducts = node.byproducts.length > 0;
   const hasAlternatives = node.alternative_blueprints > 1;
 
@@ -59,12 +61,9 @@ export const EnhancedMaterialRow: React.FC<EnhancedMaterialRowProps> = ({
             </span>
           )}
 
-          {hasExcessReuse && (
-            <span className="text-xs px-2 py-0.5 rounded font-semibold flex items-center gap-1" style={{ backgroundColor: "rgb(34 197 94)", color: "white" }}
-              title={`${node.quantity_from_excess_pool} units reused from byproducts/excess`}
-            >
-              <RotateCcw size={10} />
-              {node.quantity_from_excess_pool}
+          {node.facility_name && !isBaseMaterial && (
+            <span className="text-xs px-2 py-0.5 rounded font-semibold" style={{ backgroundColor: "var(--primary)", color: "white" }}>
+              {node.facility_name}
             </span>
           )}
 
@@ -94,7 +93,7 @@ export const EnhancedMaterialRow: React.FC<EnhancedMaterialRowProps> = ({
           >
             {blueprintOptions.map((opt) => (
               <option key={opt.blueprint_id} value={opt.blueprint_id}>
-                Output: {opt.output_quantity} ({opt.time_seconds}s)
+                {opt.facility_name || 'Unknown'} - {opt.output_quantity} units ({opt.time_seconds}s)
               </option>
             ))}
           </select>

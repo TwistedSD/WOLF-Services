@@ -89,18 +89,29 @@ export const ProductionSummary: React.FC<ProductionSummaryProps> = ({ rootNode }
   const totalReused = calculateTotalReused(rootNode);
 
   const formatTime = (seconds: number): string => {
-    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
-    if (minutes > 0) {
-      return `${minutes}m ${secs}s`;
-    }
-    return `${secs}s`;
+
+    const parts: string[] = [];
+    if (hours > 0) parts.push(`${hours}h`);
+    if (minutes > 0) parts.push(`${minutes}m`);
+    if (secs > 0 || parts.length === 0) parts.push(`${secs}s`);
+
+    return parts.join(' ');
   };
 
   return (
     <div className="border-2" style={{ borderColor: "var(--primary)" }}>
       <div className="px-3 py-2" style={{ backgroundColor: "var(--background-lighter)" }}>
-        <h4 className="text-xs font-semibold text-foreground-muted uppercase">Production Summary</h4>
+        <div className="flex items-center justify-between">
+          <h4 className="text-xs font-semibold text-foreground-muted uppercase">Production Summary</h4>
+          {rootNode.facility_name && (
+            <span className="text-xs text-foreground-muted">
+              Made in: <span className="font-semibold text-primary">{rootNode.facility_name}</span>
+            </span>
+          )}
+        </div>
       </div>
 
       {/* Base Materials Section */}
@@ -123,14 +134,7 @@ export const ProductionSummary: React.FC<ProductionSummaryProps> = ({ rootNode }
             ))}
             <div className="flex justify-between py-1 mt-2 pt-2 border-t text-sm font-semibold" style={{ borderColor: "var(--background-lighter)" }}>
               <span className="text-foreground">Total</span>
-              <div className="flex items-center gap-2">
-                {totalReused > 0 && (
-                  <span className="text-xs px-2 py-0.5 rounded" style={{ backgroundColor: "rgb(34 197 94)", color: "white" }}>
-                    ↓{totalReused} from reuse
-                  </span>
-                )}
-                <span className="text-foreground font-mono">{rootNode.total_base_materials.toLocaleString()}</span>
-              </div>
+              <span className="text-foreground font-mono">{rootNode.total_base_materials.toLocaleString()}</span>
             </div>
           </div>
         )}

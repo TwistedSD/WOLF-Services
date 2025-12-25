@@ -16,6 +16,8 @@ export interface ProductionNode {
   excess_quantity: number;
   quantity_from_excess_pool: number;
   blueprint_id: number | null;
+  facility_type_id?: number | null;
+  facility_name?: string | null;
   runs_required: number;
   time_seconds: number;
   total_production_time: number;
@@ -31,6 +33,8 @@ export interface BlueprintOptionSimple {
   blueprint_id: number;
   output_quantity: number;
   time_seconds: number;
+  facility_type_id?: number | null;
+  facility_name?: string | null;
 }
 
 export interface BlueprintComparison {

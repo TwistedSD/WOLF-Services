@@ -122,7 +122,7 @@ export const CalculatorTab: React.FC<CalculatorTabProps> = () => {
                   {selectedBlueprint.primary_type_name}
                 </h3>
                 <div className="flex items-center gap-2">
-                  <label className="text-sm text-foreground-muted">Quantity:</label>
+                  <label className="text-sm text-foreground-muted">Runs:</label>
                   <input
                     type="number"
                     value={quantity}
