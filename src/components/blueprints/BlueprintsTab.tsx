@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useAssemblies, useBlueprints, type Material } from "../../hooks/useBlueprints";
+import React, { useState, useMemo } from "react";
+import { useAssemblies, useBlueprints, useBlueprintDetails, type Material } from "../../hooks/useBlueprints";
 import { useProductionCalculator } from "../../hooks/useEfficiency";
 import { EnhancedMaterialRow } from "./EnhancedMaterialRow";
 import { ProductionSummary } from "./ProductionSummary";
@@ -37,10 +37,22 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
   const [selectedFacilityId, setSelectedFacilityId] = useState<number | null>(null);
   const [selectedBlueprintId, setSelectedBlueprintId] = useState<number | null>(null);
   const [selectedTypeId, setSelectedTypeId] = useState<number | null>(null);
-  const [quantity, setQuantity] = useState<number>(1);
+  const [runs, setRuns] = useState<number>(1);
   const [blueprintOverrides, setBlueprintOverrides] = useState<{ [typeId: number]: number }>({});
 
   const { blueprints, isLoading: loadingBlueprints, error: blueprintsError } = useBlueprints(selectedFacilityId);
+
+  // Fetch blueprint details to get output quantity
+  const { details: blueprintDetails } = useBlueprintDetails(selectedBlueprintId);
+
+  // Calculate actual quantity from runs × output_quantity
+  const quantity = useMemo(() => {
+    if (!blueprintDetails || blueprintDetails.outputs.length === 0) return runs;
+    // Get the primary output (first output with the matching primary_type_id)
+    const primaryOutput = blueprintDetails.outputs.find(o => o.type_id === blueprintDetails.primary_type_id);
+    if (!primaryOutput) return runs;
+    return runs * primaryOutput.quantity;
+  }, [runs, blueprintDetails]);
 
   // Use the new production calculator API
   const { result, isLoading: loadingCalculation, error: calculationError } = useProductionCalculator(
@@ -53,7 +65,7 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
     setSelectedBlueprintId(blueprintId);
     setSelectedTypeId(typeId);
     setBlueprintOverrides({}); // Reset overrides when changing blueprint
-    setQuantity(1); // Reset to 1
+    setRuns(1); // Reset runs
   };
 
   const handleBlueprintChange = (typeId: number, blueprintId: number) => {
@@ -63,9 +75,9 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
     }));
   };
 
-  const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleRunsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value) || 1;
-    setQuantity(Math.max(1, value));
+    setRuns(Math.max(1, value));
   };
 
   const formatDuration = (seconds: number): string => {
@@ -167,11 +179,11 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
                   )}
                 </div>
                 <div className="flex items-center gap-2">
-                  <label className="text-sm text-foreground-muted">Quantity:</label>
+                  <label className="text-sm text-foreground-muted">Runs:</label>
                   <input
                     type="number"
-                    value={quantity}
-                    onChange={handleQuantityChange}
+                    value={runs}
+                    onChange={handleRunsChange}
                     min="1"
                     className="w-24 px-2 py-1 text-sm border rounded text-foreground"
                     style={{
