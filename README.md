@@ -21,12 +21,16 @@ View and manage all your network nodes and connected infrastructure:
 - **Manufacturing Facilities** - View refineries, printers, assemblers, and shipyards
 - **Turrets** - Monitor defensive installations
 
-### Blueprints Calculator
-Browse and analyze production chains:
-- Filter blueprints by assembly type (Printer, Refinery, Assembler, Shipyard)
-- View detailed material requirements for any blueprint
-- Calculate base materials needed for production
-- See production times and output quantities
+### Blueprint Calculator
+Advanced production planning with excess material reuse:
+- **Assembly Types** - Filter by Printer, Refinery, Assembler, Shipyard, Factory
+- **Production Tree** - Recursive material breakdown with visual indicators
+- **Excess Material Reuse** - See materials saved through byproduct reuse (green badges)
+- **Byproduct Tracking** - View all byproducts generated (blue badges)
+- **Blueprint Alternatives** - Select optimal production paths
+- **Base Material Summary** - Aggregated ore requirements with savings indicator
+- **Production Time** - Full time breakdown for manufacturing chains
+- **Quantity Planning** - Calculate requirements for any quantity
 
 ### Killboard
 Track combat activity across EVE Frontier:
@@ -44,4 +48,43 @@ Access to this tribal hub is restricted to verified members of:
 
 Tribal membership is verified on-chain when you connect your wallet. Non-members will be denied access.
 
+## API Integration
 
+The website connects to the WOLF API at `https://api.ef-wolf.co.uk` for:
+- Blueprint data and production calculations
+- Smart assembly information
+- Killboard data
+
+## New Calculator Features
+
+The enhanced blueprint calculator includes:
+
+**Visual Indicators:**
+- Green badges - Materials reused from excess pool
+- Blue badges - Byproducts generated during production
+- BASE badges - Base materials (ores that cannot be manufactured)
+- Excess display - Shows overproduction amounts
+
+**Advanced Features:**
+- Recursive production tree with expand/collapse
+- Blueprint selector dropdowns for alternative production methods
+- Real-time recalculation when changing quantity or blueprints
+- Summary panel with base materials, excess, byproducts, and time
+
+**Production Optimization:**
+- Automatic calculation of optimal blueprint paths
+- Excess material reuse across the production chain
+- Byproduct tracking and reuse visibility
+- Savings indicator showing materials saved through reuse
+
+## Development
+
+See [CALCULATOR-IMPLEMENTATION.md](CALCULATOR-IMPLEMENTATION.md) for details on the enhanced blueprint calculator implementation.
+
+## Technology Stack
+
+- **React** with TypeScript
+- **Vite** for build tooling
+- **TailwindCSS** for styling
+- **MUD** for blockchain integration
+- **EVE Frontier** smart contracts

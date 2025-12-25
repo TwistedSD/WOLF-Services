@@ -1,60 +1,26 @@
 import React, { useState } from "react";
-import { useAssemblies, useBlueprints, type Material } from "../../hooks/useBlueprints";
-import { useProductionCalculator } from "../../hooks/useEfficiency";
+import { useAssemblies, useBlueprints, type Blueprint } from "../../hooks/useBlueprints";
+import { useProductionCalculator, useBlueprintOptions } from "../../hooks/useEfficiency";
 import { EnhancedMaterialRow } from "./EnhancedMaterialRow";
 import { ProductionSummary } from "./ProductionSummary";
 
-interface BlueprintsTabProps {
+interface CalculatorTabProps {
   walletAddress: string | null;
 }
 
-interface MaterialRowProps {
-  material: Material;
-  depth: number;
-}
-
-const MaterialRow: React.FC<MaterialRowProps> = ({ material, depth }) => {
-  return (
-    <div className="border-b" style={{ borderColor: "var(--background-lighter)" }}>
-      <div
-        className="flex items-center justify-between py-2 px-3 hover:bg-background-lighter transition-colors"
-        style={{ paddingLeft: `${depth * 16 + 12}px` }}
-      >
-        <div className="flex items-center gap-2 flex-1">
-          <span className="text-sm text-foreground">{material.type_name}</span>
-        </div>
-
-        <span className="text-xs text-foreground-muted w-16 text-right">
-          {material.quantity.toLocaleString()}
-        </span>
-      </div>
-    </div>
-  );
-};
-
-export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
+export const CalculatorTab: React.FC<CalculatorTabProps> = () => {
   const { assemblies, isLoading: loadingAssemblies, error: assembliesError } = useAssemblies();
   const [selectedFacilityId, setSelectedFacilityId] = useState<number | null>(null);
-  const [selectedBlueprintId, setSelectedBlueprintId] = useState<number | null>(null);
-  const [selectedTypeId, setSelectedTypeId] = useState<number | null>(null);
+  const [selectedBlueprint, setSelectedBlueprint] = useState<Blueprint | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
   const [blueprintOverrides, setBlueprintOverrides] = useState<{ [typeId: number]: number }>({});
 
   const { blueprints, isLoading: loadingBlueprints, error: blueprintsError } = useBlueprints(selectedFacilityId);
-
-  // Use the new production calculator API
   const { result, isLoading: loadingCalculation, error: calculationError } = useProductionCalculator(
-    selectedTypeId,
+    selectedBlueprint?.primary_type_id || null,
     quantity,
     blueprintOverrides
   );
-
-  const handleBlueprintSelect = (blueprintId: number, typeId: number) => {
-    setSelectedBlueprintId(blueprintId);
-    setSelectedTypeId(typeId);
-    setBlueprintOverrides({}); // Reset overrides when changing blueprint
-    setQuantity(1); // Reset to 1
-  };
 
   const handleBlueprintChange = (typeId: number, blueprintId: number) => {
     setBlueprintOverrides((prev) => ({
@@ -68,13 +34,10 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
     setQuantity(Math.max(1, value));
   };
 
-  const formatDuration = (seconds: number): string => {
-    const minutes = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    if (minutes > 0) {
-      return `${minutes}m ${secs}s`;
-    }
-    return `${secs}s`;
+  const handleBlueprintSelect = (blueprint: Blueprint) => {
+    setSelectedBlueprint(blueprint);
+    setBlueprintOverrides({}); // Reset overrides when changing blueprint
+    setQuantity(1); // Reset quantity
   };
 
   return (
@@ -95,8 +58,7 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
                 key={facility.facility_type_id}
                 onClick={() => {
                   setSelectedFacilityId(facility.facility_type_id);
-                  setSelectedBlueprintId(null);
-                  setSelectedTypeId(null);
+                  setSelectedBlueprint(null);
                 }}
                 className={`w-full px-3 py-2 text-left text-sm border-b transition-colors ${
                   selectedFacilityId === facility.facility_type_id
@@ -130,9 +92,9 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
             {blueprints.map((blueprint) => (
               <button
                 key={blueprint.blueprint_id}
-                onClick={() => handleBlueprintSelect(blueprint.blueprint_id, blueprint.primary_type_id)}
+                onClick={() => handleBlueprintSelect(blueprint)}
                 className={`w-full px-3 py-2 text-left text-sm border-b transition-colors ${
-                  selectedBlueprintId === blueprint.blueprint_id
+                  selectedBlueprint?.blueprint_id === blueprint.blueprint_id
                     ? "bg-primary text-white"
                     : "text-foreground hover:bg-background-lighter"
                 }`}
@@ -145,27 +107,20 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
         )}
       </div>
 
-      {/* Blueprint Details */}
+      {/* Production Calculator */}
       <div className="flex-1 border-2 overflow-y-auto" style={{ borderColor: "var(--primary)", backgroundColor: "var(--background-light)" }}>
-        {!selectedBlueprintId ? (
+        {!selectedBlueprint ? (
           <div className="p-6 text-center text-foreground-muted">
-            Select a blueprint to view details
+            Select a blueprint to calculate production requirements
           </div>
         ) : (
           <div>
             {/* Header with Quantity Input */}
             <div className="px-4 py-3 border-b-2" style={{ borderColor: "var(--primary)", backgroundColor: "var(--background-lighter)" }}>
               <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-lg font-semibold text-foreground">
-                    {blueprints.find(b => b.blueprint_id === selectedBlueprintId)?.primary_type_name}
-                  </h3>
-                  {result && (
-                    <p className="text-xs text-foreground-muted mt-1">
-                      Production Time: {formatDuration(result.time_seconds)} per run
-                    </p>
-                  )}
-                </div>
+                <h3 className="text-lg font-semibold text-foreground">
+                  {selectedBlueprint.primary_type_name}
+                </h3>
                 <div className="flex items-center gap-2">
                   <label className="text-sm text-foreground-muted">Quantity:</label>
                   <input
@@ -185,49 +140,27 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
 
             {calculationError ? (
               <div className="p-6 text-center text-error">
-                Error loading production data: {calculationError}
+                Error: {calculationError}
               </div>
             ) : loadingCalculation ? (
               <div className="p-6 text-center text-foreground-muted">
-                Calculating production requirements...
+                Calculating production tree...
               </div>
             ) : result ? (
               <>
-                {/* Output */}
+                {/* Production Tree */}
                 <div className="border-b-2" style={{ borderColor: "var(--primary)" }}>
                   <div className="px-3 py-2" style={{ backgroundColor: "var(--background-lighter)" }}>
-                    <h4 className="text-xs font-semibold text-foreground-muted uppercase">Output</h4>
+                    <h4 className="text-xs font-semibold text-foreground-muted uppercase">Production Tree</h4>
                   </div>
-                  <MaterialRow material={{
-                    type_id: result.type_id,
-                    type_name: result.type_name,
-                    quantity: result.quantity_produced,
-                    icon_id: null,
-                    icon_file: null
-                  }} depth={0} />
-                  {result.excess_quantity > 0 && (
-                    <div className="px-3 py-2 text-xs text-foreground-muted">
-                      Excess: +{result.excess_quantity} (produced {result.quantity_produced}, needed {result.quantity_needed})
-                    </div>
-                  )}
+                  <div className="overflow-x-auto">
+                    <EnhancedMaterialRow
+                      node={result}
+                      depth={0}
+                      onBlueprintChange={handleBlueprintChange}
+                    />
+                  </div>
                 </div>
-
-                {/* Input Materials (Production Tree) */}
-                {result.inputs.length > 0 && (
-                  <div className="border-b-2" style={{ borderColor: "var(--primary)" }}>
-                    <div className="px-3 py-2" style={{ backgroundColor: "var(--background-lighter)" }}>
-                      <h4 className="text-xs font-semibold text-foreground-muted uppercase">Input Materials</h4>
-                    </div>
-                    {result.inputs.map((input, idx) => (
-                      <EnhancedMaterialRow
-                        key={`${input.type_id}-${idx}`}
-                        node={input}
-                        depth={0}
-                        onBlueprintChange={handleBlueprintChange}
-                      />
-                    ))}
-                  </div>
-                )}
 
                 {/* Production Summary */}
                 <ProductionSummary rootNode={result} />
@@ -240,4 +173,4 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
   );
 };
 
-export default BlueprintsTab;
+export default CalculatorTab;
