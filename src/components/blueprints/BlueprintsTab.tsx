@@ -44,13 +44,11 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
   // Fetch blueprint details to show raw inputs/outputs
   const { details: blueprintDetails, isLoading: loadingDetails, error: detailsError } = useBlueprintDetails(selectedBlueprintId);
 
-  // Get the primary output type from the blueprint to calculate production for
-  const selectedBlueprint = blueprints.find(b => b.blueprint_id === selectedBlueprintId);
-
-  // Calculate production tree for the blueprint's output
+  // Calculate production tree for each input material
+  // We'll calculate production for all inputs, not using primary_type_id at all
   const { result: productionResult, isLoading: loadingProduction } = useProductionCalculator(
-    selectedBlueprint?.primary_type_id || null,
-    runs,
+    blueprintDetails?.inputs[0]?.type_id || null,
+    (blueprintDetails?.inputs[0]?.quantity || 0) * runs,
     blueprintOverrides
   );
 
