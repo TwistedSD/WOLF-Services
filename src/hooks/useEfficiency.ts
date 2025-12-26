@@ -171,3 +171,61 @@ export function useBlueprintComparison(typeId: number | null, quantity: number) 
 
   return { comparisons, isLoading, error };
 }
+
+export interface BlueprintProductionResult {
+  blueprint_id: number;
+  runs: number;
+  outputs: Array<{
+    type_id: number;
+    type_name: string;
+    quantity: number;
+  }>;
+  inputs: ProductionNode[];
+}
+
+export function useBlueprintProduction(
+  blueprintId: number | null,
+  runs: number,
+  blueprintOverrides?: { [typeId: number]: number }
+) {
+  const [result, setResult] = useState<BlueprintProductionResult | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!blueprintId || runs <= 0) {
+      setResult(null);
+      return;
+    }
+
+    const fetchProduction = async () => {
+      try {
+        setIsLoading(true);
+
+        const overridesParam = blueprintOverrides && Object.keys(blueprintOverrides).length > 0
+          ? `&blueprintOverrides=${encodeURIComponent(JSON.stringify(blueprintOverrides))}`
+          : '';
+
+        const response = await fetch(
+          `${API_URL}/api/industry/blueprints/${blueprintId}/production?runs=${runs}${overridesParam}`
+        );
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch blueprint production: ${response.status} ${response.statusText}`);
+        }
+        const data = await response.json();
+        setResult(data);
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching blueprint production:', err);
+        setError(err instanceof Error ? err.message : "Unknown error");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProduction();
+  }, [blueprintId, runs, JSON.stringify(blueprintOverrides)]);
+
+  return { result, isLoading, error };
+}

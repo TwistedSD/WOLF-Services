@@ -2,17 +2,17 @@ import React, { useState } from "react";
 import type { ProductionNode, Byproduct } from "../../hooks/useEfficiency";
 
 interface ProductionSummaryProps {
-  rootNode: ProductionNode | null;
+  inputs: ProductionNode[];
 }
 
 interface AggregatedByproduct extends Byproduct {
   wasReused: boolean;
 }
 
-export const ProductionSummary: React.FC<ProductionSummaryProps> = ({ rootNode }) => {
+export const ProductionSummary: React.FC<ProductionSummaryProps> = ({ inputs }) => {
   const [openSections, setOpenSections] = useState<Set<string>>(new Set(["base", "excess"]));
 
-  if (!rootNode) return null;
+  if (!inputs || inputs.length === 0) return null;
 
   const toggleSection = (section: string) => {
     const newSet = new Set(openSections);
@@ -24,8 +24,8 @@ export const ProductionSummary: React.FC<ProductionSummaryProps> = ({ rootNode }
     setOpenSections(newSet);
   };
 
-  // Collect all excess materials (both byproducts and overproduction)
-  const collectAllExcess = (node: ProductionNode): Map<string, number> => {
+  // Collect all excess materials (both byproducts and overproduction) from all inputs
+  const collectAllExcess = (nodes: ProductionNode[]): Map<string, number> => {
     const allExcess: Map<string, number> = new Map();
 
     const traverse = (n: ProductionNode) => {
@@ -45,11 +45,34 @@ export const ProductionSummary: React.FC<ProductionSummaryProps> = ({ rootNode }
       n.inputs.forEach(traverse);
     };
 
-    traverse(node);
+    nodes.forEach(traverse);
     return allExcess;
   };
 
-  const allExcess = collectAllExcess(rootNode);
+  // Aggregate base materials from all inputs
+  const aggregateBaseMaterials = (nodes: ProductionNode[]): { breakdown: { [name: string]: number }, total: number } => {
+    const breakdown: { [name: string]: number } = {};
+    let total = 0;
+
+    nodes.forEach(node => {
+      Object.entries(node.base_material_names).forEach(([typeId, name]) => {
+        const quantity = node.base_material_breakdown[parseInt(typeId)] || 0;
+        breakdown[name] = (breakdown[name] || 0) + quantity;
+        total += quantity;
+      });
+    });
+
+    return { breakdown, total };
+  };
+
+  // Aggregate production times
+  const aggregateProductionTime = (nodes: ProductionNode[]): number => {
+    return Math.max(...nodes.map(n => n.total_production_time), 0);
+  };
+
+  const allExcess = collectAllExcess(inputs);
+  const { breakdown: baseMaterialBreakdown, total: totalBaseMaterials } = aggregateBaseMaterials(inputs);
+  const totalProductionTime = aggregateProductionTime(inputs);
 
   const formatTime = (seconds: number): string => {
     const hours = Math.floor(seconds / 3600);
@@ -69,11 +92,6 @@ export const ProductionSummary: React.FC<ProductionSummaryProps> = ({ rootNode }
       <div className="px-3 py-2" style={{ backgroundColor: "var(--background-lighter)" }}>
         <div className="flex items-center justify-between">
           <h4 className="text-xs font-semibold text-foreground-muted uppercase">Production Summary</h4>
-          {rootNode.facility_name && (
-            <span className="text-xs text-foreground-muted">
-              Made in: <span className="font-semibold text-primary">{rootNode.facility_name}</span>
-            </span>
-          )}
         </div>
       </div>
 
@@ -89,15 +107,15 @@ export const ProductionSummary: React.FC<ProductionSummaryProps> = ({ rootNode }
 
         {openSections.has("base") && (
           <div className="px-3 pb-2">
-            {Object.entries(rootNode.base_material_breakdown).map(([typeId, quantity]) => (
-              <div key={typeId} className="flex justify-between py-1 text-sm">
-                <span className="text-foreground">{rootNode.base_material_names[parseInt(typeId)]}</span>
+            {Object.entries(baseMaterialBreakdown).map(([name, quantity]) => (
+              <div key={name} className="flex justify-between py-1 text-sm">
+                <span className="text-foreground">{name}</span>
                 <span className="text-foreground-muted font-mono">{quantity.toLocaleString()}</span>
               </div>
             ))}
             <div className="flex justify-between py-1 mt-2 pt-2 border-t text-sm font-semibold" style={{ borderColor: "var(--background-lighter)" }}>
               <span className="text-foreground">Total</span>
-              <span className="text-foreground font-mono">{rootNode.total_base_materials.toLocaleString()}</span>
+              <span className="text-foreground font-mono">{totalBaseMaterials.toLocaleString()}</span>
             </div>
           </div>
         )}
@@ -140,12 +158,8 @@ export const ProductionSummary: React.FC<ProductionSummaryProps> = ({ rootNode }
         {openSections.has("time") && (
           <div className="px-3 pb-2">
             <div className="flex justify-between py-1 text-sm">
-              <span className="text-foreground">Total Time</span>
-              <span className="text-foreground-muted font-mono">{formatTime(rootNode.total_production_time)}</span>
-            </div>
-            <div className="flex justify-between py-1 text-sm">
-              <span className="text-foreground">Base Material Time</span>
-              <span className="text-foreground-muted font-mono">{formatTime(rootNode.time_seconds)}</span>
+              <span className="text-foreground">Total Time (parallel)</span>
+              <span className="text-foreground-muted font-mono">{formatTime(totalProductionTime)}</span>
             </div>
           </div>
         )}

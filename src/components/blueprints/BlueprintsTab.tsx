@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useAssemblies, useBlueprints, useBlueprintDetails, type Material } from "../../hooks/useBlueprints";
-import { useProductionCalculator } from "../../hooks/useEfficiency";
+import { useBlueprintProduction } from "../../hooks/useEfficiency";
 import { EnhancedMaterialRow } from "./EnhancedMaterialRow";
 import { ProductionSummary } from "./ProductionSummary";
 
@@ -44,11 +44,10 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
   // Fetch blueprint details to show raw inputs/outputs
   const { details: blueprintDetails, isLoading: loadingDetails, error: detailsError } = useBlueprintDetails(selectedBlueprintId);
 
-  // Calculate production tree for each input material
-  // We'll calculate production for all inputs, not using primary_type_id at all
-  const { result: productionResult, isLoading: loadingProduction } = useProductionCalculator(
-    blueprintDetails?.inputs[0]?.type_id || null,
-    (blueprintDetails?.inputs[0]?.quantity || 0) * runs,
+  // Calculate production tree for ALL input materials using the blueprint production endpoint
+  const { result: productionResult, isLoading: loadingProduction } = useBlueprintProduction(
+    selectedBlueprintId,
+    runs,
     blueprintOverrides
   );
 
@@ -246,7 +245,9 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
                 )}
 
                 {/* Production Summary */}
-                {productionResult && <ProductionSummary rootNode={productionResult} />}
+                {productionResult && productionResult.inputs.length > 0 && (
+                  <ProductionSummary inputs={productionResult.inputs} />
+                )}
 
                 {/* Blueprint Info */}
                 <div className="border-b-2" style={{ borderColor: "var(--primary)" }}>
