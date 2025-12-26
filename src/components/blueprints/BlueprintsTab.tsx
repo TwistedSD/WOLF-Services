@@ -248,7 +248,7 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
                 )}
 
                 {/* Production Summary */}
-                {productionResult && <ProductionSummary result={productionResult} />}
+                {productionResult && <ProductionSummary rootNode={productionResult} />}
 
                 {/* Blueprint Info */}
                 <div className="border-b-2" style={{ borderColor: "var(--primary)" }}>
