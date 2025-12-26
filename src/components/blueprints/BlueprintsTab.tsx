@@ -81,7 +81,6 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
                 onClick={() => {
                   setSelectedFacilityId(facility.facility_type_id);
                   setSelectedBlueprintId(null);
-                  setSelectedTypeId(null);
                 }}
                 className={`w-full px-3 py-2 text-left text-sm border-b transition-colors ${
                   selectedFacilityId === facility.facility_type_id
@@ -145,9 +144,9 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
                   <h3 className="text-lg font-semibold text-foreground">
                     {blueprints.find(b => b.blueprint_id === selectedBlueprintId)?.primary_type_name}
                   </h3>
-                  {result && (
+                  {blueprintDetails && (
                     <p className="text-xs text-foreground-muted mt-1">
-                      Production Time: {formatDuration(result.time_seconds)} per run
+                      Production Time: {formatDuration(blueprintDetails.run_time)} per run
                     </p>
                   )}
                 </div>
