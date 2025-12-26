@@ -36,43 +36,16 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
   const { assemblies, isLoading: loadingAssemblies, error: assembliesError } = useAssemblies();
   const [selectedFacilityId, setSelectedFacilityId] = useState<number | null>(null);
   const [selectedBlueprintId, setSelectedBlueprintId] = useState<number | null>(null);
-  const [selectedTypeId, setSelectedTypeId] = useState<number | null>(null);
   const [runs, setRuns] = useState<number>(1);
-  const [blueprintOverrides, setBlueprintOverrides] = useState<{ [typeId: number]: number }>({});
 
   const { blueprints, isLoading: loadingBlueprints, error: blueprintsError } = useBlueprints(selectedFacilityId);
 
-  // Fetch blueprint details to get output quantity
-  const { details: blueprintDetails } = useBlueprintDetails(selectedBlueprintId);
+  // Fetch blueprint details to show raw inputs/outputs
+  const { details: blueprintDetails, isLoading: loadingDetails, error: detailsError } = useBlueprintDetails(selectedBlueprintId);
 
-  // Calculate actual quantity from runs × output_quantity
-  const quantity = useMemo(() => {
-    if (!blueprintDetails || blueprintDetails.outputs.length === 0) return runs;
-    // Get the primary output (first output with the matching primary_type_id)
-    const primaryOutput = blueprintDetails.outputs.find(o => o.type_id === blueprintDetails.primary_type_id);
-    if (!primaryOutput) return runs;
-    return runs * primaryOutput.quantity;
-  }, [runs, blueprintDetails]);
-
-  // Use the new production calculator API
-  const { result, isLoading: loadingCalculation, error: calculationError } = useProductionCalculator(
-    selectedTypeId,
-    quantity,
-    blueprintOverrides
-  );
-
-  const handleBlueprintSelect = (blueprintId: number, typeId: number) => {
+  const handleBlueprintSelect = (blueprintId: number) => {
     setSelectedBlueprintId(blueprintId);
-    setSelectedTypeId(typeId);
-    setBlueprintOverrides({}); // Reset overrides when changing blueprint
     setRuns(1); // Reset runs
-  };
-
-  const handleBlueprintChange = (typeId: number, blueprintId: number) => {
-    setBlueprintOverrides((prev) => ({
-      ...prev,
-      [typeId]: blueprintId,
-    }));
   };
 
   const handleRunsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -142,7 +115,7 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
             {blueprints.map((blueprint) => (
               <button
                 key={blueprint.blueprint_id}
-                onClick={() => handleBlueprintSelect(blueprint.blueprint_id, blueprint.primary_type_id)}
+                onClick={() => handleBlueprintSelect(blueprint.blueprint_id)}
                 className={`w-full px-3 py-2 text-left text-sm border-b transition-colors ${
                   selectedBlueprintId === blueprint.blueprint_id
                     ? "bg-primary text-white"
@@ -195,54 +168,72 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
               </div>
             </div>
 
-            {calculationError ? (
+            {detailsError ? (
               <div className="p-6 text-center text-error">
-                Error loading production data: {calculationError}
+                Error loading blueprint details: {detailsError}
               </div>
-            ) : loadingCalculation ? (
+            ) : loadingDetails ? (
               <div className="p-6 text-center text-foreground-muted">
-                Calculating production requirements...
+                Loading blueprint details...
               </div>
-            ) : result ? (
+            ) : blueprintDetails ? (
               <>
-                {/* Output */}
+                {/* Outputs */}
                 <div className="border-b-2" style={{ borderColor: "var(--primary)" }}>
                   <div className="px-3 py-2" style={{ backgroundColor: "var(--background-lighter)" }}>
-                    <h4 className="text-xs font-semibold text-foreground-muted uppercase">Output</h4>
+                    <h4 className="text-xs font-semibold text-foreground-muted uppercase">Outputs (per run)</h4>
                   </div>
-                  <MaterialRow material={{
-                    type_id: result.type_id,
-                    type_name: result.type_name,
-                    quantity: result.quantity_produced,
-                    icon_id: null,
-                    icon_file: null
-                  }} depth={0} />
-                  {result.excess_quantity > 0 && (
-                    <div className="px-3 py-2 text-xs text-foreground-muted">
-                      Excess: +{result.excess_quantity} (produced {result.quantity_produced}, needed {result.quantity_needed})
-                    </div>
-                  )}
+                  {blueprintDetails.outputs.map((output) => (
+                    <MaterialRow
+                      key={output.type_id}
+                      material={{
+                        ...output,
+                        quantity: output.quantity * runs
+                      }}
+                      depth={0}
+                    />
+                  ))}
                 </div>
 
-                {/* Input Materials (Production Tree) */}
-                {result.inputs.length > 0 && (
+                {/* Inputs */}
+                {blueprintDetails.inputs.length > 0 && (
                   <div className="border-b-2" style={{ borderColor: "var(--primary)" }}>
                     <div className="px-3 py-2" style={{ backgroundColor: "var(--background-lighter)" }}>
-                      <h4 className="text-xs font-semibold text-foreground-muted uppercase">Input Materials</h4>
+                      <h4 className="text-xs font-semibold text-foreground-muted uppercase">Inputs (per run)</h4>
                     </div>
-                    {result.inputs.map((input, idx) => (
-                      <EnhancedMaterialRow
-                        key={`${input.type_id}-${idx}`}
-                        node={input}
+                    {blueprintDetails.inputs.map((input) => (
+                      <MaterialRow
+                        key={input.type_id}
+                        material={{
+                          ...input,
+                          quantity: input.quantity * runs
+                        }}
                         depth={0}
-                        onBlueprintChange={handleBlueprintChange}
                       />
                     ))}
                   </div>
                 )}
 
-                {/* Production Summary */}
-                <ProductionSummary rootNode={result} />
+                {/* Blueprint Info */}
+                <div className="border-b-2" style={{ borderColor: "var(--primary)" }}>
+                  <div className="px-3 py-2" style={{ backgroundColor: "var(--background-lighter)" }}>
+                    <h4 className="text-xs font-semibold text-foreground-muted uppercase">Blueprint Info</h4>
+                  </div>
+                  <div className="px-3 py-2 space-y-1 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-foreground-muted">Time per run:</span>
+                      <span className="text-foreground font-mono">{formatDuration(blueprintDetails.run_time)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-foreground-muted">Total time ({runs} runs):</span>
+                      <span className="text-foreground font-mono">{formatDuration(blueprintDetails.run_time * runs)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-foreground-muted">Max input capacity:</span>
+                      <span className="text-foreground font-mono">{blueprintDetails.max_input_capacity.toLocaleString()}</span>
+                    </div>
+                  </div>
+                </div>
               </>
             ) : null}
           </div>
