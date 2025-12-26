@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 import { useAssemblies, useBlueprints, useBlueprintDetails, type Material } from "../../hooks/useBlueprints";
 import { useProductionCalculator } from "../../hooks/useEfficiency";
 import { EnhancedMaterialRow } from "./EnhancedMaterialRow";
@@ -37,20 +37,39 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
   const [selectedFacilityId, setSelectedFacilityId] = useState<number | null>(null);
   const [selectedBlueprintId, setSelectedBlueprintId] = useState<number | null>(null);
   const [runs, setRuns] = useState<number>(1);
+  const [blueprintOverrides, setBlueprintOverrides] = useState<{ [typeId: number]: number }>({});
 
   const { blueprints, isLoading: loadingBlueprints, error: blueprintsError } = useBlueprints(selectedFacilityId);
 
   // Fetch blueprint details to show raw inputs/outputs
   const { details: blueprintDetails, isLoading: loadingDetails, error: detailsError } = useBlueprintDetails(selectedBlueprintId);
 
+  // Get the primary output type from the blueprint to calculate production for
+  const selectedBlueprint = blueprints.find(b => b.blueprint_id === selectedBlueprintId);
+
+  // Calculate production tree for the blueprint's output
+  const { result: productionResult, isLoading: loadingProduction } = useProductionCalculator(
+    selectedBlueprint?.primary_type_id || null,
+    runs,
+    blueprintOverrides
+  );
+
   const handleBlueprintSelect = (blueprintId: number) => {
     setSelectedBlueprintId(blueprintId);
     setRuns(1); // Reset runs
+    setBlueprintOverrides({}); // Reset overrides
   };
 
   const handleRunsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value) || 1;
     setRuns(Math.max(1, value));
+  };
+
+  const handleBlueprintChange = (typeId: number, blueprintId: number) => {
+    setBlueprintOverrides((prev) => ({
+      ...prev,
+      [typeId]: blueprintId,
+    }));
   };
 
   const formatDuration = (seconds: number): string => {
@@ -233,6 +252,32 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
                     </div>
                   </div>
                 </div>
+
+                {/* Production Tree */}
+                {loadingProduction ? (
+                  <div className="p-6 text-center text-foreground-muted">
+                    Calculating production tree...
+                  </div>
+                ) : productionResult && (
+                  <>
+                    <div className="border-b-2" style={{ borderColor: "var(--primary)" }}>
+                      <div className="px-3 py-2" style={{ backgroundColor: "var(--background-lighter)" }}>
+                        <h4 className="text-xs font-semibold text-foreground-muted uppercase">Production Tree</h4>
+                      </div>
+                      {productionResult.inputs.map((input, index) => (
+                        <EnhancedMaterialRow
+                          key={`${input.type_id}-${index}`}
+                          node={input}
+                          depth={0}
+                          onBlueprintChange={handleBlueprintChange}
+                        />
+                      ))}
+                    </div>
+
+                    {/* Production Summary */}
+                    <ProductionSummary result={productionResult} />
+                  </>
+                )}
               </>
             ) : null}
           </div>
