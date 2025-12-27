@@ -9,6 +9,7 @@ import { TribeTabs, TabId } from './components/layout/TribeTabs';
 import { SmartAssembliesTab } from './components/assemblies/SmartAssembliesTab';
 import { BlueprintsTab } from './components/blueprints/BlueprintsTab';
 import { KillboardTab } from './components/killboard/KillboardTab';
+import { FittingTab } from './components/fitting/FittingTab';
 
 function App() {
   const { walletAddress, isConnected, availableWallets, handleConnect, handleDisconnect } = useWalletConnection();
@@ -85,10 +86,7 @@ function App() {
           <SmartAssembliesTab walletAddress={walletAddress} />
         )}
         {activeTab === "fitting" && (
-          <div className="p-6 border-2 border-primary bg-background">
-            <h2 className="text-xl font-bold text-primary mb-4">Fitting Tool</h2>
-            <p className="text-foreground-muted">Fitting tool content will go here</p>
-          </div>
+          <FittingTab />
         )}
         {activeTab === "blueprints" && (
           <BlueprintsTab walletAddress={walletAddress} />
