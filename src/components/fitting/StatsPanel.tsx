@@ -45,7 +45,7 @@ export function StatsPanel({ fitting }: StatsPanelProps) {
     used: number,
     total: number,
     percentage: number,
-    color: string
+    colorClass: string
   ) => (
     <div className="mb-3">
       <div className="flex justify-between text-sm mb-1">
@@ -57,7 +57,7 @@ export function StatsPanel({ fitting }: StatsPanelProps) {
       <div className="w-full bg-background-lighter border border-secondary/30 h-4">
         <div
           className={`h-full transition-all ${
-            percentage > 100 ? 'bg-error' : `bg-${color}`
+            percentage > 100 ? 'bg-error' : colorClass
           }`}
           style={{ width: `${Math.min(percentage, 100)}%` }}
         />
@@ -80,8 +80,8 @@ export function StatsPanel({ fitting }: StatsPanelProps) {
         {/* Resource Usage */}
         <div className="mb-6">
           <h3 className="text-sm font-bold text-primary mb-3">Resources</h3>
-          {renderResourceBar('Powergrid', usedPowergrid, totalPowergrid, pgPercentage, 'primary')}
-          {renderResourceBar('CPU', usedCPU, totalCPU, cpuPercentage, 'info')}
+          {renderResourceBar('Powergrid', usedPowergrid, totalPowergrid, pgPercentage, 'bg-primary')}
+          {renderResourceBar('CPU', usedCPU, totalCPU, cpuPercentage, 'bg-info')}
         </div>
 
         {/* Capacitor */}

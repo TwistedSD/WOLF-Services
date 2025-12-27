@@ -47,11 +47,7 @@ export function FittingTab() {
       const slotKey = `${slotType}Slots` as keyof Omit<Fitting, 'ship'>;
       const slots = [...(newFitting[slotKey] as (FittedModule | null)[])];
 
-      // Check if slot is already occupied
-      if (slots[slotIndex] !== null) {
-        return prev; // Don't fit if slot is occupied
-      }
-
+      // Replace module in slot (whether empty or occupied)
       slots[slotIndex] = { module, slotIndex };
       newFitting[slotKey] = slots as any;
 

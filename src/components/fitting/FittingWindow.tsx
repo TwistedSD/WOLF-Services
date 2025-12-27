@@ -27,15 +27,9 @@ export function FittingWindow({ fitting, modules, onModuleFit, onModuleRemove }:
   }
 
   const handleSlotClick = (slotType: string, index: number, occupied: boolean) => {
-    if (occupied) {
-      // Remove module if slot is occupied
-      onModuleRemove(slotType, index);
-      setSelectedSlot(null);
-    } else {
-      // Select slot for fitting
-      setSelectedSlot({ type: slotType, index });
-      setSearchTerm(''); // Clear search when selecting new slot
-    }
+    // Always select the slot for fitting/replacing
+    setSelectedSlot({ type: slotType, index });
+    setSearchTerm(''); // Clear search when selecting new slot
   };
 
   const handleModuleSelect = (module: Module) => {
@@ -65,17 +59,60 @@ export function FittingWindow({ fitting, modules, onModuleFit, onModuleRemove }:
       );
   };
 
+  const getSlotColors = (slotType: string) => {
+    const colorMap: { [key: string]: { text: string; borderSelected: string; bgSelected: string; borderOccupied: string; bgOccupied: string; bgOccupiedHover: string; borderEmpty: string } } = {
+      high: {
+        text: 'text-primary-light',
+        borderSelected: 'border-primary-light',
+        bgSelected: 'bg-primary-light/20',
+        borderOccupied: 'border-primary-light/50',
+        bgOccupied: 'bg-primary-light/10',
+        bgOccupiedHover: 'hover:bg-primary-light/20',
+        borderEmpty: 'hover:border-primary-light/50'
+      },
+      mid: {
+        text: 'text-info',
+        borderSelected: 'border-info',
+        bgSelected: 'bg-info/20',
+        borderOccupied: 'border-info/50',
+        bgOccupied: 'bg-info/10',
+        bgOccupiedHover: 'hover:bg-info/20',
+        borderEmpty: 'hover:border-info/50'
+      },
+      low: {
+        text: 'text-warning',
+        borderSelected: 'border-warning',
+        bgSelected: 'bg-warning/20',
+        borderOccupied: 'border-warning/50',
+        bgOccupied: 'bg-warning/10',
+        bgOccupiedHover: 'hover:bg-warning/20',
+        borderEmpty: 'hover:border-warning/50'
+      },
+      engine: {
+        text: 'text-success',
+        borderSelected: 'border-success',
+        bgSelected: 'bg-success/20',
+        borderOccupied: 'border-success/50',
+        bgOccupied: 'bg-success/10',
+        bgOccupiedHover: 'hover:bg-success/20',
+        borderEmpty: 'hover:border-success/50'
+      }
+    };
+    return colorMap[slotType] || colorMap.high;
+  };
+
   const renderSlotSection = (
     title: string,
     slotType: string,
-    slots: any[],
-    color: string
+    slots: any[]
   ) => {
     if (slots.length === 0) return null;
 
+    const colors = getSlotColors(slotType);
+
     return (
       <div className="mb-4">
-        <div className={`text-sm font-bold mb-2 text-${color}`}>
+        <div className={`text-sm font-bold mb-2 ${colors.text}`}>
           {title} ({slots.filter(s => s !== null).length}/{slots.length})
         </div>
         <div className="space-y-1">
@@ -89,17 +126,14 @@ export function FittingWindow({ fitting, modules, onModuleFit, onModuleRemove }:
                 onClick={() => handleSlotClick(slotType, index, isOccupied)}
                 className={`w-full p-2 border-2 text-left text-sm transition-colors ${
                   isSelected
-                    ? `border-${color} bg-${color}/20`
+                    ? `${colors.borderSelected} ${colors.bgSelected}`
                     : isOccupied
-                    ? `border-${color}/50 bg-${color}/10 hover:bg-${color}/20`
-                    : `border-secondary/30 bg-background-light hover:border-${color}/50`
+                    ? `${colors.borderOccupied} ${colors.bgOccupied} ${colors.bgOccupiedHover}`
+                    : `border-secondary/30 bg-background-light ${colors.borderEmpty}`
                 }`}
               >
                 {isOccupied ? (
-                  <div className="flex items-center justify-between">
-                    <span className="text-foreground">{slot.module.typeName}</span>
-                    <X size={14} className="text-error" />
-                  </div>
+                  <span className="text-foreground">{slot.module.typeName}</span>
                 ) : (
                   <span className="text-foreground-muted">[Empty {title.slice(0, -6)} Slot]</span>
                 )}
@@ -124,10 +158,10 @@ export function FittingWindow({ fitting, modules, onModuleFit, onModuleRemove }:
       <div className="flex-1 flex overflow-hidden">
         {/* Fitting Slots */}
         <div className="flex-1 p-4 overflow-y-auto border-r-2 border-primary">
-          {renderSlotSection('High Slots', 'high', fitting.highSlots, 'primary-light')}
-          {renderSlotSection('Mid Slots', 'mid', fitting.midSlots, 'info')}
-          {renderSlotSection('Low Slots', 'low', fitting.lowSlots, 'warning')}
-          {renderSlotSection('Engine Slots', 'engine', fitting.engineSlots, 'success')}
+          {renderSlotSection('High Slots', 'high', fitting.highSlots)}
+          {renderSlotSection('Mid Slots', 'mid', fitting.midSlots)}
+          {renderSlotSection('Low Slots', 'low', fitting.lowSlots)}
+          {renderSlotSection('Engine Slots', 'engine', fitting.engineSlots)}
         </div>
 
         {/* Module Selection Panel */}
@@ -136,8 +170,29 @@ export function FittingWindow({ fitting, modules, onModuleFit, onModuleRemove }:
             <>
               <div className="mb-3">
                 <div className="text-sm font-bold text-primary mb-2">
-                  Select Module for {selectedSlot.type.toUpperCase()} Slot {selectedSlot.index + 1}
+                  {(() => {
+                    const slotKey = `${selectedSlot.type}Slots` as keyof Omit<Fitting, 'ship'>;
+                    const slots = fitting[slotKey] as any[];
+                    const moduleInSlot = slots[selectedSlot.index];
+                    return moduleInSlot
+                      ? `Replace Module in ${selectedSlot.type.toUpperCase()} Slot ${selectedSlot.index + 1}`
+                      : `Select Module for ${selectedSlot.type.toUpperCase()} Slot ${selectedSlot.index + 1}`;
+                  })()}
                 </div>
+                {(() => {
+                  const slotKey = `${selectedSlot.type}Slots` as keyof Omit<Fitting, 'ship'>;
+                  const slots = fitting[slotKey] as any[];
+                  const moduleInSlot = slots[selectedSlot.index];
+                  if (moduleInSlot) {
+                    return (
+                      <div className="mb-2 p-2 border-2 border-warning bg-warning/10 text-sm">
+                        <div className="text-foreground-muted">Current:</div>
+                        <div className="text-foreground font-semibold">{moduleInSlot.module.typeName}</div>
+                      </div>
+                    );
+                  }
+                  return null;
+                })()}
                 <input
                   type="text"
                   placeholder="Search modules..."
@@ -149,7 +204,16 @@ export function FittingWindow({ fitting, modules, onModuleFit, onModuleRemove }:
 
               <div className="flex-1 overflow-y-auto space-y-1">
                 {getAvailableModules().map(module => {
-                  const fittedModules = getAllFittedModules(fitting);
+                  // Get all fitted modules, excluding the one in the currently selected slot
+                  const allFittedModules = getAllFittedModules(fitting);
+                  const fittedModules = selectedSlot ? allFittedModules.filter(fm => {
+                    // Exclude module in the selected slot to allow for replacement
+                    const slotKey = `${selectedSlot.type}Slots` as keyof Omit<Fitting, 'ship'>;
+                    const slots = fitting[slotKey] as any[];
+                    const moduleInSlot = slots[selectedSlot.index];
+                    return !(moduleInSlot && fm === moduleInSlot);
+                  }) : allFittedModules;
+
                   const validation = fitting.ship
                     ? canFitModule(fitting.ship, module, selectedSlot?.type || '', fittedModules)
                     : { canFit: true };
@@ -192,12 +256,33 @@ export function FittingWindow({ fitting, modules, onModuleFit, onModuleRemove }:
                 )}
               </div>
 
-              <button
-                onClick={() => setSelectedSlot(null)}
-                className="mt-3 w-full p-2 border-2 border-error text-error hover:bg-error hover:text-foreground transition-colors"
-              >
-                Cancel
-              </button>
+              <div className="mt-3 flex gap-2">
+                {(() => {
+                  const slotKey = `${selectedSlot.type}Slots` as keyof Omit<Fitting, 'ship'>;
+                  const slots = fitting[slotKey] as any[];
+                  const moduleInSlot = slots[selectedSlot.index];
+                  if (moduleInSlot) {
+                    return (
+                      <button
+                        onClick={() => {
+                          onModuleRemove(selectedSlot.type, selectedSlot.index);
+                          setSelectedSlot(null);
+                        }}
+                        className="flex-1 p-2 border-2 border-error text-error hover:bg-error hover:text-foreground transition-colors"
+                      >
+                        Remove
+                      </button>
+                    );
+                  }
+                  return null;
+                })()}
+                <button
+                  onClick={() => setSelectedSlot(null)}
+                  className="flex-1 p-2 border-2 border-secondary text-secondary hover:bg-secondary hover:text-background transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
             </>
           ) : (
             <div className="flex-1 flex items-center justify-center text-center text-foreground-muted text-sm p-4">
