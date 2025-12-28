@@ -6,6 +6,7 @@ export interface Ship {
   typeId: number;
   typeName: string;
   groupId: number;
+  shipSize: 'S' | 'M' | 'L';
   capacitor?: number;
   powergrid?: number;
   cpu?: number;
@@ -34,6 +35,7 @@ export interface Module {
   groupId: number;
   slotType: 'high' | 'mid' | 'low' | 'engine' | 'unknown';
   size?: string;
+  shipSize?: 'S' | 'M' | 'L';
   power?: number;
   cpu?: number;
   radius?: number;

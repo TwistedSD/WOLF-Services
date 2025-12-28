@@ -10,7 +10,22 @@ export function canFitModule(
   slotType: string,
   fittedModules: FittedModule[]
 ): { canFit: boolean; reason?: string } {
-  // 1. Check ship group compatibility
+  // 1. Check ship size compatibility (S/M/L)
+  // Modules with size restrictions can only fit ships of that size or larger
+  if (module.shipSize) {
+    const sizeOrder = { 'S': 1, 'M': 2, 'L': 3 };
+    const moduleSizeValue = sizeOrder[module.shipSize];
+    const shipSizeValue = sizeOrder[ship.shipSize];
+
+    if (moduleSizeValue > shipSizeValue) {
+      return {
+        canFit: false,
+        reason: `Module requires ${module.shipSize} ship, current ship is ${ship.shipSize}`
+      };
+    }
+  }
+
+  // 2. Check ship group compatibility (mainly for engines)
   const shipGroupAttrs = [
     module.canFitShipGroup01,
     module.canFitShipGroup02,
@@ -20,11 +35,11 @@ export function canFitModule(
   if (shipGroupAttrs.length > 0 && !shipGroupAttrs.includes(ship.groupId)) {
     return {
       canFit: false,
-      reason: `This module cannot be fitted to ship group ${ship.groupId}`
+      reason: `This module cannot be fitted to this ship type`
     };
   }
 
-  // 2. Check maxGroupFitted restriction
+  // 3. Check maxGroupFitted restriction
   if (module.maxGroupFitted !== undefined) {
     const sameGroupCount = fittedModules.filter(
       fm => fm.module.groupId === module.groupId
@@ -38,7 +53,7 @@ export function canFitModule(
     }
   }
 
-  // 3. Check CPU availability
+  // 4. Check CPU availability
   const usedCPU = fittedModules.reduce((sum, fm) => sum + (fm.module.cpu || 0), 0);
   const availableCPU = (ship.cpu || 0) - usedCPU;
   const requiredCPU = module.cpu || 0;
@@ -50,7 +65,7 @@ export function canFitModule(
     };
   }
 
-  // 4. Check Powergrid availability
+  // 5. Check Powergrid availability
   const usedPG = fittedModules.reduce((sum, fm) => sum + (fm.module.power || 0), 0);
   const availablePG = (ship.powergrid || 0) - usedPG;
   const requiredPG = module.power || 0;
