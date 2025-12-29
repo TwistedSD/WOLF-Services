@@ -199,6 +199,27 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
               </div>
             ) : blueprintDetails ? (
               <>
+                {/* Blueprint Info */}
+                <div className="border-b-2" style={{ borderColor: "var(--primary)" }}>
+                  <div className="px-3 py-2" style={{ backgroundColor: "var(--background-lighter)" }}>
+                    <h4 className="text-xs font-semibold text-foreground-muted uppercase">Blueprint Info</h4>
+                  </div>
+                  <div className="px-3 py-2 space-y-1 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-foreground-muted">Time per run:</span>
+                      <span className="text-foreground font-mono">{formatDuration(blueprintDetails.run_time)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-foreground-muted">Total time ({runs} runs):</span>
+                      <span className="text-foreground font-mono">{formatDuration(blueprintDetails.run_time * runs)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-foreground-muted">Max input capacity:</span>
+                      <span className="text-foreground font-mono">{blueprintDetails.max_input_capacity.toLocaleString()}</span>
+                    </div>
+                  </div>
+                </div>
+
                 {/* Outputs */}
                 <div className="border-b-2" style={{ borderColor: "var(--primary)" }}>
                   <div className="px-3 py-2" style={{ backgroundColor: "var(--background-lighter)" }}>
@@ -254,27 +275,6 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
                 {productionResult && productionResult.inputs.length > 0 && (
                   <ProductionSummary inputs={productionResult.inputs} />
                 )}
-
-                {/* Blueprint Info */}
-                <div className="border-b-2" style={{ borderColor: "var(--primary)" }}>
-                  <div className="px-3 py-2" style={{ backgroundColor: "var(--background-lighter)" }}>
-                    <h4 className="text-xs font-semibold text-foreground-muted uppercase">Blueprint Info</h4>
-                  </div>
-                  <div className="px-3 py-2 space-y-1 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-foreground-muted">Time per run:</span>
-                      <span className="text-foreground font-mono">{formatDuration(blueprintDetails.run_time)}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-foreground-muted">Total time ({runs} runs):</span>
-                      <span className="text-foreground font-mono">{formatDuration(blueprintDetails.run_time * runs)}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-foreground-muted">Max input capacity:</span>
-                      <span className="text-foreground font-mono">{blueprintDetails.max_input_capacity.toLocaleString()}</span>
-                    </div>
-                  </div>
-                </div>
               </>
             ) : null}
           </div>
