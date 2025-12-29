@@ -7,7 +7,7 @@ import { useSmartCharacter } from './hooks/useSmartCharacter';
 import { TribeHeader } from './components/layout/TribeHeader';
 import { TribeTabs, TabId } from './components/layout/TribeTabs';
 import { SmartAssembliesTab } from './components/assemblies/SmartAssembliesTab';
-import { BlueprintsTab } from './components/blueprints/BlueprintsTab';
+import { BlueprintsSection } from './components/blueprints/BlueprintsSection';
 import { KillboardTab } from './components/killboard/KillboardTab';
 import { FittingTab } from './components/fitting/FittingTab';
 
@@ -89,7 +89,7 @@ function App() {
           <FittingTab />
         )}
         {activeTab === "blueprints" && (
-          <BlueprintsTab walletAddress={walletAddress} />
+          <BlueprintsSection walletAddress={walletAddress} />
         )}
         {activeTab === "killboard" && (
           <KillboardTab />
