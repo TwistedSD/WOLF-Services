@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useFittingData, Ship, Module } from '../../hooks/useFittingData';
+import { useFittingData, Ship, Module, Charge } from '../../hooks/useFittingData';
 import { ShipList } from './ShipList';
 import { FittingWindow } from './FittingWindow';
 import { StatsPanel } from './StatsPanel';
@@ -7,6 +7,7 @@ import { StatsPanel } from './StatsPanel';
 export interface FittedModule {
   module: Module;
   slotIndex: number;
+  charge?: Charge | null;
 }
 
 export interface Fitting {
@@ -67,6 +68,42 @@ export function FittingTab() {
     });
   };
 
+  const handleChargeFit = (charge: Charge, slotType: string, slotIndex: number) => {
+    setFitting(prev => {
+      const newFitting = { ...prev };
+      const slotKey = `${slotType}Slots` as keyof Omit<Fitting, 'ship'>;
+      const slots = [...(newFitting[slotKey] as (FittedModule | null)[])];
+
+      if (slots[slotIndex]) {
+        slots[slotIndex] = {
+          ...slots[slotIndex]!,
+          charge
+        };
+      }
+
+      newFitting[slotKey] = slots as any;
+      return newFitting;
+    });
+  };
+
+  const handleChargeRemove = (slotType: string, slotIndex: number) => {
+    setFitting(prev => {
+      const newFitting = { ...prev };
+      const slotKey = `${slotType}Slots` as keyof Omit<Fitting, 'ship'>;
+      const slots = [...(newFitting[slotKey] as (FittedModule | null)[])];
+
+      if (slots[slotIndex]) {
+        slots[slotIndex] = {
+          ...slots[slotIndex]!,
+          charge: null
+        };
+      }
+
+      newFitting[slotKey] = slots as any;
+      return newFitting;
+    });
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -110,6 +147,8 @@ export function FittingTab() {
             modules={modules}
             onModuleFit={handleModuleFit}
             onModuleRemove={handleModuleRemove}
+            onChargeFit={handleChargeFit}
+            onChargeRemove={handleChargeRemove}
           />
         </div>
 

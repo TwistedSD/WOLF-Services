@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Fitting } from './FittingTab';
-import { Module } from '../../hooks/useFittingData';
+import { Module, Charge } from '../../hooks/useFittingData';
 import { canFitModule, getAllFittedModules } from '../../utils/fittingValidation';
 
 interface FittingWindowProps {
@@ -8,11 +8,14 @@ interface FittingWindowProps {
   modules: Module[];
   onModuleFit: (module: Module, slotType: string, slotIndex: number) => void;
   onModuleRemove: (slotType: string, slotIndex: number) => void;
+  onChargeFit: (charge: Charge, slotType: string, slotIndex: number) => void;
+  onChargeRemove: (slotType: string, slotIndex: number) => void;
 }
 
-export function FittingWindow({ fitting, modules, onModuleFit, onModuleRemove }: FittingWindowProps) {
+export function FittingWindow({ fitting, modules, onModuleFit, onModuleRemove, onChargeFit, onChargeRemove }: FittingWindowProps) {
   const [selectedSlot, setSelectedSlot] = useState<{ type: string; index: number } | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedChargeSlot, setSelectedChargeSlot] = useState<{ type: string; index: number } | null>(null);
 
   if (!fitting.ship) {
     return (
@@ -144,24 +147,37 @@ export function FittingWindow({ fitting, modules, onModuleFit, onModuleRemove }:
             const isSelected = selectedSlot?.type === slotType && selectedSlot?.index === index;
 
             return (
-              <button
-                key={index}
-                onClick={() => handleSlotClick(slotType, index, isOccupied)}
-                className={`w-full p-2 border-2 text-left text-sm transition-colors ${
-                  isSelected
-                    ? `${colors.borderSelected} ${colors.bgSelected}`
-                    : isOccupied
-                    ? `${colors.borderOccupied} ${colors.bgOccupied} ${colors.bgOccupiedHover}`
-                    : `border-secondary/30 ${colors.borderEmpty}`
-                }`}
-                style={!isSelected && !isOccupied ? { backgroundColor: "var(--background-light)" } : undefined}
-              >
-                {isOccupied ? (
-                  <span className="text-foreground">{slot.module.typeName}</span>
-                ) : (
-                  <span className="text-foreground-muted">[Empty {title.slice(0, -6)} Slot]</span>
-                )}
-              </button>
+              <div key={index} className="space-y-1">
+                <button
+                  onClick={() => handleSlotClick(slotType, index, isOccupied)}
+                  className={`w-full p-2 border-2 text-left text-sm transition-colors ${
+                    isSelected
+                      ? `${colors.borderSelected} ${colors.bgSelected}`
+                      : isOccupied
+                      ? `${colors.borderOccupied} ${colors.bgOccupied} ${colors.bgOccupiedHover}`
+                      : `border-secondary/30 ${colors.borderEmpty}`
+                  }`}
+                  style={!isSelected && !isOccupied ? { backgroundColor: "var(--background-light)" } : undefined}
+                >
+                  <div className="flex justify-between items-center">
+                    <span className={isOccupied ? "text-foreground" : "text-foreground-muted"}>
+                      {isOccupied ? slot.module.typeName : `[Empty ${title.slice(0, -6)} Slot]`}
+                    </span>
+                    {isOccupied && slot.module.compatibleCharges && slot.module.compatibleCharges.length > 0 && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedChargeSlot({ type: slotType, index });
+                        }}
+                        className="ml-2 px-2 py-0.5 text-xs border border-secondary/50 hover:border-primary hover:bg-primary/10 transition-colors"
+                        style={{ backgroundColor: "var(--background)" }}
+                      >
+                        {slot.charge ? slot.charge.typeName : '[No Charge]'}
+                      </button>
+                    )}
+                  </div>
+                </button>
+              </div>
             );
           })}
         </div>
@@ -274,6 +290,72 @@ export function FittingWindow({ fitting, modules, onModuleFit, onModuleRemove }:
                 })()}
                 <button
                   onClick={() => setSelectedSlot(null)}
+                  className="flex-1 p-2 border-2 border-secondary text-secondary hover:bg-secondary hover:text-background transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            </>
+          ) : selectedChargeSlot ? (
+            <>
+              <div className="mb-3">
+                <div className="text-sm font-bold text-primary mb-2">
+                  Select Charge for {(() => {
+                    const slotKey = `${selectedChargeSlot.type}Slots` as keyof Omit<Fitting, 'ship'>;
+                    const slots = fitting[slotKey] as any[];
+                    const moduleInSlot = slots[selectedChargeSlot.index];
+                    return moduleInSlot?.module.typeName || 'Module';
+                  })()}
+                </div>
+              </div>
+
+              <div className="flex-1 overflow-y-auto space-y-1">
+                {(() => {
+                  const slotKey = `${selectedChargeSlot.type}Slots` as keyof Omit<Fitting, 'ship'>;
+                  const slots = fitting[slotKey] as any[];
+                  const moduleInSlot = slots[selectedChargeSlot.index];
+                  const charges = moduleInSlot?.module.compatibleCharges || [];
+
+                  return charges.map((charge: Charge) => (
+                    <button
+                      key={charge.typeId}
+                      onClick={() => {
+                        onChargeFit(charge, selectedChargeSlot.type, selectedChargeSlot.index);
+                        setSelectedChargeSlot(null);
+                      }}
+                      className="w-full p-2 border-2 text-left text-sm transition-colors border-secondary/30 hover:border-primary hover:bg-primary/10 cursor-pointer"
+                      style={{ backgroundColor: "var(--background-light)" }}
+                    >
+                      <div className="font-semibold text-foreground">
+                        {charge.typeName}
+                      </div>
+                    </button>
+                  ));
+                })()}
+              </div>
+
+              <div className="mt-3 flex gap-2">
+                {(() => {
+                  const slotKey = `${selectedChargeSlot.type}Slots` as keyof Omit<Fitting, 'ship'>;
+                  const slots = fitting[slotKey] as any[];
+                  const moduleInSlot = slots[selectedChargeSlot.index];
+                  if (moduleInSlot?.charge) {
+                    return (
+                      <button
+                        onClick={() => {
+                          onChargeRemove(selectedChargeSlot.type, selectedChargeSlot.index);
+                          setSelectedChargeSlot(null);
+                        }}
+                        className="flex-1 p-2 border-2 border-error text-error hover:bg-error hover:text-foreground transition-colors"
+                      >
+                        Remove Charge
+                      </button>
+                    );
+                  }
+                  return null;
+                })()}
+                <button
+                  onClick={() => setSelectedChargeSlot(null)}
                   className="flex-1 p-2 border-2 border-secondary text-secondary hover:bg-secondary hover:text-background transition-colors"
                 >
                   Cancel

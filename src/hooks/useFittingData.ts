@@ -29,6 +29,12 @@ export interface Ship {
   hullHP?: number;
 }
 
+export interface Charge {
+  typeId: number;
+  typeName: string;
+  groupId: number;
+}
+
 export interface Module {
   typeId: number;
   typeName: string;
@@ -44,6 +50,8 @@ export interface Module {
   speedBonus?: number;
   cpuBonus?: number;
   speedMultiplier?: number;
+  chargeSize?: number;
+  chargeGroup?: number;
   shieldRechargeRateMultiplier?: number;
   emDamageResonance?: number;
   explosiveDamageResonance?: number;
@@ -54,6 +62,7 @@ export interface Module {
   canFitShipGroup01?: number;
   canFitShipGroup02?: number;
   canFitShipGroup03?: number;
+  compatibleCharges?: Charge[];
 }
 
 export function useFittingData() {
