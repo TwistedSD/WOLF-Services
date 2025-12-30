@@ -61,7 +61,11 @@ export function FittingWindow({ fitting, modules, onModuleFit, onModuleRemove }:
     });
 
     return modules
-      .filter(m => m.slotType === targetSlotType) // Must match slot type
+      .filter(m => {
+        // Filter out unknown slot types and ensure slot type matches
+        if (m.slotType === 'unknown') return false;
+        return m.slotType === targetSlotType;
+      })
       .filter(m => {
         // Check if module can actually fit
         const validation = canFitModule(fitting.ship!, m, selectedSlot.type, fittedModulesExcludingCurrent);
