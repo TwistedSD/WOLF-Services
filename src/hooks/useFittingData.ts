@@ -49,10 +49,12 @@ export interface Module {
   capacityBonus?: number;
   speedBonus?: number;
   cpuBonus?: number;
+  powergridBonus?: number;
   speedMultiplier?: number;
   chargeSize?: number;
   chargeGroup1?: number;
   shieldRechargeRateMultiplier?: number;
+  shieldCapacity?: number;
   emDamageResonance?: number;
   explosiveDamageResonance?: number;
   kineticDamageResonance?: number;

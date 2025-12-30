@@ -1,6 +1,7 @@
 import React from 'react';
 import { Fitting } from './FittingTab';
 import { getAllFittedModules, calculateUsedCPU, calculateUsedPowergrid } from '../../utils/fittingValidation';
+import { calculateFittingStats, getStatDelta } from '../../utils/fittingStats';
 
 interface StatsPanelProps {
   fitting: Fitting;
@@ -18,27 +19,39 @@ export function StatsPanel({ fitting }: StatsPanelProps) {
   }
 
   const ship = fitting.ship;
+  const stats = calculateFittingStats(fitting);
 
   // Calculate used resources
   const fittedModules = getAllFittedModules(fitting);
   const usedPowergrid = calculateUsedPowergrid(fittedModules);
   const usedCPU = calculateUsedCPU(fittedModules);
 
-  const totalPowergrid = ship.powergrid || 0;
-  const totalCPU = ship.cpu || 0;
+  // Use modified stats if available
+  const totalPowergrid = stats?.powergrid || ship.powergrid || 0;
+  const totalCPU = stats?.cpu || ship.cpu || 0;
 
   const pgPercentage = totalPowergrid > 0 ? (usedPowergrid / totalPowergrid) * 100 : 0;
   const cpuPercentage = totalCPU > 0 ? (usedCPU / totalCPU) * 100 : 0;
 
-  const renderStatRow = (label: string, value: number | string, unit?: string) => (
-    <div className="flex justify-between py-1 border-b border-primary/20">
-      <span className="text-foreground-muted text-sm">{label}</span>
-      <span className="text-foreground font-semibold text-sm">
-        {typeof value === 'number' ? value.toLocaleString() : value}
-        {unit && <span className="text-foreground-muted ml-1">{unit}</span>}
-      </span>
-    </div>
-  );
+  const renderStatRow = (label: string, value: number | string, unit?: string, baseValue?: number) => {
+    const hasBonus = baseValue !== undefined && typeof value === 'number' && Math.abs(value - baseValue) > 0.01;
+    const delta = hasBonus ? getStatDelta(value as number, baseValue!) : null;
+
+    return (
+      <div className="flex justify-between py-1 border-b border-primary/20">
+        <span className="text-foreground-muted text-sm">{label}</span>
+        <span className="text-foreground font-semibold text-sm">
+          {typeof value === 'number' ? value.toLocaleString() : value}
+          {unit && <span className="text-foreground-muted ml-1">{unit}</span>}
+          {hasBonus && delta && (
+            <span className={`ml-2 text-xs ${delta.isPositive ? 'text-success' : 'text-error'}`}>
+              ({delta.isPositive ? '+' : ''}{delta.value.toFixed(1)})
+            </span>
+          )}
+        </span>
+      </div>
+    );
+  };
 
   const renderResourceBar = (
     label: string,
@@ -87,33 +100,33 @@ export function StatsPanel({ fitting }: StatsPanelProps) {
         {/* Capacitor */}
         <div className="mb-6">
           <h3 className="text-sm font-bold text-primary mb-2">Capacitor</h3>
-          {renderStatRow('Capacity', ship.capacitor || 0, 'GJ')}
-          {renderStatRow('Recharge Time', ship.capacitorRecharge || 0, 's')}
+          {renderStatRow('Capacity', stats?.capacitor || ship.capacitor || 0, 'GJ', ship.capacitor)}
+          {renderStatRow('Recharge Time', stats?.capacitorRecharge || ship.capacitorRecharge || 0, 's', ship.capacitorRecharge)}
         </div>
 
         {/* Defense */}
         <div className="mb-6">
           <h3 className="text-sm font-bold text-primary mb-2">Defense</h3>
-          {renderStatRow('Shield HP', ship.shieldCapacity || 0)}
-          {renderStatRow('Armor HP', ship.armorHP || 0)}
-          {renderStatRow('Hull HP', ship.hullHP || 0)}
-          {renderStatRow('Signature', ship.signatureRadius?.toFixed(2) || '0', 'm')}
+          {renderStatRow('Shield HP', stats?.shieldCapacity || ship.shieldCapacity || 0, undefined, ship.shieldCapacity)}
+          {renderStatRow('Armor HP', stats?.armorHP || ship.armorHP || 0, undefined, ship.armorHP)}
+          {renderStatRow('Hull HP', stats?.hullHP || ship.hullHP || 0, undefined, ship.hullHP)}
+          {renderStatRow('Signature', (stats?.signatureRadius || ship.signatureRadius || 0).toFixed(2), 'm', ship.signatureRadius)}
         </div>
 
         {/* Resistances */}
         <div className="mb-6">
           <h3 className="text-sm font-bold text-primary mb-2">Resistances</h3>
-          {renderStatRow('EM', ((1 - (ship.emDamageResonance || 1)) * 100).toFixed(1), '%')}
-          {renderStatRow('Thermal', ((1 - (ship.thermalDamageResonance || 1)) * 100).toFixed(1), '%')}
-          {renderStatRow('Kinetic', ((1 - (ship.kineticDamageResonance || 1)) * 100).toFixed(1), '%')}
-          {renderStatRow('Explosive', ((1 - (ship.explosiveDamageResonance || 1)) * 100).toFixed(1), '%')}
+          {renderStatRow('EM', (stats?.emResistance || ((1 - (ship.emDamageResonance || 1)) * 100)).toFixed(1), '%', ((1 - (ship.emDamageResonance || 1)) * 100))}
+          {renderStatRow('Thermal', (stats?.thermalResistance || ((1 - (ship.thermalDamageResonance || 1)) * 100)).toFixed(1), '%', ((1 - (ship.thermalDamageResonance || 1)) * 100))}
+          {renderStatRow('Kinetic', (stats?.kineticResistance || ((1 - (ship.kineticDamageResonance || 1)) * 100)).toFixed(1), '%', ((1 - (ship.kineticDamageResonance || 1)) * 100))}
+          {renderStatRow('Explosive', (stats?.explosiveResistance || ((1 - (ship.explosiveDamageResonance || 1)) * 100)).toFixed(1), '%', ((1 - (ship.explosiveDamageResonance || 1)) * 100))}
         </div>
 
         {/* Navigation */}
         <div className="mb-6">
           <h3 className="text-sm font-bold text-primary mb-2">Navigation</h3>
-          {renderStatRow('Max Velocity', ship.maxVelocity || 0, 'm/s')}
-          {renderStatRow('Mass', ship.mass?.toFixed(0) || '0', 'kg')}
+          {renderStatRow('Max Velocity', stats?.maxVelocity || ship.maxVelocity || 0, 'm/s', ship.maxVelocity)}
+          {renderStatRow('Mass', (stats?.mass || ship.mass || 0).toFixed(0), 'kg', ship.mass)}
         </div>
 
         {/* Targeting */}

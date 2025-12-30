@@ -157,9 +157,9 @@ export function FittingTab() {
         </button>
       </div>
 
-      <div className="grid grid-cols-12 gap-4">
+      <div className="grid grid-cols-12 gap-4" style={{ height: 'calc(100vh - 200px)' }}>
         {/* Ship List - Left Panel */}
-        <div className="col-span-3">
+        <div className="col-span-3 h-full">
           <ShipList
             ships={ships}
             selectedShip={selectedShip}
@@ -168,7 +168,7 @@ export function FittingTab() {
         </div>
 
         {/* Fitting Window - Middle Panel */}
-        <div className="col-span-6">
+        <div className="col-span-6 h-full">
           <FittingWindow
             fitting={fitting}
             modules={modules}
@@ -180,7 +180,7 @@ export function FittingTab() {
         </div>
 
         {/* Stats Panel - Right Panel */}
-        <div className="col-span-3">
+        <div className="col-span-3 h-full">
           <StatsPanel fitting={fitting} />
         </div>
       </div>

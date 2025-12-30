@@ -167,7 +167,7 @@ export function FittingWindow({ fitting, modules, onModuleFit, onModuleRemove, o
                   <button
                     onClick={() => setSelectedChargeSlot({ type: slotType, index })}
                     className="w-full ml-4 px-2 py-1 text-xs border border-secondary/30 hover:border-primary hover:bg-primary/10 transition-colors text-left"
-                    style={{ backgroundColor: "var(--background)" }}
+                    style={{ backgroundColor: "var(--background-light)" }}
                   >
                     <span className="text-foreground-muted">Charge: </span>
                     <span className="text-foreground">{slot.charge ? slot.charge.typeName : '[None]'}</span>
