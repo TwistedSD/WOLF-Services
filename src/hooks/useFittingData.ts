@@ -51,7 +51,7 @@ export interface Module {
   cpuBonus?: number;
   speedMultiplier?: number;
   chargeSize?: number;
-  chargeGroup?: number;
+  chargeGroup1?: number;
   shieldRechargeRateMultiplier?: number;
   emDamageResonance?: number;
   explosiveDamageResonance?: number;
@@ -62,6 +62,7 @@ export interface Module {
   canFitShipGroup01?: number;
   canFitShipGroup02?: number;
   canFitShipGroup03?: number;
+  canFitShipGroup04?: number;
   compatibleCharges?: Charge[];
 }
 

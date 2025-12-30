@@ -25,13 +25,16 @@ export function canFitModule(
     }
   }
 
-  // 2. Check ship group compatibility (mainly for engines)
+  // 2. Check ship group compatibility
+  // canFitShipGroup01/02/03/04 contain the ship group IDs this module can fit on
   const shipGroupAttrs = [
     module.canFitShipGroup01,
     module.canFitShipGroup02,
-    module.canFitShipGroup03
+    module.canFitShipGroup03,
+    module.canFitShipGroup04
   ].filter(g => g !== undefined);
 
+  // If module has canFitShipGroup restrictions, ship must match one of them
   if (shipGroupAttrs.length > 0 && !shipGroupAttrs.includes(ship.groupId)) {
     return {
       canFit: false,
