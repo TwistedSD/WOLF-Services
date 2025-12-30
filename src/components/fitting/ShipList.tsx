@@ -11,7 +11,7 @@ export function ShipList({ ships, selectedShip, onShipSelect }: ShipListProps) {
   return (
     <div className="border-2 h-full flex flex-col" style={{ borderColor: "var(--primary)", backgroundColor: "var(--background-light)" }}>
       {/* Header */}
-      <div className="px-3 py-2 border-b-2" style={{ borderColor: "var(--primary)", backgroundColor: "var(--background-lighter)" }}>
+      <div className="px-3 py-2 border-b-2" style={{ borderColor: "var(--primary)", backgroundColor: "var(--background-light)" }}>
         <h3 className="text-sm font-semibold text-foreground">Ships</h3>
       </div>
 

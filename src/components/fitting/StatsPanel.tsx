@@ -71,7 +71,7 @@ export function StatsPanel({ fitting }: StatsPanelProps) {
   return (
     <div className="border-2 h-full flex flex-col" style={{ borderColor: "var(--primary)", backgroundColor: "var(--background-light)" }}>
       {/* Header */}
-      <div className="p-4 border-b-2" style={{ borderColor: "var(--primary)", backgroundColor: "var(--background-lighter)" }}>
+      <div className="p-4 border-b-2" style={{ borderColor: "var(--primary)", backgroundColor: "var(--background-light)" }}>
         <h2 className="text-xl font-bold text-primary">Ship Stats</h2>
       </div>
 

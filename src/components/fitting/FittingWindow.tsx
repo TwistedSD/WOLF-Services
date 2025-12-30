@@ -131,7 +131,7 @@ export function FittingWindow({ fitting, modules, onModuleFit, onModuleRemove }:
                     ? `${colors.borderOccupied} ${colors.bgOccupied} ${colors.bgOccupiedHover}`
                     : `border-secondary/30 ${colors.borderEmpty}`
                 }`}
-                style={!isSelected && !isOccupied ? { backgroundColor: "var(--background-lighter)" } : undefined}
+                style={!isSelected && !isOccupied ? { backgroundColor: "var(--background-light)" } : undefined}
               >
                 {isOccupied ? (
                   <span className="text-foreground">{slot.module.typeName}</span>
@@ -149,7 +149,7 @@ export function FittingWindow({ fitting, modules, onModuleFit, onModuleRemove }:
   return (
     <div className="border-2 h-full flex flex-col" style={{ borderColor: "var(--primary)", backgroundColor: "var(--background-light)" }}>
       {/* Header */}
-      <div className="p-4 border-b-2" style={{ borderColor: "var(--primary)", backgroundColor: "var(--background-lighter)" }}>
+      <div className="p-4 border-b-2" style={{ borderColor: "var(--primary)", backgroundColor: "var(--background-light)" }}>
         <h2 className="text-xl font-bold text-primary">{fitting.ship.typeName}</h2>
         <div className="text-sm text-foreground-muted mt-1">
           Group ID: {fitting.ship.groupId}
@@ -166,7 +166,7 @@ export function FittingWindow({ fitting, modules, onModuleFit, onModuleRemove }:
         </div>
 
         {/* Module Selection Panel */}
-        <div className="w-80 p-4 flex flex-col" style={{ backgroundColor: "var(--background-lighter)" }}>
+        <div className="w-80 p-4 flex flex-col" style={{ backgroundColor: "var(--background-light)" }}>
           {selectedSlot ? (
             <>
               <div className="mb-3">
