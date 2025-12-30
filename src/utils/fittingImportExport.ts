@@ -296,32 +296,37 @@ export function importFitting(
       }
     });
 
-    // Import charges (match to fitted modules)
-    parsed.charges.forEach(({ name }) => {
-      // Try to find a fitted module that can use this charge
-      let chargeAssigned = false;
+    // Import charges - assign to ALL compatible modules
+    // First, collect all unique charge types from the parsed data
+    const uniqueCharges = new Map<string, { name: string; quantity: number }>();
+    parsed.charges.forEach(charge => {
+      uniqueCharges.set(charge.name, charge);
+    });
 
-      const tryAssignCharge = (slots: (FittedModule | null)[]) => {
-        for (const slot of slots) {
-          if (slot && !slot.charge && slot.module.compatibleCharges) {
-            const charge = findCharge(name, slot.module);
-            if (charge) {
-              slot.charge = charge;
-              chargeAssigned = true;
-              return true;
-            }
+    // For each unique charge type, assign it to ALL compatible modules
+    uniqueCharges.forEach(({ name }) => {
+      const allSlots = [
+        ...fitting.highSlots,
+        ...fitting.midSlots,
+        ...fitting.lowSlots,
+        ...fitting.engineSlots
+      ];
+
+      let assignedCount = 0;
+
+      // Assign this charge to ALL modules that can use it
+      allSlots.forEach(slot => {
+        if (slot && !slot.charge && slot.module.compatibleCharges) {
+          const charge = slot.module.compatibleCharges.find(c => c.typeName === name);
+          if (charge) {
+            slot.charge = charge;
+            assignedCount++;
           }
         }
-        return false;
-      };
+      });
 
-      tryAssignCharge(fitting.highSlots) ||
-      tryAssignCharge(fitting.midSlots) ||
-      tryAssignCharge(fitting.lowSlots) ||
-      tryAssignCharge(fitting.engineSlots);
-
-      if (!chargeAssigned) {
-        errors.push(`Could not assign charge: ${name}`);
+      if (assignedCount === 0) {
+        errors.push(`Could not assign charge: ${name} (no compatible modules found)`);
       }
     });
 
