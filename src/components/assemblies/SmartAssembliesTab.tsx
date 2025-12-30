@@ -71,7 +71,10 @@ function isManufacturing(a: SmartAssembly): boolean {
     t.includes("factory") ||
     t.includes("fabricator") ||
     t.includes("assembler") ||
-    t.includes("forge")
+    t.includes("forge") ||
+    t.includes("shipyard") ||
+    t.includes("ship yard") ||
+    t.includes("relay")
   );
 }
 
@@ -374,6 +377,9 @@ export const SmartAssembliesTab: React.FC<SmartAssembliesTabProps> = ({
   const [openTurretsCategory, setOpenTurretsCategory] = useState<Set<string>>(
     new Set()
   );
+  const [openOtherCategory, setOpenOtherCategory] = useState<Set<string>>(
+    new Set()
+  );
 
   const toggleNode = (nodeId: string) => {
     const newSet = new Set(openNodes);
@@ -397,7 +403,7 @@ export const SmartAssembliesTab: React.FC<SmartAssembliesTabProps> = ({
 
   const toggleCategory = (
     categoryKey: string,
-    categoryType: "storage" | "manufacturing" | "turrets"
+    categoryType: "storage" | "manufacturing" | "turrets" | "other"
   ) => {
     let newSet: Set<string>;
     if (categoryType === "storage") {
@@ -416,7 +422,7 @@ export const SmartAssembliesTab: React.FC<SmartAssembliesTabProps> = ({
         newSet.add(categoryKey);
       }
       setOpenManufacturingCategory(newSet);
-    } else {
+    } else if (categoryType === "turrets") {
       newSet = new Set(openTurretsCategory);
       if (newSet.has(categoryKey)) {
         newSet.delete(categoryKey);
@@ -424,6 +430,14 @@ export const SmartAssembliesTab: React.FC<SmartAssembliesTabProps> = ({
         newSet.add(categoryKey);
       }
       setOpenTurretsCategory(newSet);
+    } else {
+      newSet = new Set(openOtherCategory);
+      if (newSet.has(categoryKey)) {
+        newSet.delete(categoryKey);
+      } else {
+        newSet.add(categoryKey);
+      }
+      setOpenOtherCategory(newSet);
     }
   };
 
@@ -439,6 +453,7 @@ export const SmartAssembliesTab: React.FC<SmartAssembliesTabProps> = ({
       storage: SmartAssembly[];
       manufacturing: SmartAssembly[];
       turrets: SmartAssembly[];
+      other: SmartAssembly[];
     };
     const groupMap = new Map<string, Group>();
 
@@ -450,6 +465,7 @@ export const SmartAssembliesTab: React.FC<SmartAssembliesTabProps> = ({
         storage: [],
         manufacturing: [],
         turrets: [],
+        other: [],
       });
     }
 
@@ -464,6 +480,7 @@ export const SmartAssembliesTab: React.FC<SmartAssembliesTabProps> = ({
         storage: [],
         manufacturing: [],
         turrets: [],
+        other: [],
       };
 
       if (isStorage(a)) {
@@ -472,6 +489,9 @@ export const SmartAssembliesTab: React.FC<SmartAssembliesTabProps> = ({
         grp.manufacturing.push(a);
       } else if (isTurret(a)) {
         grp.turrets.push(a);
+      } else {
+        // Catch all other assembly types so they still display
+        grp.other.push(a);
       }
 
       groupMap.set(key, grp);
@@ -485,12 +505,14 @@ export const SmartAssembliesTab: React.FC<SmartAssembliesTabProps> = ({
         storage: [],
         manufacturing: [],
         turrets: [],
+        other: [],
       };
       grp.node = grp.node ?? n;
       const existingIds = new Set([
         ...grp.storage.map((c) => String(c.id)),
         ...grp.manufacturing.map((c) => String(c.id)),
         ...grp.turrets.map((c) => String(c.id)),
+        ...grp.other.map((c) => String(c.id)),
       ]);
       const linkedIds = getLinkedAssemblyIds(n);
       for (const id of linkedIds) {
@@ -506,6 +528,8 @@ export const SmartAssembliesTab: React.FC<SmartAssembliesTabProps> = ({
             grp.manufacturing.push(child);
           } else if (isTurret(child)) {
             grp.turrets.push(child);
+          } else {
+            grp.other.push(child);
           }
           existingIds.add(String(child.id));
         }
@@ -838,9 +862,57 @@ export const SmartAssembliesTab: React.FC<SmartAssembliesTabProps> = ({
                     </div>
                   )}
 
+                  {/* Other Section */}
+                  {group.other.length > 0 && (
+                    <div className="mt-4">
+                      <button
+                        onClick={() => toggleCategory(group.id, "other")}
+                        className="w-full flex items-center justify-between px-2 py-2 hover:bg-background-lighter transition-colors"
+                      >
+                        <div className="text-xs font-semibold text-foreground-muted uppercase">
+                          Other ({group.other.length})
+                        </div>
+                        <span className="text-foreground-muted text-xs">
+                          {openOtherCategory.has(group.id) ? "−" : "+"}
+                        </span>
+                      </button>
+
+                      {openOtherCategory.has(group.id) && (
+                        <div className="mt-2">
+                          {group.other.map((other) => {
+                            const otherStatus = getAssemblyStatus(other);
+                            const statusColor =
+                              otherStatus === "Online"
+                                ? "text-green-500"
+                                : otherStatus === "Destroyed"
+                                ? "text-red-500"
+                                : "text-foreground-muted";
+                            return (
+                              <div
+                                key={String(other.id)}
+                                className="flex items-center justify-between px-3 py-2 border-2 mb-2"
+                                style={{
+                                  borderColor: "var(--background-lighter)",
+                                }}
+                              >
+                                <span className="text-sm text-foreground">
+                                  {getTypeName(other)}
+                                </span>
+                                <span className={`text-xs ${statusColor}`}>
+                                  {otherStatus}
+                                </span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
                   {group.storage.length === 0 &&
                     group.manufacturing.length === 0 &&
-                    group.turrets.length === 0 && (
+                    group.turrets.length === 0 &&
+                    group.other.length === 0 && (
                       <div className="text-sm text-foreground-muted px-2 py-2 mt-2">
                         No assemblies attached to this network node
                       </div>
