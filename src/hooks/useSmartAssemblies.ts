@@ -105,16 +105,19 @@ export function useSmartAssemblies(params?: UseSmartAssembliesParams): UseSmartA
         };
         const results = await Promise.all(explicitIds.map(fetchOne));
         const validResults = results.filter(Boolean) as SmartAssembly[];
-        // Only return if we got data for all requested IDs
-        if (validResults.length === explicitIds.length) {
+        // Return partial results - better to show some assemblies than none
+        if (validResults.length > 0) {
+          if (validResults.length < explicitIds.length) {
+            console.warn(`[useSmartAssemblies] Only got ${validResults.length}/${explicitIds.length} assemblies, showing partial results`);
+          }
           return validResults;
         }
-        // If we didn't get all assemblies, return null to try the filtered approach
-        console.warn(`[useSmartAssemblies] Only got ${validResults.length}/${explicitIds.length} assemblies`);
+        // If we got no assemblies, try the filtered approach
+        console.warn(`[useSmartAssemblies] Got no assemblies from explicit IDs, trying filtered approach`);
         return null;
       };
 
-      // Try filtered queries with ownerId or ownerAddress
+      // Try filtered queries with ownerId or ownerAddress (with pagination)
       const tryFetchWithFilters = async (): Promise<SmartAssembly[] | null> => {
         const base = `${baseUrl.replace(/\/$/, "")}/v2/smartassemblies`;
         const queries: string[] = [];
@@ -137,22 +140,63 @@ export function useSmartAssemblies(params?: UseSmartAssembliesParams): UseSmartA
         }
         if (queries.length === 0) return null;
 
+        // Try each query parameter, with pagination support
         for (const q of queries) {
           try {
-            const url = `${base}?${q}`;
-            if (import.meta.env.DEV) console.debug("[useSmartAssemblies] fetching", url);
-            const res = await fetch(url, { signal: controller.signal });
-            if (res.ok) {
-              const data = (await res.json()) as SmartAssembly[] | { items?: SmartAssembly[] };
-              const list = Array.isArray(data) ? data : Array.isArray((data as any)?.items) ? (data as any).items : [];
-              return list;
+            const allResults: SmartAssembly[] = [];
+            let offset = 0;
+            const limit = 100; // Fetch 100 at a time
+            let hasMore = true;
+
+            // Paginate through all results
+            while (hasMore && allResults.length < 1000) { // Safety limit of 1000 assemblies
+              const url = `${base}?${q}&limit=${limit}&offset=${offset}`;
+              if (import.meta.env.DEV) console.debug("[useSmartAssemblies] fetching", url);
+              const res = await fetch(url, { signal: controller.signal });
+
+              if (!res.ok) {
+                if (![400, 404].includes(res.status)) {
+                  const text = await res.text().catch(() => "");
+                  if (import.meta.env.DEV) console.warn("[useSmartAssemblies] non-404 error", res.status, text);
+                }
+                break; // Try next query param
+              }
+
+              const data = (await res.json()) as SmartAssembly[] | { data?: SmartAssembly[]; items?: SmartAssembly[]; metadata?: { total?: number } };
+              const list = Array.isArray(data)
+                ? data
+                : Array.isArray((data as any)?.data)
+                  ? (data as any).data
+                  : Array.isArray((data as any)?.items)
+                    ? (data as any).items
+                    : [];
+
+              if (list.length === 0) {
+                hasMore = false;
+              } else {
+                allResults.push(...list);
+                offset += list.length;
+
+                // Check if we've fetched everything based on metadata.total
+                const total = (data as any)?.metadata?.total;
+                if (typeof total === 'number' && offset >= total) {
+                  hasMore = false;
+                }
+
+                // If we got fewer results than limit, we're probably done
+                if (list.length < limit) {
+                  hasMore = false;
+                }
+              }
             }
-            if (![400, 404].includes(res.status)) {
-              const text = await res.text().catch(() => "");
-              if (import.meta.env.DEV) console.warn("[useSmartAssemblies] non-404 error", res.status, text);
+
+            if (allResults.length > 0) {
+              if (import.meta.env.DEV) console.debug(`[useSmartAssemblies] Found ${allResults.length} assemblies using ${q}`);
+              return allResults;
             }
           } catch (e) {
             if (controller.signal.aborted) return null;
+            if (import.meta.env.DEV) console.warn("[useSmartAssemblies] Error with query", q, e);
           }
         }
         return null;
