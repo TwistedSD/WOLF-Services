@@ -102,11 +102,11 @@ export function parseGameExport(text: string): {
   const engineModules: string[] = [];
   const charges: { name: string; quantity: number }[] = [];
 
-  // Track which section we're in and consecutive empty lines
-  let currentSection = 'low';
-  let consecutiveEmptyLines = 0;
-  let inChargeSection = false;
+  // Track which section we're in
+  let currentSection: 'low' | 'mid' | 'high' | 'charge' | 'engine' = 'low';
   let startParsing = false;
+  let previousLineWasEmpty = false;
+  let emptyLinesSinceLastContent = 0;
 
   for (const line of lines) {
     // Skip until we find the header
@@ -117,9 +117,10 @@ export function parseGameExport(text: string): {
       continue;
     }
 
-    // Empty line handling
+    // Empty line handling - marks section boundaries
     if (line === '') {
-      consecutiveEmptyLines++;
+      previousLineWasEmpty = true;
+      emptyLinesSinceLastContent++;
       continue;
     }
 
@@ -130,28 +131,46 @@ export function parseGameExport(text: string): {
         name: chargeMatch[1].trim(),
         quantity: parseInt(chargeMatch[2])
       });
-      inChargeSection = true;
+      currentSection = 'charge';
+      previousLineWasEmpty = false;
+      emptyLinesSinceLastContent = 0;
       continue;
     }
 
-    // After charges section, everything goes to engine
-    if (inChargeSection) {
+    // If we were in charge section and encounter non-charge content, it's engine
+    if (currentSection === 'charge' && !chargeMatch) {
       engineModules.push(line);
-      consecutiveEmptyLines = 0;
+      currentSection = 'engine';
+      previousLineWasEmpty = false;
+      emptyLinesSinceLastContent = 0;
       continue;
     }
 
-    // Determine section based on consecutive empty lines before this content line
-    // 0 empty lines = low slots (first section)
-    // 1 empty line = mid slots
-    // 2 empty lines = high slots
-    // 3+ empty lines = charges or engine
-    if (consecutiveEmptyLines === 0) {
-      currentSection = 'low';
-    } else if (consecutiveEmptyLines === 1) {
-      currentSection = 'mid';
-    } else if (consecutiveEmptyLines >= 2) {
-      currentSection = 'high';
+    // If we're in engine section, stay in engine
+    if (currentSection === 'engine') {
+      engineModules.push(line);
+      previousLineWasEmpty = false;
+      emptyLinesSinceLastContent = 0;
+      continue;
+    }
+
+    // Section transitions based on empty lines
+    if (previousLineWasEmpty) {
+      // After high slots, if we have 2+ empty lines, non-charge content goes to engine
+      if (currentSection === 'high' && emptyLinesSinceLastContent >= 2 && !chargeMatch) {
+        engineModules.push(line);
+        currentSection = 'engine';
+        previousLineWasEmpty = false;
+        emptyLinesSinceLastContent = 0;
+        continue;
+      }
+
+      // Normal section transitions
+      if (currentSection === 'low') {
+        currentSection = 'mid';
+      } else if (currentSection === 'mid') {
+        currentSection = 'high';
+      }
     }
 
     // Add module to appropriate section
@@ -167,8 +186,8 @@ export function parseGameExport(text: string): {
         break;
     }
 
-    // Reset empty line counter after processing a content line
-    consecutiveEmptyLines = 0;
+    previousLineWasEmpty = false;
+    emptyLinesSinceLastContent = 0;
   }
 
   return {
