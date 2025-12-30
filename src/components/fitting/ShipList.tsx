@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Ship } from '../../hooks/useFittingData';
 
 interface ShipListProps {
@@ -8,36 +8,22 @@ interface ShipListProps {
 }
 
 export function ShipList({ ships, selectedShip, onShipSelect }: ShipListProps) {
-  const [searchTerm, setSearchTerm] = useState('');
-
-  const filteredShips = ships.filter(ship =>
-    ship.typeName.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
   return (
     <div className="border-2 h-full flex flex-col" style={{ borderColor: "var(--primary)", backgroundColor: "var(--background-light)" }}>
       {/* Header */}
-      <div className="p-4 border-b-2" style={{ borderColor: "var(--primary)", backgroundColor: "var(--background-lighter)" }}>
-        <h2 className="text-xl font-bold text-primary mb-2">Ships</h2>
-        <input
-          type="text"
-          placeholder="Search ships..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full px-2 py-1 border-2 text-foreground placeholder-foreground-muted focus:border-primary"
-          style={{ backgroundColor: "var(--background)", borderColor: "var(--secondary)" }}
-        />
+      <div className="px-3 py-2 border-b-2" style={{ borderColor: "var(--primary)", backgroundColor: "var(--background-lighter)" }}>
+        <h3 className="text-sm font-semibold text-foreground">Ships</h3>
       </div>
 
       {/* Ship List */}
       <div className="flex-1 overflow-y-auto">
-        {filteredShips.length === 0 ? (
+        {ships.length === 0 ? (
           <div className="p-4 text-center text-foreground-muted">
             No ships found
           </div>
         ) : (
           <div className="divide-y-2 divide-primary/20">
-            {filteredShips.map(ship => (
+            {ships.map(ship => (
               <button
                 key={ship.typeId}
                 onClick={() => onShipSelect(ship)}
