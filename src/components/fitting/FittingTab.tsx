@@ -92,29 +92,31 @@ export function FittingTab() {
   }
 
   return (
-    <div className="grid grid-cols-12 gap-4">
-      {/* Ship List - Left Panel */}
-      <div className="col-span-3">
-        <ShipList
-          ships={ships}
-          selectedShip={selectedShip}
-          onShipSelect={handleShipSelect}
-        />
-      </div>
+    <div className="p-6 border-2 border-primary" style={{ backgroundColor: "var(--background-light)" }}>
+      <div className="grid grid-cols-12 gap-4">
+        {/* Ship List - Left Panel */}
+        <div className="col-span-3">
+          <ShipList
+            ships={ships}
+            selectedShip={selectedShip}
+            onShipSelect={handleShipSelect}
+          />
+        </div>
 
-      {/* Fitting Window - Middle Panel */}
-      <div className="col-span-6">
-        <FittingWindow
-          fitting={fitting}
-          modules={modules}
-          onModuleFit={handleModuleFit}
-          onModuleRemove={handleModuleRemove}
-        />
-      </div>
+        {/* Fitting Window - Middle Panel */}
+        <div className="col-span-6">
+          <FittingWindow
+            fitting={fitting}
+            modules={modules}
+            onModuleFit={handleModuleFit}
+            onModuleRemove={handleModuleRemove}
+          />
+        </div>
 
-      {/* Stats Panel - Right Panel */}
-      <div className="col-span-3">
-        <StatsPanel fitting={fitting} />
+        {/* Stats Panel - Right Panel */}
+        <div className="col-span-3">
+          <StatsPanel fitting={fitting} />
+        </div>
       </div>
     </div>
   );
