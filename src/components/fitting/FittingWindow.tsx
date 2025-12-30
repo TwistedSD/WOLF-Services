@@ -159,24 +159,20 @@ export function FittingWindow({ fitting, modules, onModuleFit, onModuleRemove, o
                   }`}
                   style={!isSelected && !isOccupied ? { backgroundColor: "var(--background-light)" } : undefined}
                 >
-                  <div className="flex justify-between items-center">
-                    <span className={isOccupied ? "text-foreground" : "text-foreground-muted"}>
-                      {isOccupied ? slot.module.typeName : `[Empty ${title.slice(0, -6)} Slot]`}
-                    </span>
-                    {isOccupied && slot.module.compatibleCharges && slot.module.compatibleCharges.length > 0 && (
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedChargeSlot({ type: slotType, index });
-                        }}
-                        className="ml-2 px-2 py-0.5 text-xs border border-secondary/50 hover:border-primary hover:bg-primary/10 transition-colors"
-                        style={{ backgroundColor: "var(--background)" }}
-                      >
-                        {slot.charge ? slot.charge.typeName : '[No Charge]'}
-                      </button>
-                    )}
-                  </div>
+                  <span className={isOccupied ? "text-foreground" : "text-foreground-muted"}>
+                    {isOccupied ? slot.module.typeName : `[Empty ${title.slice(0, -6)} Slot]`}
+                  </span>
                 </button>
+                {isOccupied && slot.module.compatibleCharges && slot.module.compatibleCharges.length > 0 && (
+                  <button
+                    onClick={() => setSelectedChargeSlot({ type: slotType, index })}
+                    className="w-full ml-4 px-2 py-1 text-xs border border-secondary/30 hover:border-primary hover:bg-primary/10 transition-colors text-left"
+                    style={{ backgroundColor: "var(--background)" }}
+                  >
+                    <span className="text-foreground-muted">Charge: </span>
+                    <span className="text-foreground">{slot.charge ? slot.charge.typeName : '[None]'}</span>
+                  </button>
+                )}
               </div>
             );
           })}
