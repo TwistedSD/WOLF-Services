@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Fitting } from './FittingTab';
 import { Module } from '../../hooks/useFittingData';
-import { X, AlertCircle } from 'lucide-react';
 import { canFitModule, getAllFittedModules } from '../../utils/fittingValidation';
 
 interface FittingWindowProps {
@@ -41,7 +40,7 @@ export function FittingWindow({ fitting, modules, onModuleFit, onModuleRemove }:
   };
 
   const getAvailableModules = () => {
-    if (!selectedSlot) return [];
+    if (!selectedSlot || !fitting.ship) return [];
 
     const slotTypeMap: { [key: string]: string } = {
       high: 'high',
@@ -51,8 +50,23 @@ export function FittingWindow({ fitting, modules, onModuleFit, onModuleRemove }:
     };
 
     const targetSlotType = slotTypeMap[selectedSlot.type];
+
+    // Get all fitted modules excluding the one in the currently selected slot
+    const allFittedModules = getAllFittedModules(fitting);
+    const fittedModulesExcludingCurrent = allFittedModules.filter(fm => {
+      const slotKey = `${selectedSlot.type}Slots` as keyof Omit<Fitting, 'ship'>;
+      const slots = fitting[slotKey] as any[];
+      const moduleInSlot = slots[selectedSlot.index];
+      return !(moduleInSlot && fm === moduleInSlot);
+    });
+
     return modules
-      .filter(m => m.slotType === targetSlotType)
+      .filter(m => m.slotType === targetSlotType) // Must match slot type
+      .filter(m => {
+        // Check if module can actually fit
+        const validation = canFitModule(fitting.ship!, m, selectedSlot.type, fittedModulesExcludingCurrent);
+        return validation.canFit;
+      })
       .filter(m =>
         searchTerm === '' ||
         m.typeName.toLowerCase().includes(searchTerm.toLowerCase())
@@ -205,52 +219,22 @@ export function FittingWindow({ fitting, modules, onModuleFit, onModuleRemove }:
               </div>
 
               <div className="flex-1 overflow-y-auto space-y-1">
-                {getAvailableModules().map(module => {
-                  // Get all fitted modules, excluding the one in the currently selected slot
-                  const allFittedModules = getAllFittedModules(fitting);
-                  const fittedModules = selectedSlot ? allFittedModules.filter(fm => {
-                    // Exclude module in the selected slot to allow for replacement
-                    const slotKey = `${selectedSlot.type}Slots` as keyof Omit<Fitting, 'ship'>;
-                    const slots = fitting[slotKey] as any[];
-                    const moduleInSlot = slots[selectedSlot.index];
-                    return !(moduleInSlot && fm === moduleInSlot);
-                  }) : allFittedModules;
-
-                  const validation = fitting.ship
-                    ? canFitModule(fitting.ship, module, selectedSlot?.type || '', fittedModules)
-                    : { canFit: true };
-
-                  return (
-                    <button
-                      key={module.typeId}
-                      onClick={() => validation.canFit && handleModuleSelect(module)}
-                      disabled={!validation.canFit}
-                      className={`w-full p-2 border-2 text-left text-sm transition-colors ${
-                        validation.canFit
-                          ? 'border-secondary/30 hover:border-primary hover:bg-primary/10 cursor-pointer'
-                          : 'border-error/30 bg-error/5 cursor-not-allowed opacity-60'
-                      }`}
-                      style={validation.canFit ? { backgroundColor: "var(--background-light)" } : undefined}
-                      title={validation.reason}
-                    >
-                      <div className={`font-semibold flex items-center gap-2 ${
-                        validation.canFit ? 'text-foreground' : 'text-error'
-                      }`}>
-                        {!validation.canFit && <AlertCircle size={14} />}
-                        {module.typeName}
-                      </div>
-                      <div className="text-xs text-foreground-muted mt-1">
-                        {module.power && `PG: ${module.power}`}
-                        {module.cpu && ` | CPU: ${module.cpu}`}
-                      </div>
-                      {!validation.canFit && validation.reason && (
-                        <div className="text-xs text-error mt-1">
-                          {validation.reason}
-                        </div>
-                      )}
-                    </button>
-                  );
-                })}
+                {getAvailableModules().map(module => (
+                  <button
+                    key={module.typeId}
+                    onClick={() => handleModuleSelect(module)}
+                    className="w-full p-2 border-2 text-left text-sm transition-colors border-secondary/30 hover:border-primary hover:bg-primary/10 cursor-pointer"
+                    style={{ backgroundColor: "var(--background-light)" }}
+                  >
+                    <div className="font-semibold text-foreground">
+                      {module.typeName}
+                    </div>
+                    <div className="text-xs text-foreground-muted mt-1">
+                      {module.power && `PG: ${module.power}`}
+                      {module.cpu && ` | CPU: ${module.cpu}`}
+                    </div>
+                  </button>
+                ))}
 
                 {getAvailableModules().length === 0 && (
                   <div className="text-center text-foreground-muted text-sm p-4">
