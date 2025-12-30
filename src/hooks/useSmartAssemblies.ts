@@ -77,10 +77,11 @@ export function useSmartAssemblies(params?: UseSmartAssembliesParams): UseSmartA
       setIsLoading(true);
       setError(null);
 
-      // If caller provided explicit IDs, fetch them directly
+      // If caller provided explicit IDs, fetch them directly with batching to avoid rate limits
       const tryFetchExplicitIds = async (): Promise<SmartAssembly[] | null> => {
         if (!explicitIds || explicitIds.length === 0) return null;
         const base = `${baseUrl.replace(/\/$/, "")}/v2/smartassemblies`;
+
         const fetchOne = async (id: string): Promise<SmartAssembly | null> => {
           try {
             const r = await fetch(`${base}/${id}`, { signal: controller.signal });
@@ -90,11 +91,12 @@ export function useSmartAssemblies(params?: UseSmartAssembliesParams): UseSmartA
             }
             const obj = await r.json();
             const s = (obj?.data ?? obj) as SmartAssembly;
-            // Only return if we got actual data, not just an ID
-            if (s?.id != null && (s.name || s.type || s.assemblyType || s.smartAssemblyType)) {
+            // Return any assembly with an ID - be lenient with validation
+            // The component can handle assemblies with minimal data
+            if (s?.id != null) {
               return s;
             }
-            console.warn(`[useSmartAssemblies] Incomplete data for assembly ${id}`);
+            console.warn(`[useSmartAssemblies] No ID in response for assembly ${id}`, s);
             return null;
           } catch (e) {
             if (!controller.signal.aborted) {
@@ -103,14 +105,33 @@ export function useSmartAssemblies(params?: UseSmartAssembliesParams): UseSmartA
             return null;
           }
         };
-        const results = await Promise.all(explicitIds.map(fetchOne));
-        const validResults = results.filter(Boolean) as SmartAssembly[];
-        // Return partial results - better to show some assemblies than none
-        if (validResults.length > 0) {
-          if (validResults.length < explicitIds.length) {
-            console.warn(`[useSmartAssemblies] Only got ${validResults.length}/${explicitIds.length} assemblies, showing partial results`);
+
+        // Fetch in batches to avoid overwhelming the API
+        const batchSize = 5;
+        const allResults: SmartAssembly[] = [];
+
+        for (let i = 0; i < explicitIds.length; i += batchSize) {
+          const batch = explicitIds.slice(i, i + batchSize);
+          const results = await Promise.all(batch.map(fetchOne));
+          const validBatch = results.filter(Boolean) as SmartAssembly[];
+          allResults.push(...validBatch);
+
+          // Small delay between batches to avoid rate limiting
+          if (i + batchSize < explicitIds.length) {
+            await new Promise(resolve => setTimeout(resolve, 100));
           }
-          return validResults;
+        }
+
+        if (import.meta.env.DEV) {
+          console.log(`[useSmartAssemblies] Fetched ${allResults.length}/${explicitIds.length} assemblies via explicit IDs`);
+        }
+
+        // Return partial results - better to show some assemblies than none
+        if (allResults.length > 0) {
+          if (allResults.length < explicitIds.length) {
+            console.warn(`[useSmartAssemblies] Only got ${allResults.length}/${explicitIds.length} assemblies, showing partial results`);
+          }
+          return allResults;
         }
         // If we got no assemblies, try the filtered approach
         console.warn(`[useSmartAssemblies] Got no assemblies from explicit IDs, trying filtered approach`);
