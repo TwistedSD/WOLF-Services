@@ -67,6 +67,11 @@ export function FittingWindow({ fitting, modules, onModuleFit, onModuleRemove }:
         return m.slotType === targetSlotType;
       })
       .filter(m => {
+        // Only show actual modules - they must have power OR CPU cost
+        // This filters out ammo, charges, scripts, and other non-module items
+        return (m.power !== undefined && m.power > 0) || (m.cpu !== undefined && m.cpu > 0);
+      })
+      .filter(m => {
         // Check if module can actually fit
         const validation = canFitModule(fitting.ship!, m, selectedSlot.type, fittedModulesExcludingCurrent);
         return validation.canFit;
