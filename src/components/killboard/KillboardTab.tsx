@@ -136,6 +136,14 @@ const KillboardTabInner: React.FC = () => {
   const [subTab, setSubTab] = useState<KillboardSubTab>("recent");
   const [filter, setFilter] = useState("");
 
+  // Ensure system names are fetched for all killmails
+  useEffect(() => {
+    if (killmails.length > 0 && systems.ensureNames) {
+      const systemIds = Array.from(new Set(killmails.map(km => km.solarSystemId)));
+      systems.ensureNames(systemIds);
+    }
+  }, [killmails, systems.ensureNames]);
+
   const suggestions = useMemo(() => {
     const s = (systems as any).search(filter, 5).map((x: any) => ({
       kind: "system" as const,
