@@ -103,7 +103,7 @@ const PlayersList = ({ rows, getSystemName, title }: PlayersListProps) => {
                       {new Date(km.time).toLocaleString()}
                     </div>
                     <div className={Col.system}>
-                      {getSystemName(km.solarSystemId)}
+                      {getSystemName(km.solarSystemId) ?? `#${km.solarSystemId}`}
                     </div>
                     <div className={Col.player}>
                       {km.victim?.name ?? km.victim?.id ?? km.victim?.address}
