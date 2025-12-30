@@ -92,7 +92,7 @@ export function FittingTab() {
   }
 
   return (
-    <div className="p-3">
+    <div>
       <div className="grid grid-cols-12 gap-4">
         {/* Ship List - Left Panel */}
         <div className="col-span-3">

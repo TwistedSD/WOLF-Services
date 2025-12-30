@@ -9,7 +9,7 @@ interface StatsPanelProps {
 export function StatsPanel({ fitting }: StatsPanelProps) {
   if (!fitting.ship) {
     return (
-      <div className="border-2 border-primary bg-background h-full flex items-center justify-center">
+      <div className="border-2 h-full flex items-center justify-center" style={{ borderColor: "var(--primary)", backgroundColor: "var(--background-light)" }}>
         <div className="text-center p-8">
           <p className="text-foreground-muted">Ship stats will appear here</p>
         </div>
@@ -54,7 +54,7 @@ export function StatsPanel({ fitting }: StatsPanelProps) {
           {used.toFixed(1)} / {total.toFixed(1)}
         </span>
       </div>
-      <div className="w-full bg-background-lighter border border-secondary/30 h-4">
+      <div className="w-full border h-4" style={{ backgroundColor: "var(--background)", borderColor: "var(--secondary)" }}>
         <div
           className={`h-full transition-all ${
             percentage > 100 ? 'bg-error' : colorClass
@@ -69,9 +69,9 @@ export function StatsPanel({ fitting }: StatsPanelProps) {
   );
 
   return (
-    <div className="border-2 border-primary bg-background h-full flex flex-col">
+    <div className="border-2 h-full flex flex-col" style={{ borderColor: "var(--primary)", backgroundColor: "var(--background-light)" }}>
       {/* Header */}
-      <div className="p-4 border-b-2 border-primary">
+      <div className="p-4 border-b-2" style={{ borderColor: "var(--primary)", backgroundColor: "var(--background-lighter)" }}>
         <h2 className="text-xl font-bold text-primary">Ship Stats</h2>
       </div>
 

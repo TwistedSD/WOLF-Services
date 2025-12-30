@@ -15,16 +15,17 @@ export function ShipList({ ships, selectedShip, onShipSelect }: ShipListProps) {
   );
 
   return (
-    <div className="border-2 border-primary bg-background h-full flex flex-col">
+    <div className="border-2 h-full flex flex-col" style={{ borderColor: "var(--primary)", backgroundColor: "var(--background-light)" }}>
       {/* Header */}
-      <div className="p-4 border-b-2 border-primary">
+      <div className="p-4 border-b-2" style={{ borderColor: "var(--primary)", backgroundColor: "var(--background-lighter)" }}>
         <h2 className="text-xl font-bold text-primary mb-2">Ships</h2>
         <input
           type="text"
           placeholder="Search ships..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full px-2 py-1 bg-background-lighter border-2 border-secondary text-foreground placeholder-foreground-muted focus:border-primary"
+          className="w-full px-2 py-1 border-2 text-foreground placeholder-foreground-muted focus:border-primary"
+          style={{ backgroundColor: "var(--background)", borderColor: "var(--secondary)" }}
         />
       </div>
 

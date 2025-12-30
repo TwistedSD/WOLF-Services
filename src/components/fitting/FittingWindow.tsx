@@ -17,7 +17,7 @@ export function FittingWindow({ fitting, modules, onModuleFit, onModuleRemove }:
 
   if (!fitting.ship) {
     return (
-      <div className="border-2 border-primary bg-background h-full flex items-center justify-center">
+      <div className="border-2 h-full flex items-center justify-center" style={{ borderColor: "var(--primary)", backgroundColor: "var(--background-light)" }}>
         <div className="text-center p-8">
           <h2 className="text-xl font-bold text-primary mb-2">No Ship Selected</h2>
           <p className="text-foreground-muted">Select a ship from the list to begin fitting</p>
@@ -129,8 +129,9 @@ export function FittingWindow({ fitting, modules, onModuleFit, onModuleRemove }:
                     ? `${colors.borderSelected} ${colors.bgSelected}`
                     : isOccupied
                     ? `${colors.borderOccupied} ${colors.bgOccupied} ${colors.bgOccupiedHover}`
-                    : `border-secondary/30 bg-background-light ${colors.borderEmpty}`
+                    : `border-secondary/30 ${colors.borderEmpty}`
                 }`}
+                style={!isSelected && !isOccupied ? { backgroundColor: "var(--background-lighter)" } : undefined}
               >
                 {isOccupied ? (
                   <span className="text-foreground">{slot.module.typeName}</span>
@@ -146,9 +147,9 @@ export function FittingWindow({ fitting, modules, onModuleFit, onModuleRemove }:
   };
 
   return (
-    <div className="border-2 border-primary bg-background h-full flex flex-col">
+    <div className="border-2 h-full flex flex-col" style={{ borderColor: "var(--primary)", backgroundColor: "var(--background-light)" }}>
       {/* Header */}
-      <div className="p-4 border-b-2 border-primary">
+      <div className="p-4 border-b-2" style={{ borderColor: "var(--primary)", backgroundColor: "var(--background-lighter)" }}>
         <h2 className="text-xl font-bold text-primary">{fitting.ship.typeName}</h2>
         <div className="text-sm text-foreground-muted mt-1">
           Group ID: {fitting.ship.groupId}
@@ -157,7 +158,7 @@ export function FittingWindow({ fitting, modules, onModuleFit, onModuleRemove }:
 
       <div className="flex-1 flex overflow-hidden">
         {/* Fitting Slots */}
-        <div className="flex-1 p-4 overflow-y-auto border-r-2 border-primary">
+        <div className="flex-1 p-4 overflow-y-auto border-r-2" style={{ borderColor: "var(--primary)" }}>
           {renderSlotSection('High Slots', 'high', fitting.highSlots)}
           {renderSlotSection('Mid Slots', 'mid', fitting.midSlots)}
           {renderSlotSection('Low Slots', 'low', fitting.lowSlots)}
@@ -165,7 +166,7 @@ export function FittingWindow({ fitting, modules, onModuleFit, onModuleRemove }:
         </div>
 
         {/* Module Selection Panel */}
-        <div className="w-80 p-4 bg-background-light flex flex-col">
+        <div className="w-80 p-4 flex flex-col" style={{ backgroundColor: "var(--background-lighter)" }}>
           {selectedSlot ? (
             <>
               <div className="mb-3">
@@ -198,7 +199,8 @@ export function FittingWindow({ fitting, modules, onModuleFit, onModuleRemove }:
                   placeholder="Search modules..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-2 py-1 bg-background border-2 border-secondary text-foreground placeholder-foreground-muted text-sm focus:border-primary"
+                  className="w-full px-2 py-1 border-2 text-foreground placeholder-foreground-muted text-sm focus:border-primary"
+                  style={{ backgroundColor: "var(--background)", borderColor: "var(--secondary)" }}
                 />
               </div>
 
@@ -225,9 +227,10 @@ export function FittingWindow({ fitting, modules, onModuleFit, onModuleRemove }:
                       disabled={!validation.canFit}
                       className={`w-full p-2 border-2 text-left text-sm transition-colors ${
                         validation.canFit
-                          ? 'border-secondary/30 bg-background hover:border-primary hover:bg-primary/10 cursor-pointer'
+                          ? 'border-secondary/30 hover:border-primary hover:bg-primary/10 cursor-pointer'
                           : 'border-error/30 bg-error/5 cursor-not-allowed opacity-60'
                       }`}
+                      style={validation.canFit ? { backgroundColor: "var(--background-light)" } : undefined}
                       title={validation.reason}
                     >
                       <div className={`font-semibold flex items-center gap-2 ${
