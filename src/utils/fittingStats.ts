@@ -14,7 +14,7 @@ export interface CalculatedStats {
   armorHP: number;
   hullHP: number;
 
-  // Resistances (as percentages, 0-100)
+  // Resistances (as percentages, 0-100) - WITH stacking penalty applied
   emResistance: number;
   thermalResistance: number;
   kineticResistance: number;
@@ -39,6 +39,32 @@ export interface CalculatedStats {
 }
 
 /**
+ * EVE-style stacking penalty calculation
+ * Each additional module of the same type has diminishing returns
+ * Formula: 1 - (1-r1) × (1-r2)^0.869 × (1-r3)^0.571 × (1-r4)^0.283 × (1-r5)^0.106...
+ */
+function applyStackingPenalty(bonuses: number[]): number {
+  if (bonuses.length === 0) return 0;
+  if (bonuses.length === 1) return bonuses[0];
+
+  // Sort bonuses in descending order (largest first gets no penalty)
+  const sorted = [...bonuses].sort((a, b) => b - a);
+
+  // Stacking penalty exponents
+  const penalties = [1, 0.869, 0.571, 0.283, 0.106, 0.0407];
+
+  // Calculate stacked resistance
+  let totalResonance = 1; // Start at 100% damage (0% resistance)
+  sorted.forEach((bonus, index) => {
+    const penalty = penalties[Math.min(index, penalties.length - 1)];
+    const resistanceDecimal = bonus / 100; // Convert percentage to decimal
+    totalResonance *= Math.pow(1 - resistanceDecimal, penalty);
+  });
+
+  return (1 - totalResonance) * 100; // Convert back to resistance percentage
+}
+
+/**
  * Apply module bonuses to ship stats
  */
 export function calculateFittingStats(fitting: Fitting): CalculatedStats | null {
@@ -51,12 +77,12 @@ export function calculateFittingStats(fitting: Fitting): CalculatedStats | null 
   let stats: CalculatedStats = {
     baseShip: ship,
 
-    // Defense
+    // Defense (HP values are additive)
     shieldCapacity: ship.shieldCapacity || 0,
     armorHP: ship.armorHP || 0,
     hullHP: ship.hullHP || 0,
 
-    // Resistances (convert resonance to resistance percentage)
+    // Resistances (start at base ship resistances)
     emResistance: (1 - (ship.emDamageResonance || 1)) * 100,
     thermalResistance: (1 - (ship.thermalDamageResonance || 1)) * 100,
     kineticResistance: (1 - (ship.kineticDamageResonance || 1)) * 100,
@@ -80,16 +106,21 @@ export function calculateFittingStats(fitting: Fitting): CalculatedStats | null 
     scanResolution: ship.scanResolution || 0
   };
 
+  // Collect resistance bonuses for stacking penalty calculation
+  const emBonuses: number[] = [];
+  const thermalBonuses: number[] = [];
+  const kineticBonuses: number[] = [];
+  const explosiveBonuses: number[] = [];
+
   // Apply module bonuses
   fittedModules.forEach(fm => {
     const module = fm.module;
+    const charge = fm.charge;
 
-    // Armor HP bonus (additive)
+    // HP bonuses (additive)
     if (module.armorHP) {
       stats.armorHP += module.armorHP;
     }
-
-    // Shield capacity bonus (additive)
     if (module.shieldCapacity) {
       stats.shieldCapacity += module.shieldCapacity;
     }
@@ -124,23 +155,72 @@ export function calculateFittingStats(fitting: Fitting): CalculatedStats | null 
       stats.capacitorRecharge *= module.shieldRechargeRateMultiplier;
     }
 
-    // Resistance bonuses (negative values increase resistance, e.g., -16 means +16% resistance)
+    // Resistance bonuses (collect for stacking penalty)
+    // Negative values increase resistance (e.g., -16 means +16% resistance)
+    // Charges modify these bonuses (e.g., +200% means bonus becomes 3x larger)
     if (module.emResistanceBonus) {
-      stats.emResistance += (-module.emResistanceBonus);
+      let bonus = -module.emResistanceBonus;
+      if (charge?.emResistanceBonusMod) {
+        bonus *= (1 + charge.emResistanceBonusMod / 100);
+      }
+      emBonuses.push(bonus);
     }
 
     if (module.thermalResistanceBonus) {
-      stats.thermalResistance += (-module.thermalResistanceBonus);
+      let bonus = -module.thermalResistanceBonus;
+      if (charge?.thermalResistanceBonusMod) {
+        bonus *= (1 + charge.thermalResistanceBonusMod / 100);
+      }
+      thermalBonuses.push(bonus);
     }
 
     if (module.kineticResistanceBonus) {
-      stats.kineticResistance += (-module.kineticResistanceBonus);
+      let bonus = -module.kineticResistanceBonus;
+      if (charge?.kineticResistanceBonusMod) {
+        bonus *= (1 + charge.kineticResistanceBonusMod / 100);
+      }
+      kineticBonuses.push(bonus);
     }
 
     if (module.explosiveResistanceBonus) {
-      stats.explosiveResistance += (-module.explosiveResistanceBonus);
+      let bonus = -module.explosiveResistanceBonus;
+      if (charge?.explosiveResistanceBonusMod) {
+        bonus *= (1 + charge.explosiveResistanceBonusMod / 100);
+      }
+      explosiveBonuses.push(bonus);
     }
   });
+
+  // Apply stacking penalty to resistances and combine with ship base
+  // Resistances combine multiplicatively: total_resonance = ship_resonance * module_resonance
+  if (emBonuses.length > 0) {
+    const moduleResistance = applyStackingPenalty(emBonuses);
+    const shipResonance = ship.emDamageResonance || 1;
+    const moduleResonance = 1 - (moduleResistance / 100);
+    const totalResonance = shipResonance * moduleResonance;
+    stats.emResistance = (1 - totalResonance) * 100;
+  }
+  if (thermalBonuses.length > 0) {
+    const moduleResistance = applyStackingPenalty(thermalBonuses);
+    const shipResonance = ship.thermalDamageResonance || 1;
+    const moduleResonance = 1 - (moduleResistance / 100);
+    const totalResonance = shipResonance * moduleResonance;
+    stats.thermalResistance = (1 - totalResonance) * 100;
+  }
+  if (kineticBonuses.length > 0) {
+    const moduleResistance = applyStackingPenalty(kineticBonuses);
+    const shipResonance = ship.kineticDamageResonance || 1;
+    const moduleResonance = 1 - (moduleResistance / 100);
+    const totalResonance = shipResonance * moduleResonance;
+    stats.kineticResistance = (1 - totalResonance) * 100;
+  }
+  if (explosiveBonuses.length > 0) {
+    const moduleResistance = applyStackingPenalty(explosiveBonuses);
+    const shipResonance = ship.explosiveDamageResonance || 1;
+    const moduleResonance = 1 - (moduleResistance / 100);
+    const totalResonance = shipResonance * moduleResonance;
+    stats.explosiveResistance = (1 - totalResonance) * 100;
+  }
 
   return stats;
 }

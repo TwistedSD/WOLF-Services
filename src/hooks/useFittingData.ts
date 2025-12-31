@@ -33,6 +33,12 @@ export interface Charge {
   typeId: number;
   typeName: string;
   groupId: number;
+  chargeSize?: number;
+  launcherGroup?: number;
+  emResistanceBonusMod?: number;
+  explosiveResistanceBonusMod?: number;
+  kineticResistanceBonusMod?: number;
+  thermalResistanceBonusMod?: number;
 }
 
 export interface Module {
