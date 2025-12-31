@@ -55,11 +55,11 @@ export interface Module {
   chargeGroup1?: number;
   shieldRechargeRateMultiplier?: number;
   shieldCapacity?: number;
-  emDamageResonance?: number;
-  explosiveDamageResonance?: number;
-  kineticDamageResonance?: number;
-  thermalDamageResonance?: number;
   armorHP?: number;
+  emResistanceBonus?: number;
+  explosiveResistanceBonus?: number;
+  kineticResistanceBonus?: number;
+  thermalResistanceBonus?: number;
   maxGroupFitted?: number;
   canFitShipGroup01?: number;
   canFitShipGroup02?: number;

@@ -124,30 +124,21 @@ export function calculateFittingStats(fitting: Fitting): CalculatedStats | null 
       stats.capacitorRecharge *= module.shieldRechargeRateMultiplier;
     }
 
-    // Resistance modifications (modules provide resonance multipliers)
-    // Lower resonance = higher resistance, so we multiply the resonance
-    if (module.emDamageResonance) {
-      const currentResonance = 1 - (stats.emResistance / 100);
-      const newResonance = currentResonance * module.emDamageResonance;
-      stats.emResistance = (1 - newResonance) * 100;
+    // Resistance bonuses (negative values increase resistance, e.g., -16 means +16% resistance)
+    if (module.emResistanceBonus) {
+      stats.emResistance += (-module.emResistanceBonus);
     }
 
-    if (module.thermalDamageResonance) {
-      const currentResonance = 1 - (stats.thermalResistance / 100);
-      const newResonance = currentResonance * module.thermalDamageResonance;
-      stats.thermalResistance = (1 - newResonance) * 100;
+    if (module.thermalResistanceBonus) {
+      stats.thermalResistance += (-module.thermalResistanceBonus);
     }
 
-    if (module.kineticDamageResonance) {
-      const currentResonance = 1 - (stats.kineticResistance / 100);
-      const newResonance = currentResonance * module.kineticDamageResonance;
-      stats.kineticResistance = (1 - newResonance) * 100;
+    if (module.kineticResistanceBonus) {
+      stats.kineticResistance += (-module.kineticResistanceBonus);
     }
 
-    if (module.explosiveDamageResonance) {
-      const currentResonance = 1 - (stats.explosiveResistance / 100);
-      const newResonance = currentResonance * module.explosiveDamageResonance;
-      stats.explosiveResistance = (1 - newResonance) * 100;
+    if (module.explosiveResistanceBonus) {
+      stats.explosiveResistance += (-module.explosiveResistanceBonus);
     }
   });
 
