@@ -1,0 +1,1107 @@
+[
+  {
+    "blueprint_id": 1000,
+    "primary_type_id": 88561,
+    "run_time": 4
+  },
+  {
+    "blueprint_id": 1001,
+    "primary_type_id": 88886,
+    "run_time": 197
+  },
+  {
+    "blueprint_id": 1002,
+    "primary_type_id": 84180,
+    "run_time": 3
+  },
+  {
+    "blueprint_id": 1003,
+    "primary_type_id": 84210,
+    "run_time": 5
+  },
+  {
+    "blueprint_id": 1004,
+    "primary_type_id": 84182,
+    "run_time": 4
+  },
+  {
+    "blueprint_id": 1005,
+    "primary_type_id": 78418,
+    "run_time": 20
+  },
+  {
+    "blueprint_id": 1006,
+    "primary_type_id": 81974,
+    "run_time": 156
+  },
+  {
+    "blueprint_id": 1007,
+    "primary_type_id": 83463,
+    "run_time": 3
+  },
+  {
+    "blueprint_id": 1008,
+    "primary_type_id": 77852,
+    "run_time": 167
+  },
+  {
+    "blueprint_id": 1009,
+    "primary_type_id": 87847,
+    "run_time": 50
+  },
+  {
+    "blueprint_id": 1010,
+    "primary_type_id": 82128,
+    "run_time": 3
+  },
+  {
+    "blueprint_id": 1011,
+    "primary_type_id": 81846,
+    "run_time": 39
+  },
+  {
+    "blueprint_id": 1012,
+    "primary_type_id": 82647,
+    "run_time": 155
+  },
+  {
+    "blueprint_id": 1013,
+    "primary_type_id": 88887,
+    "run_time": 3
+  },
+  {
+    "blueprint_id": 1014,
+    "primary_type_id": 82652,
+    "run_time": 207
+  },
+  {
+    "blueprint_id": 1015,
+    "primary_type_id": 89089,
+    "run_time": 25
+  },
+  {
+    "blueprint_id": 1016,
+    "primary_type_id": 88319,
+    "run_time": 6
+  },
+  {
+    "blueprint_id": 1017,
+    "primary_type_id": 84180,
+    "run_time": 3
+  },
+  {
+    "blueprint_id": 1019,
+    "primary_type_id": 84182,
+    "run_time": 4
+  },
+  {
+    "blueprint_id": 1020,
+    "primary_type_id": 84210,
+    "run_time": 5
+  },
+  {
+    "blueprint_id": 1021,
+    "primary_type_id": 88561,
+    "run_time": 4
+  },
+  {
+    "blueprint_id": 1022,
+    "primary_type_id": 88780,
+    "run_time": 17
+  },
+  {
+    "blueprint_id": 1023,
+    "primary_type_id": 88565,
+    "run_time": 11
+  },
+  {
+    "blueprint_id": 1026,
+    "primary_type_id": 83895,
+    "run_time": 3
+  },
+  {
+    "blueprint_id": 1027,
+    "primary_type_id": 83897,
+    "run_time": 3
+  },
+  {
+    "blueprint_id": 1029,
+    "primary_type_id": 82130,
+    "run_time": 5
+  },
+  {
+    "blueprint_id": 1030,
+    "primary_type_id": 82133,
+    "run_time": 5
+  },
+  {
+    "blueprint_id": 1031,
+    "primary_type_id": 89978,
+    "run_time": 43200
+  },
+  {
+    "blueprint_id": 1032,
+    "primary_type_id": 89979,
+    "run_time": 43200
+  },
+  {
+    "blueprint_id": 1033,
+    "primary_type_id": 78515,
+    "run_time": 35
+  },
+  {
+    "blueprint_id": 1034,
+    "primary_type_id": 82137,
+    "run_time": 3
+  },
+  {
+    "blueprint_id": 1035,
+    "primary_type_id": 88843,
+    "run_time": 7
+  },
+  {
+    "blueprint_id": 1037,
+    "primary_type_id": 88839,
+    "run_time": 5
+  },
+  {
+    "blueprint_id": 1038,
+    "primary_type_id": 88841,
+    "run_time": 8
+  },
+  {
+    "blueprint_id": 1039,
+    "primary_type_id": 84204,
+    "run_time": 7
+  },
+  {
+    "blueprint_id": 1040,
+    "primary_type_id": 82411,
+    "run_time": 248
+  },
+  {
+    "blueprint_id": 1042,
+    "primary_type_id": 82412,
+    "run_time": 222
+  },
+  {
+    "blueprint_id": 1043,
+    "primary_type_id": 78416,
+    "run_time": 46
+  },
+  {
+    "blueprint_id": 1044,
+    "primary_type_id": 78417,
+    "run_time": 31
+  },
+  {
+    "blueprint_id": 1045,
+    "primary_type_id": 82413,
+    "run_time": 222
+  },
+  {
+    "blueprint_id": 1046,
+    "primary_type_id": 82410,
+    "run_time": 222
+  },
+  {
+    "blueprint_id": 1047,
+    "primary_type_id": 78420,
+    "run_time": 31
+  },
+  {
+    "blueprint_id": 1048,
+    "primary_type_id": 78421,
+    "run_time": 31
+  },
+  {
+    "blueprint_id": 1049,
+    "primary_type_id": 83896,
+    "run_time": 5
+  },
+  {
+    "blueprint_id": 1050,
+    "primary_type_id": 83898,
+    "run_time": 5
+  },
+  {
+    "blueprint_id": 1051,
+    "primary_type_id": 82127,
+    "run_time": 5
+  },
+  {
+    "blueprint_id": 1052,
+    "primary_type_id": 82131,
+    "run_time": 5
+  },
+  {
+    "blueprint_id": 1053,
+    "primary_type_id": 82126,
+    "run_time": 5
+  },
+  {
+    "blueprint_id": 1054,
+    "primary_type_id": 81658,
+    "run_time": 3
+  },
+  {
+    "blueprint_id": 1055,
+    "primary_type_id": 88844,
+    "run_time": 32
+  },
+  {
+    "blueprint_id": 1056,
+    "primary_type_id": 78437,
+    "run_time": 35
+  },
+  {
+    "blueprint_id": 1057,
+    "primary_type_id": 88840,
+    "run_time": 24
+  },
+  {
+    "blueprint_id": 1058,
+    "primary_type_id": 88842,
+    "run_time": 37
+  },
+  {
+    "blueprint_id": 1059,
+    "primary_type_id": 84206,
+    "run_time": 32
+  },
+  {
+    "blueprint_id": 1060,
+    "primary_type_id": 78422,
+    "run_time": 126
+  },
+  {
+    "blueprint_id": 1061,
+    "primary_type_id": 82134,
+    "run_time": 13
+  },
+  {
+    "blueprint_id": 1062,
+    "primary_type_id": 82132,
+    "run_time": 13
+  },
+  {
+    "blueprint_id": 1063,
+    "primary_type_id": 82140,
+    "run_time": 13
+  },
+  {
+    "blueprint_id": 1064,
+    "primary_type_id": 82137,
+    "run_time": 3
+  },
+  {
+    "blueprint_id": 1066,
+    "primary_type_id": 88889,
+    "run_time": 452
+  },
+  {
+    "blueprint_id": 1067,
+    "primary_type_id": 87599,
+    "run_time": 904
+  },
+  {
+    "blueprint_id": 1068,
+    "primary_type_id": 78508,
+    "run_time": 4230
+  },
+  {
+    "blueprint_id": 1069,
+    "primary_type_id": 82028,
+    "run_time": 574
+  },
+  {
+    "blueprint_id": 1070,
+    "primary_type_id": 82030,
+    "run_time": 632
+  },
+  {
+    "blueprint_id": 1071,
+    "primary_type_id": 81657,
+    "run_time": 664
+  },
+  {
+    "blueprint_id": 1072,
+    "primary_type_id": 82033,
+    "run_time": 643
+  },
+  {
+    "blueprint_id": 1073,
+    "primary_type_id": 82092,
+    "run_time": 2457
+  },
+  {
+    "blueprint_id": 1074,
+    "primary_type_id": 82094,
+    "run_time": 2872
+  },
+  {
+    "blueprint_id": 1075,
+    "primary_type_id": 82098,
+    "run_time": 2667
+  },
+  {
+    "blueprint_id": 1076,
+    "primary_type_id": 82096,
+    "run_time": 2727
+  },
+  {
+    "blueprint_id": 1077,
+    "primary_type_id": 82093,
+    "run_time": 9935
+  },
+  {
+    "blueprint_id": 1078,
+    "primary_type_id": 82095,
+    "run_time": 11770
+  },
+  {
+    "blueprint_id": 1079,
+    "primary_type_id": 82099,
+    "run_time": 11086
+  },
+  {
+    "blueprint_id": 1080,
+    "primary_type_id": 82097,
+    "run_time": 11412
+  },
+  {
+    "blueprint_id": 1081,
+    "primary_type_id": 83423,
+    "run_time": 921
+  },
+  {
+    "blueprint_id": 1082,
+    "primary_type_id": 83426,
+    "run_time": 921
+  },
+  {
+    "blueprint_id": 1083,
+    "primary_type_id": 83451,
+    "run_time": 1169
+  },
+  {
+    "blueprint_id": 1084,
+    "primary_type_id": 83449,
+    "run_time": 1169
+  },
+  {
+    "blueprint_id": 1085,
+    "primary_type_id": 83457,
+    "run_time": 1169
+  },
+  {
+    "blueprint_id": 1086,
+    "primary_type_id": 83443,
+    "run_time": 804
+  },
+  {
+    "blueprint_id": 1087,
+    "primary_type_id": 83438,
+    "run_time": 962
+  },
+  {
+    "blueprint_id": 1088,
+    "primary_type_id": 83459,
+    "run_time": 970
+  },
+  {
+    "blueprint_id": 1089,
+    "primary_type_id": 83528,
+    "run_time": 863
+  },
+  {
+    "blueprint_id": 1090,
+    "primary_type_id": 83524,
+    "run_time": 14863
+  },
+  {
+    "blueprint_id": 1092,
+    "primary_type_id": 82915,
+    "run_time": 798
+  },
+  {
+    "blueprint_id": 1094,
+    "primary_type_id": 83434,
+    "run_time": 830
+  },
+  {
+    "blueprint_id": 1095,
+    "primary_type_id": 83430,
+    "run_time": 943
+  },
+  {
+    "blueprint_id": 1096,
+    "primary_type_id": 82650,
+    "run_time": 150
+  },
+  {
+    "blueprint_id": 1098,
+    "primary_type_id": 78507,
+    "run_time": 471
+  },
+  {
+    "blueprint_id": 1100,
+    "primary_type_id": 83497,
+    "run_time": 209
+  },
+  {
+    "blueprint_id": 1102,
+    "primary_type_id": 78502,
+    "run_time": 1883
+  },
+  {
+    "blueprint_id": 1103,
+    "primary_type_id": 78510,
+    "run_time": 942
+  },
+  {
+    "blueprint_id": 1104,
+    "primary_type_id": 81656,
+    "run_time": 137
+  },
+  {
+    "blueprint_id": 1105,
+    "primary_type_id": 82090,
+    "run_time": 301
+  },
+  {
+    "blueprint_id": 1106,
+    "primary_type_id": 82091,
+    "run_time": 620
+  },
+  {
+    "blueprint_id": 1107,
+    "primary_type_id": 81972,
+    "run_time": 115
+  },
+  {
+    "blueprint_id": 1108,
+    "primary_type_id": 82088,
+    "run_time": 249
+  },
+  {
+    "blueprint_id": 1109,
+    "primary_type_id": 82089,
+    "run_time": 505
+  },
+  {
+    "blueprint_id": 1110,
+    "primary_type_id": 82084,
+    "run_time": 276
+  },
+  {
+    "blueprint_id": 1111,
+    "primary_type_id": 82085,
+    "run_time": 577
+  },
+  {
+    "blueprint_id": 1112,
+    "primary_type_id": 82032,
+    "run_time": 132
+  },
+  {
+    "blueprint_id": 1113,
+    "primary_type_id": 82086,
+    "run_time": 283
+  },
+  {
+    "blueprint_id": 1114,
+    "primary_type_id": 82087,
+    "run_time": 597
+  },
+  {
+    "blueprint_id": 1115,
+    "primary_type_id": 77484,
+    "run_time": 750
+  },
+  {
+    "blueprint_id": 1116,
+    "primary_type_id": 82681,
+    "run_time": 97
+  },
+  {
+    "blueprint_id": 1117,
+    "primary_type_id": 83536,
+    "run_time": 194
+  },
+  {
+    "blueprint_id": 1118,
+    "primary_type_id": 82651,
+    "run_time": 111
+  },
+  {
+    "blueprint_id": 1119,
+    "primary_type_id": 83437,
+    "run_time": 222
+  },
+  {
+    "blueprint_id": 1120,
+    "primary_type_id": 83441,
+    "run_time": 97
+  },
+  {
+    "blueprint_id": 1121,
+    "primary_type_id": 83442,
+    "run_time": 194
+  },
+  {
+    "blueprint_id": 1122,
+    "primary_type_id": 83613,
+    "run_time": 181
+  },
+  {
+    "blueprint_id": 1123,
+    "primary_type_id": 83614,
+    "run_time": 405
+  },
+  {
+    "blueprint_id": 1124,
+    "primary_type_id": 83615,
+    "run_time": 916
+  },
+  {
+    "blueprint_id": 1125,
+    "primary_type_id": 83618,
+    "run_time": 159
+  },
+  {
+    "blueprint_id": 1126,
+    "primary_type_id": 83619,
+    "run_time": 362
+  },
+  {
+    "blueprint_id": 1127,
+    "primary_type_id": 83620,
+    "run_time": 835
+  },
+  {
+    "blueprint_id": 1128,
+    "primary_type_id": 83623,
+    "run_time": 159
+  },
+  {
+    "blueprint_id": 1129,
+    "primary_type_id": 83624,
+    "run_time": 350
+  },
+  {
+    "blueprint_id": 1130,
+    "primary_type_id": 72960,
+    "run_time": 148
+  },
+  {
+    "blueprint_id": 1131,
+    "primary_type_id": 83625,
+    "run_time": 796
+  },
+  {
+    "blueprint_id": 1132,
+    "primary_type_id": 83628,
+    "run_time": 181
+  },
+  {
+    "blueprint_id": 1133,
+    "primary_type_id": 83629,
+    "run_time": 405
+  },
+  {
+    "blueprint_id": 1134,
+    "primary_type_id": 83630,
+    "run_time": 923
+  },
+  {
+    "blueprint_id": 1135,
+    "primary_type_id": 82682,
+    "run_time": 181
+  },
+  {
+    "blueprint_id": 1136,
+    "primary_type_id": 83516,
+    "run_time": 371
+  },
+  {
+    "blueprint_id": 1137,
+    "primary_type_id": 83517,
+    "run_time": 777
+  },
+  {
+    "blueprint_id": 1138,
+    "primary_type_id": 83518,
+    "run_time": 1585
+  },
+  {
+    "blueprint_id": 1139,
+    "primary_type_id": 83519,
+    "run_time": 3274
+  },
+  {
+    "blueprint_id": 1140,
+    "primary_type_id": 82683,
+    "run_time": 178
+  },
+  {
+    "blueprint_id": 1141,
+    "primary_type_id": 83520,
+    "run_time": 366
+  },
+  {
+    "blueprint_id": 1142,
+    "primary_type_id": 83521,
+    "run_time": 760
+  },
+  {
+    "blueprint_id": 1143,
+    "primary_type_id": 83522,
+    "run_time": 1553
+  },
+  {
+    "blueprint_id": 1144,
+    "primary_type_id": 83523,
+    "run_time": 3192
+  },
+  {
+    "blueprint_id": 1145,
+    "primary_type_id": 83498,
+    "run_time": 469
+  },
+  {
+    "blueprint_id": 1146,
+    "primary_type_id": 83499,
+    "run_time": 1054
+  },
+  {
+    "blueprint_id": 1147,
+    "primary_type_id": 83500,
+    "run_time": 2339
+  },
+  {
+    "blueprint_id": 1148,
+    "primary_type_id": 83501,
+    "run_time": 5144
+  },
+  {
+    "blueprint_id": 1149,
+    "primary_type_id": 83448,
+    "run_time": 505
+  },
+  {
+    "blueprint_id": 1150,
+    "primary_type_id": 82653,
+    "run_time": 207
+  },
+  {
+    "blueprint_id": 1151,
+    "primary_type_id": 83450,
+    "run_time": 505
+  },
+  {
+    "blueprint_id": 1152,
+    "primary_type_id": 82654,
+    "run_time": 207
+  },
+  {
+    "blueprint_id": 1153,
+    "primary_type_id": 83456,
+    "run_time": 505
+  },
+  {
+    "blueprint_id": 1154,
+    "primary_type_id": 82667,
+    "run_time": 243
+  },
+  {
+    "blueprint_id": 1155,
+    "primary_type_id": 83458,
+    "run_time": 496
+  },
+  {
+    "blueprint_id": 1156,
+    "primary_type_id": 83768,
+    "run_time": 218
+  },
+  {
+    "blueprint_id": 1157,
+    "primary_type_id": 83769,
+    "run_time": 461
+  },
+  {
+    "blueprint_id": 1158,
+    "primary_type_id": 83770,
+    "run_time": 949
+  },
+  {
+    "blueprint_id": 1159,
+    "primary_type_id": 83772,
+    "run_time": 201
+  },
+  {
+    "blueprint_id": 1160,
+    "primary_type_id": 83773,
+    "run_time": 426
+  },
+  {
+    "blueprint_id": 1161,
+    "primary_type_id": 83774,
+    "run_time": 881
+  },
+  {
+    "blueprint_id": 1162,
+    "primary_type_id": 83775,
+    "run_time": 1811
+  },
+  {
+    "blueprint_id": 1163,
+    "primary_type_id": 83777,
+    "run_time": 201
+  },
+  {
+    "blueprint_id": 1164,
+    "primary_type_id": 83778,
+    "run_time": 415
+  },
+  {
+    "blueprint_id": 1165,
+    "primary_type_id": 83779,
+    "run_time": 863
+  },
+  {
+    "blueprint_id": 1166,
+    "primary_type_id": 83782,
+    "run_time": 184
+  },
+  {
+    "blueprint_id": 1167,
+    "primary_type_id": 83783,
+    "run_time": 387
+  },
+  {
+    "blueprint_id": 1168,
+    "primary_type_id": 83784,
+    "run_time": 804
+  },
+  {
+    "blueprint_id": 1169,
+    "primary_type_id": 83421,
+    "run_time": 357
+  },
+  {
+    "blueprint_id": 1170,
+    "primary_type_id": 82648,
+    "run_time": 172
+  },
+  {
+    "blueprint_id": 1171,
+    "primary_type_id": 83425,
+    "run_time": 391
+  },
+  {
+    "blueprint_id": 1172,
+    "primary_type_id": 82649,
+    "run_time": 182
+  },
+  {
+    "blueprint_id": 1173,
+    "primary_type_id": 83429,
+    "run_time": 421
+  },
+  {
+    "blueprint_id": 1174,
+    "primary_type_id": 83433,
+    "run_time": 357
+  },
+  {
+    "blueprint_id": 1175,
+    "primary_type_id": 77753,
+    "run_time": 89
+  },
+  {
+    "blueprint_id": 1176,
+    "primary_type_id": 78490,
+    "run_time": 825
+  },
+  {
+    "blueprint_id": 1177,
+    "primary_type_id": 78511,
+    "run_time": 413
+  },
+  {
+    "blueprint_id": 1178,
+    "primary_type_id": 78506,
+    "run_time": 207
+  },
+  {
+    "blueprint_id": 1179,
+    "primary_type_id": 88764,
+    "run_time": 3
+  },
+  {
+    "blueprint_id": 1180,
+    "primary_type_id": 88319,
+    "run_time": 3
+  },
+  {
+    "blueprint_id": 1181,
+    "primary_type_id": 78423,
+    "run_time": 3
+  },
+  {
+    "blueprint_id": 1182,
+    "primary_type_id": 77800,
+    "run_time": 3
+  },
+  {
+    "blueprint_id": 1183,
+    "primary_type_id": 77811,
+    "run_time": 3
+  },
+  {
+    "blueprint_id": 1184,
+    "primary_type_id": 77810,
+    "run_time": 3
+  },
+  {
+    "blueprint_id": 1185,
+    "primary_type_id": 88765,
+    "run_time": 3
+  },
+  {
+    "blueprint_id": 1186,
+    "primary_type_id": 89258,
+    "run_time": 9
+  },
+  {
+    "blueprint_id": 1188,
+    "primary_type_id": 88764,
+    "run_time": 4
+  },
+  {
+    "blueprint_id": 1190,
+    "primary_type_id": 89259,
+    "run_time": 9
+  },
+  {
+    "blueprint_id": 1191,
+    "primary_type_id": 78435,
+    "run_time": 18
+  },
+  {
+    "blueprint_id": 1192,
+    "primary_type_id": 89260,
+    "run_time": 9
+  },
+  {
+    "blueprint_id": 1193,
+    "primary_type_id": 77728,
+    "run_time": 18
+  },
+  {
+    "blueprint_id": 1194,
+    "primary_type_id": 88765,
+    "run_time": 3
+  },
+  {
+    "blueprint_id": 1195,
+    "primary_type_id": 77729,
+    "run_time": 20
+  },
+  {
+    "blueprint_id": 1196,
+    "primary_type_id": 78434,
+    "run_time": 20
+  },
+  {
+    "blueprint_id": 1197,
+    "primary_type_id": 78446,
+    "run_time": 15
+  },
+  {
+    "blueprint_id": 1198,
+    "primary_type_id": 78447,
+    "run_time": 15
+  },
+  {
+    "blueprint_id": 1199,
+    "primary_type_id": 78448,
+    "run_time": 15
+  },
+  {
+    "blueprint_id": 1200,
+    "primary_type_id": 78449,
+    "run_time": 15
+  },
+  {
+    "blueprint_id": 1201,
+    "primary_type_id": 77800,
+    "run_time": 3
+  },
+  {
+    "blueprint_id": 1202,
+    "primary_type_id": 77810,
+    "run_time": 3
+  },
+  {
+    "blueprint_id": 1203,
+    "primary_type_id": 77811,
+    "run_time": 3
+  },
+  {
+    "blueprint_id": 1204,
+    "primary_type_id": 78426,
+    "run_time": 5
+  },
+  {
+    "blueprint_id": 1205,
+    "primary_type_id": 89258,
+    "run_time": 25
+  },
+  {
+    "blueprint_id": 1209,
+    "primary_type_id": 89259,
+    "run_time": 25
+  },
+  {
+    "blueprint_id": 1212,
+    "primary_type_id": 89260,
+    "run_time": 25
+  },
+  {
+    "blueprint_id": 1220,
+    "primary_type_id": 77800,
+    "run_time": 4
+  },
+  {
+    "blueprint_id": 1221,
+    "primary_type_id": 77810,
+    "run_time": 4
+  },
+  {
+    "blueprint_id": 1222,
+    "primary_type_id": 77811,
+    "run_time": 4
+  },
+  {
+    "blueprint_id": 1223,
+    "primary_type_id": 78426,
+    "run_time": 8
+  },
+  {
+    "blueprint_id": 1224,
+    "primary_type_id": 87848,
+    "run_time": 150
+  },
+  {
+    "blueprint_id": 1226,
+    "primary_type_id": 87846,
+    "run_time": 130
+  },
+  {
+    "blueprint_id": 1227,
+    "primary_type_id": 87698,
+    "run_time": 60
+  },
+  {
+    "blueprint_id": 1228,
+    "primary_type_id": 82426,
+    "run_time": 8320
+  },
+  {
+    "blueprint_id": 1229,
+    "primary_type_id": 81904,
+    "run_time": 79200
+  },
+  {
+    "blueprint_id": 1230,
+    "primary_type_id": 81808,
+    "run_time": 151200
+  },
+  {
+    "blueprint_id": 1231,
+    "primary_type_id": 82424,
+    "run_time": 82800
+  },
+  {
+    "blueprint_id": 1232,
+    "primary_type_id": 81609,
+    "run_time": 8200
+  },
+  {
+    "blueprint_id": 1233,
+    "primary_type_id": 82430,
+    "run_time": 244800
+  },
+  {
+    "blueprint_id": 1234,
+    "primary_type_id": 81611,
+    "run_time": 324000
+  },
+  {
+    "blueprint_id": 1470,
+    "primary_type_id": 91106,
+    "run_time": 10630
+  },
+  {
+    "blueprint_id": 1471,
+    "primary_type_id": 91107,
+    "run_time": 10260
+  },
+  {
+    "blueprint_id": 1472,
+    "primary_type_id": 90887,
+    "run_time": 120
+  },
+  {
+    "blueprint_id": 1473,
+    "primary_type_id": 92389,
+    "run_time": 97
+  },
+  {
+    "blueprint_id": 1474,
+    "primary_type_id": 92390,
+    "run_time": 800
+  },
+  {
+    "blueprint_id": 1475,
+    "primary_type_id": 91967,
+    "run_time": 46400
+  },
+  {
+    "blueprint_id": 1476,
+    "primary_type_id": 91968,
+    "run_time": 37100
+  },
+  {
+    "blueprint_id": 1479,
+    "primary_type_id": 92421,
+    "run_time": 320
+  },
+  {
+    "blueprint_id": 1480,
+    "primary_type_id": 78435,
+    "run_time": 20
+  },
+  {
+    "blueprint_id": 1481,
+    "primary_type_id": 77728,
+    "run_time": 20
+  },
+  {
+    "blueprint_id": 1482,
+    "primary_type_id": 92483,
+    "run_time": 11
+  },
+  {
+    "blueprint_id": 1483,
+    "primary_type_id": 82425,
+    "run_time": 78000
+  },
+  {
+    "blueprint_id": 1487,
+    "primary_type_id": 91749,
+    "run_time": 50800
+  }
+]

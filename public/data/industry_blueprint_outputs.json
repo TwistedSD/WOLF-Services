@@ -1,0 +1,1520 @@
+[
+  {
+    "id": 1,
+    "blueprint_id": 1079,
+    "type_id": 82099,
+    "quantity": 1
+  },
+  {
+    "id": 2,
+    "blueprint_id": 1162,
+    "type_id": 83775,
+    "quantity": 1
+  },
+  {
+    "id": 3,
+    "blueprint_id": 1080,
+    "type_id": 82097,
+    "quantity": 1
+  },
+  {
+    "id": 4,
+    "blueprint_id": 1163,
+    "type_id": 83777,
+    "quantity": 1
+  },
+  {
+    "id": 5,
+    "blueprint_id": 1081,
+    "type_id": 83423,
+    "quantity": 1
+  },
+  {
+    "id": 6,
+    "blueprint_id": 1164,
+    "type_id": 83778,
+    "quantity": 1
+  },
+  {
+    "id": 7,
+    "blueprint_id": 1082,
+    "type_id": 83426,
+    "quantity": 1
+  },
+  {
+    "id": 8,
+    "blueprint_id": 1165,
+    "type_id": 83779,
+    "quantity": 1
+  },
+  {
+    "id": 9,
+    "blueprint_id": 1000,
+    "type_id": 88561,
+    "quantity": 14
+  },
+  {
+    "id": 10,
+    "blueprint_id": 1083,
+    "type_id": 83451,
+    "quantity": 1
+  },
+  {
+    "id": 11,
+    "blueprint_id": 1166,
+    "type_id": 83782,
+    "quantity": 1
+  },
+  {
+    "id": 12,
+    "blueprint_id": 1001,
+    "type_id": 88886,
+    "quantity": 1
+  },
+  {
+    "id": 13,
+    "blueprint_id": 1084,
+    "type_id": 83449,
+    "quantity": 1
+  },
+  {
+    "id": 14,
+    "blueprint_id": 1167,
+    "type_id": 83783,
+    "quantity": 1
+  },
+  {
+    "id": 15,
+    "blueprint_id": 1002,
+    "type_id": 84180,
+    "quantity": 1
+  },
+  {
+    "id": 16,
+    "blueprint_id": 1085,
+    "type_id": 83457,
+    "quantity": 1
+  },
+  {
+    "id": 17,
+    "blueprint_id": 1168,
+    "type_id": 83784,
+    "quantity": 1
+  },
+  {
+    "id": 18,
+    "blueprint_id": 1003,
+    "type_id": 84210,
+    "quantity": 14
+  },
+  {
+    "id": 19,
+    "blueprint_id": 1086,
+    "type_id": 83443,
+    "quantity": 1
+  },
+  {
+    "id": 20,
+    "blueprint_id": 1169,
+    "type_id": 83421,
+    "quantity": 1
+  },
+  {
+    "id": 21,
+    "blueprint_id": 1004,
+    "type_id": 84182,
+    "quantity": 8
+  },
+  {
+    "id": 22,
+    "blueprint_id": 1087,
+    "type_id": 83438,
+    "quantity": 1
+  },
+  {
+    "id": 23,
+    "blueprint_id": 1170,
+    "type_id": 82648,
+    "quantity": 1
+  },
+  {
+    "id": 24,
+    "blueprint_id": 1005,
+    "type_id": 78418,
+    "quantity": 1
+  },
+  {
+    "id": 25,
+    "blueprint_id": 1088,
+    "type_id": 83459,
+    "quantity": 1
+  },
+  {
+    "id": 26,
+    "blueprint_id": 1171,
+    "type_id": 83425,
+    "quantity": 1
+  },
+  {
+    "id": 27,
+    "blueprint_id": 1006,
+    "type_id": 81974,
+    "quantity": 1
+  },
+  {
+    "id": 28,
+    "blueprint_id": 1089,
+    "type_id": 83528,
+    "quantity": 1
+  },
+  {
+    "id": 29,
+    "blueprint_id": 1172,
+    "type_id": 82649,
+    "quantity": 1
+  },
+  {
+    "id": 30,
+    "blueprint_id": 1007,
+    "type_id": 83463,
+    "quantity": 1
+  },
+  {
+    "id": 31,
+    "blueprint_id": 1090,
+    "type_id": 83524,
+    "quantity": 1
+  },
+  {
+    "id": 32,
+    "blueprint_id": 1173,
+    "type_id": 83429,
+    "quantity": 1
+  },
+  {
+    "id": 33,
+    "blueprint_id": 1008,
+    "type_id": 77852,
+    "quantity": 1
+  },
+  {
+    "id": 34,
+    "blueprint_id": 1174,
+    "type_id": 83433,
+    "quantity": 1
+  },
+  {
+    "id": 35,
+    "blueprint_id": 1009,
+    "type_id": 87847,
+    "quantity": 1
+  },
+  {
+    "id": 36,
+    "blueprint_id": 1092,
+    "type_id": 82915,
+    "quantity": 1
+  },
+  {
+    "id": 37,
+    "blueprint_id": 1175,
+    "type_id": 77753,
+    "quantity": 1
+  },
+  {
+    "id": 38,
+    "blueprint_id": 1010,
+    "type_id": 82128,
+    "quantity": 100
+  },
+  {
+    "id": 39,
+    "blueprint_id": 1176,
+    "type_id": 78490,
+    "quantity": 1
+  },
+  {
+    "id": 40,
+    "blueprint_id": 1011,
+    "type_id": 81846,
+    "quantity": 1
+  },
+  {
+    "id": 41,
+    "blueprint_id": 1094,
+    "type_id": 83434,
+    "quantity": 1
+  },
+  {
+    "id": 42,
+    "blueprint_id": 1177,
+    "type_id": 78511,
+    "quantity": 1
+  },
+  {
+    "id": 43,
+    "blueprint_id": 1012,
+    "type_id": 82647,
+    "quantity": 1
+  },
+  {
+    "id": 44,
+    "blueprint_id": 1095,
+    "type_id": 83430,
+    "quantity": 1
+  },
+  {
+    "id": 45,
+    "blueprint_id": 1178,
+    "type_id": 78506,
+    "quantity": 1
+  },
+  {
+    "id": 46,
+    "blueprint_id": 1013,
+    "type_id": 88887,
+    "quantity": 10
+  },
+  {
+    "id": 47,
+    "blueprint_id": 1096,
+    "type_id": 82650,
+    "quantity": 1
+  },
+  {
+    "id": 48,
+    "blueprint_id": 1179,
+    "type_id": 84182,
+    "quantity": 1
+  },
+  {
+    "id": 49,
+    "blueprint_id": 1014,
+    "type_id": 82652,
+    "quantity": 1
+  },
+  {
+    "id": 50,
+    "blueprint_id": 1180,
+    "type_id": 83839,
+    "quantity": 1
+  },
+  {
+    "id": 51,
+    "blueprint_id": 1015,
+    "type_id": 89089,
+    "quantity": 10
+  },
+  {
+    "id": 52,
+    "blueprint_id": 1098,
+    "type_id": 78507,
+    "quantity": 1
+  },
+  {
+    "id": 53,
+    "blueprint_id": 1181,
+    "type_id": 88335,
+    "quantity": 75
+  },
+  {
+    "id": 54,
+    "blueprint_id": 1016,
+    "type_id": 88319,
+    "quantity": 200
+  },
+  {
+    "id": 55,
+    "blueprint_id": 1182,
+    "type_id": 89258,
+    "quantity": 5
+  },
+  {
+    "id": 56,
+    "blueprint_id": 1182,
+    "type_id": 89259,
+    "quantity": 15
+  },
+  {
+    "id": 57,
+    "blueprint_id": 1017,
+    "type_id": 84180,
+    "quantity": 1
+  },
+  {
+    "id": 58,
+    "blueprint_id": 1100,
+    "type_id": 83497,
+    "quantity": 1
+  },
+  {
+    "id": 59,
+    "blueprint_id": 1183,
+    "type_id": 89258,
+    "quantity": 10
+  },
+  {
+    "id": 60,
+    "blueprint_id": 1183,
+    "type_id": 78423,
+    "quantity": 150
+  },
+  {
+    "id": 61,
+    "blueprint_id": 1184,
+    "type_id": 89259,
+    "quantity": 8
+  },
+  {
+    "id": 62,
+    "blueprint_id": 1184,
+    "type_id": 89260,
+    "quantity": 15
+  },
+  {
+    "id": 63,
+    "blueprint_id": 1184,
+    "type_id": 99001,
+    "quantity": 4
+  },
+  {
+    "id": 64,
+    "blueprint_id": 1019,
+    "type_id": 84182,
+    "quantity": 14
+  },
+  {
+    "id": 65,
+    "blueprint_id": 1102,
+    "type_id": 78502,
+    "quantity": 1
+  },
+  {
+    "id": 66,
+    "blueprint_id": 1185,
+    "type_id": 78423,
+    "quantity": 7
+  },
+  {
+    "id": 67,
+    "blueprint_id": 1020,
+    "type_id": 84210,
+    "quantity": 14
+  },
+  {
+    "id": 68,
+    "blueprint_id": 1103,
+    "type_id": 78510,
+    "quantity": 1
+  },
+  {
+    "id": 69,
+    "blueprint_id": 1186,
+    "type_id": 88234,
+    "quantity": 20
+  },
+  {
+    "id": 70,
+    "blueprint_id": 1186,
+    "type_id": 77804,
+    "quantity": 180
+  },
+  {
+    "id": 71,
+    "blueprint_id": 1021,
+    "type_id": 88561,
+    "quantity": 14
+  },
+  {
+    "id": 72,
+    "blueprint_id": 1104,
+    "type_id": 81656,
+    "quantity": 1
+  },
+  {
+    "id": 73,
+    "blueprint_id": 1022,
+    "type_id": 88780,
+    "quantity": 1
+  },
+  {
+    "id": 74,
+    "blueprint_id": 1105,
+    "type_id": 82090,
+    "quantity": 1
+  },
+  {
+    "id": 75,
+    "blueprint_id": 1188,
+    "type_id": 84210,
+    "quantity": 1
+  },
+  {
+    "id": 76,
+    "blueprint_id": 1188,
+    "type_id": 88561,
+    "quantity": 2
+  },
+  {
+    "id": 77,
+    "blueprint_id": 1188,
+    "type_id": 84182,
+    "quantity": 6
+  },
+  {
+    "id": 78,
+    "blueprint_id": 1023,
+    "type_id": 88565,
+    "quantity": 1
+  },
+  {
+    "id": 79,
+    "blueprint_id": 1106,
+    "type_id": 82091,
+    "quantity": 1
+  },
+  {
+    "id": 80,
+    "blueprint_id": 1107,
+    "type_id": 81972,
+    "quantity": 1
+  },
+  {
+    "id": 81,
+    "blueprint_id": 1190,
+    "type_id": 88235,
+    "quantity": 50
+  },
+  {
+    "id": 82,
+    "blueprint_id": 1190,
+    "type_id": 77803,
+    "quantity": 150
+  },
+  {
+    "id": 83,
+    "blueprint_id": 1108,
+    "type_id": 82088,
+    "quantity": 1
+  },
+  {
+    "id": 84,
+    "blueprint_id": 1191,
+    "type_id": 78516,
+    "quantity": 600
+  },
+  {
+    "id": 85,
+    "blueprint_id": 1026,
+    "type_id": 83895,
+    "quantity": 1
+  },
+  {
+    "id": 86,
+    "blueprint_id": 1109,
+    "type_id": 82089,
+    "quantity": 1
+  },
+  {
+    "id": 87,
+    "blueprint_id": 1192,
+    "type_id": 77805,
+    "quantity": 20
+  },
+  {
+    "id": 88,
+    "blueprint_id": 1192,
+    "type_id": 77801,
+    "quantity": 198
+  },
+  {
+    "id": 89,
+    "blueprint_id": 1027,
+    "type_id": 83897,
+    "quantity": 1
+  },
+  {
+    "id": 90,
+    "blueprint_id": 1110,
+    "type_id": 82084,
+    "quantity": 1
+  },
+  {
+    "id": 91,
+    "blueprint_id": 1193,
+    "type_id": 84868,
+    "quantity": 600
+  },
+  {
+    "id": 92,
+    "blueprint_id": 1111,
+    "type_id": 82085,
+    "quantity": 1
+  },
+  {
+    "id": 93,
+    "blueprint_id": 1194,
+    "type_id": 88782,
+    "quantity": 1
+  },
+  {
+    "id": 94,
+    "blueprint_id": 1194,
+    "type_id": 88783,
+    "quantity": 1
+  },
+  {
+    "id": 95,
+    "blueprint_id": 1194,
+    "type_id": 78423,
+    "quantity": 50
+  },
+  {
+    "id": 96,
+    "blueprint_id": 1029,
+    "type_id": 82130,
+    "quantity": 100
+  },
+  {
+    "id": 97,
+    "blueprint_id": 1112,
+    "type_id": 82032,
+    "quantity": 1
+  },
+  {
+    "id": 98,
+    "blueprint_id": 1195,
+    "type_id": 83839,
+    "quantity": 16
+  },
+  {
+    "id": 99,
+    "blueprint_id": 1195,
+    "type_id": 77728,
+    "quantity": 28
+  },
+  {
+    "id": 100,
+    "blueprint_id": 1030,
+    "type_id": 82133,
+    "quantity": 100
+  },
+  {
+    "id": 101,
+    "blueprint_id": 1113,
+    "type_id": 82086,
+    "quantity": 1
+  },
+  {
+    "id": 102,
+    "blueprint_id": 1196,
+    "type_id": 83839,
+    "quantity": 1
+  },
+  {
+    "id": 103,
+    "blueprint_id": 1196,
+    "type_id": 78435,
+    "quantity": 28
+  },
+  {
+    "id": 104,
+    "blueprint_id": 1031,
+    "type_id": 89978,
+    "quantity": 1
+  },
+  {
+    "id": 105,
+    "blueprint_id": 1114,
+    "type_id": 82087,
+    "quantity": 1
+  },
+  {
+    "id": 106,
+    "blueprint_id": 1197,
+    "type_id": 88781,
+    "quantity": 1
+  },
+  {
+    "id": 107,
+    "blueprint_id": 1197,
+    "type_id": 77804,
+    "quantity": 126
+  },
+  {
+    "id": 108,
+    "blueprint_id": 1197,
+    "type_id": 78423,
+    "quantity": 349
+  },
+  {
+    "id": 109,
+    "blueprint_id": 1032,
+    "type_id": 89979,
+    "quantity": 1
+  },
+  {
+    "id": 110,
+    "blueprint_id": 1115,
+    "type_id": 77484,
+    "quantity": 1
+  },
+  {
+    "id": 111,
+    "blueprint_id": 1198,
+    "type_id": 88781,
+    "quantity": 1
+  },
+  {
+    "id": 112,
+    "blueprint_id": 1198,
+    "type_id": 88783,
+    "quantity": 16
+  },
+  {
+    "id": 113,
+    "blueprint_id": 1033,
+    "type_id": 78515,
+    "quantity": 600
+  },
+  {
+    "id": 114,
+    "blueprint_id": 1116,
+    "type_id": 82681,
+    "quantity": 1
+  },
+  {
+    "id": 115,
+    "blueprint_id": 1199,
+    "type_id": 88781,
+    "quantity": 1
+  },
+  {
+    "id": 116,
+    "blueprint_id": 1199,
+    "type_id": 88782,
+    "quantity": 4
+  },
+  {
+    "id": 117,
+    "blueprint_id": 1199,
+    "type_id": 88783,
+    "quantity": 8
+  },
+  {
+    "id": 118,
+    "blueprint_id": 1034,
+    "type_id": 82137,
+    "quantity": 100
+  },
+  {
+    "id": 119,
+    "blueprint_id": 1117,
+    "type_id": 83536,
+    "quantity": 1
+  },
+  {
+    "id": 120,
+    "blueprint_id": 1200,
+    "type_id": 88781,
+    "quantity": 1
+  },
+  {
+    "id": 121,
+    "blueprint_id": 1200,
+    "type_id": 88782,
+    "quantity": 8
+  },
+  {
+    "id": 122,
+    "blueprint_id": 1035,
+    "type_id": 88843,
+    "quantity": 1
+  },
+  {
+    "id": 123,
+    "blueprint_id": 1118,
+    "type_id": 82651,
+    "quantity": 1
+  },
+  {
+    "id": 124,
+    "blueprint_id": 1201,
+    "type_id": 89258,
+    "quantity": 10
+  },
+  {
+    "id": 125,
+    "blueprint_id": 1201,
+    "type_id": 89259,
+    "quantity": 30
+  },
+  {
+    "id": 126,
+    "blueprint_id": 1119,
+    "type_id": 83437,
+    "quantity": 1
+  },
+  {
+    "id": 127,
+    "blueprint_id": 1202,
+    "type_id": 89259,
+    "quantity": 10
+  },
+  {
+    "id": 128,
+    "blueprint_id": 1202,
+    "type_id": 89260,
+    "quantity": 30
+  },
+  {
+    "id": 129,
+    "blueprint_id": 1202,
+    "type_id": 99001,
+    "quantity": 8
+  },
+  {
+    "id": 130,
+    "blueprint_id": 1037,
+    "type_id": 88839,
+    "quantity": 1
+  },
+  {
+    "id": 131,
+    "blueprint_id": 1120,
+    "type_id": 83441,
+    "quantity": 1
+  },
+  {
+    "id": 132,
+    "blueprint_id": 1203,
+    "type_id": 89258,
+    "quantity": 20
+  },
+  {
+    "id": 133,
+    "blueprint_id": 1203,
+    "type_id": 78423,
+    "quantity": 200
+  },
+  {
+    "id": 134,
+    "blueprint_id": 1038,
+    "type_id": 88841,
+    "quantity": 1
+  },
+  {
+    "id": 135,
+    "blueprint_id": 1121,
+    "type_id": 83442,
+    "quantity": 1
+  },
+  {
+    "id": 136,
+    "blueprint_id": 1204,
+    "type_id": 89260,
+    "quantity": 40
+  },
+  {
+    "id": 137,
+    "blueprint_id": 1039,
+    "type_id": 84204,
+    "quantity": 1
+  },
+  {
+    "id": 138,
+    "blueprint_id": 1122,
+    "type_id": 83613,
+    "quantity": 1
+  },
+  {
+    "id": 139,
+    "blueprint_id": 1205,
+    "type_id": 88234,
+    "quantity": 60
+  },
+  {
+    "id": 140,
+    "blueprint_id": 1205,
+    "type_id": 77804,
+    "quantity": 540
+  },
+  {
+    "id": 141,
+    "blueprint_id": 1040,
+    "type_id": 82411,
+    "quantity": 1
+  },
+  {
+    "id": 142,
+    "blueprint_id": 1123,
+    "type_id": 83614,
+    "quantity": 1
+  },
+  {
+    "id": 143,
+    "blueprint_id": 1124,
+    "type_id": 83615,
+    "quantity": 1
+  },
+  {
+    "id": 144,
+    "blueprint_id": 1042,
+    "type_id": 82412,
+    "quantity": 1
+  },
+  {
+    "id": 145,
+    "blueprint_id": 1125,
+    "type_id": 83618,
+    "quantity": 1
+  },
+  {
+    "id": 146,
+    "blueprint_id": 1043,
+    "type_id": 78416,
+    "quantity": 1
+  },
+  {
+    "id": 147,
+    "blueprint_id": 1126,
+    "type_id": 83619,
+    "quantity": 1
+  },
+  {
+    "id": 148,
+    "blueprint_id": 1209,
+    "type_id": 88235,
+    "quantity": 150
+  },
+  {
+    "id": 149,
+    "blueprint_id": 1209,
+    "type_id": 77803,
+    "quantity": 450
+  },
+  {
+    "id": 150,
+    "blueprint_id": 1044,
+    "type_id": 78417,
+    "quantity": 1
+  },
+  {
+    "id": 151,
+    "blueprint_id": 1127,
+    "type_id": 83620,
+    "quantity": 1
+  },
+  {
+    "id": 152,
+    "blueprint_id": 1045,
+    "type_id": 82413,
+    "quantity": 1
+  },
+  {
+    "id": 153,
+    "blueprint_id": 1128,
+    "type_id": 83623,
+    "quantity": 1
+  },
+  {
+    "id": 154,
+    "blueprint_id": 1046,
+    "type_id": 82410,
+    "quantity": 1
+  },
+  {
+    "id": 155,
+    "blueprint_id": 1129,
+    "type_id": 83624,
+    "quantity": 1
+  },
+  {
+    "id": 156,
+    "blueprint_id": 1212,
+    "type_id": 77805,
+    "quantity": 60
+  },
+  {
+    "id": 157,
+    "blueprint_id": 1212,
+    "type_id": 77801,
+    "quantity": 594
+  },
+  {
+    "id": 158,
+    "blueprint_id": 1047,
+    "type_id": 78420,
+    "quantity": 1
+  },
+  {
+    "id": 159,
+    "blueprint_id": 1130,
+    "type_id": 72960,
+    "quantity": 1
+  },
+  {
+    "id": 160,
+    "blueprint_id": 1048,
+    "type_id": 78421,
+    "quantity": 1
+  },
+  {
+    "id": 161,
+    "blueprint_id": 1131,
+    "type_id": 83625,
+    "quantity": 1
+  },
+  {
+    "id": 162,
+    "blueprint_id": 1049,
+    "type_id": 83896,
+    "quantity": 1
+  },
+  {
+    "id": 163,
+    "blueprint_id": 1132,
+    "type_id": 83628,
+    "quantity": 1
+  },
+  {
+    "id": 164,
+    "blueprint_id": 1050,
+    "type_id": 83898,
+    "quantity": 1
+  },
+  {
+    "id": 165,
+    "blueprint_id": 1133,
+    "type_id": 83629,
+    "quantity": 1
+  },
+  {
+    "id": 166,
+    "blueprint_id": 1051,
+    "type_id": 82127,
+    "quantity": 100
+  },
+  {
+    "id": 167,
+    "blueprint_id": 1134,
+    "type_id": 83630,
+    "quantity": 1
+  },
+  {
+    "id": 168,
+    "blueprint_id": 1052,
+    "type_id": 82131,
+    "quantity": 100
+  },
+  {
+    "id": 169,
+    "blueprint_id": 1135,
+    "type_id": 82682,
+    "quantity": 1
+  },
+  {
+    "id": 170,
+    "blueprint_id": 1053,
+    "type_id": 82126,
+    "quantity": 100
+  },
+  {
+    "id": 171,
+    "blueprint_id": 1136,
+    "type_id": 83516,
+    "quantity": 1
+  },
+  {
+    "id": 172,
+    "blueprint_id": 1054,
+    "type_id": 81658,
+    "quantity": 100
+  },
+  {
+    "id": 173,
+    "blueprint_id": 1137,
+    "type_id": 83517,
+    "quantity": 1
+  },
+  {
+    "id": 174,
+    "blueprint_id": 1220,
+    "type_id": 89258,
+    "quantity": 30
+  },
+  {
+    "id": 175,
+    "blueprint_id": 1220,
+    "type_id": 89259,
+    "quantity": 90
+  },
+  {
+    "id": 176,
+    "blueprint_id": 1055,
+    "type_id": 88844,
+    "quantity": 1
+  },
+  {
+    "id": 177,
+    "blueprint_id": 1138,
+    "type_id": 83518,
+    "quantity": 1
+  },
+  {
+    "id": 178,
+    "blueprint_id": 1221,
+    "type_id": 89259,
+    "quantity": 30
+  },
+  {
+    "id": 179,
+    "blueprint_id": 1221,
+    "type_id": 89260,
+    "quantity": 90
+  },
+  {
+    "id": 180,
+    "blueprint_id": 1221,
+    "type_id": 99001,
+    "quantity": 24
+  },
+  {
+    "id": 181,
+    "blueprint_id": 1470,
+    "type_id": 91106,
+    "quantity": 1
+  },
+  {
+    "id": 182,
+    "blueprint_id": 1056,
+    "type_id": 78437,
+    "quantity": 600
+  },
+  {
+    "id": 183,
+    "blueprint_id": 1139,
+    "type_id": 83519,
+    "quantity": 1
+  },
+  {
+    "id": 184,
+    "blueprint_id": 1222,
+    "type_id": 89258,
+    "quantity": 60
+  },
+  {
+    "id": 185,
+    "blueprint_id": 1222,
+    "type_id": 78423,
+    "quantity": 600
+  },
+  {
+    "id": 186,
+    "blueprint_id": 1471,
+    "type_id": 91107,
+    "quantity": 1
+  },
+  {
+    "id": 187,
+    "blueprint_id": 1057,
+    "type_id": 88840,
+    "quantity": 1
+  },
+  {
+    "id": 188,
+    "blueprint_id": 1140,
+    "type_id": 82683,
+    "quantity": 1
+  },
+  {
+    "id": 189,
+    "blueprint_id": 1223,
+    "type_id": 89260,
+    "quantity": 120
+  },
+  {
+    "id": 190,
+    "blueprint_id": 1472,
+    "type_id": 90887,
+    "quantity": 1
+  },
+  {
+    "id": 191,
+    "blueprint_id": 1058,
+    "type_id": 88842,
+    "quantity": 1
+  },
+  {
+    "id": 192,
+    "blueprint_id": 1141,
+    "type_id": 83520,
+    "quantity": 1
+  },
+  {
+    "id": 193,
+    "blueprint_id": 1224,
+    "type_id": 87848,
+    "quantity": 1
+  },
+  {
+    "id": 194,
+    "blueprint_id": 1473,
+    "type_id": 92389,
+    "quantity": 1
+  },
+  {
+    "id": 195,
+    "blueprint_id": 1059,
+    "type_id": 84206,
+    "quantity": 1
+  },
+  {
+    "id": 196,
+    "blueprint_id": 1142,
+    "type_id": 83521,
+    "quantity": 1
+  },
+  {
+    "id": 197,
+    "blueprint_id": 1474,
+    "type_id": 92390,
+    "quantity": 1
+  },
+  {
+    "id": 198,
+    "blueprint_id": 1060,
+    "type_id": 78422,
+    "quantity": 1
+  },
+  {
+    "id": 199,
+    "blueprint_id": 1143,
+    "type_id": 83522,
+    "quantity": 1
+  },
+  {
+    "id": 200,
+    "blueprint_id": 1226,
+    "type_id": 87846,
+    "quantity": 1
+  },
+  {
+    "id": 201,
+    "blueprint_id": 1475,
+    "type_id": 91967,
+    "quantity": 1
+  },
+  {
+    "id": 202,
+    "blueprint_id": 1061,
+    "type_id": 82134,
+    "quantity": 100
+  },
+  {
+    "id": 203,
+    "blueprint_id": 1144,
+    "type_id": 83523,
+    "quantity": 1
+  },
+  {
+    "id": 204,
+    "blueprint_id": 1227,
+    "type_id": 87698,
+    "quantity": 1
+  },
+  {
+    "id": 205,
+    "blueprint_id": 1476,
+    "type_id": 91968,
+    "quantity": 1
+  },
+  {
+    "id": 206,
+    "blueprint_id": 1062,
+    "type_id": 82132,
+    "quantity": 100
+  },
+  {
+    "id": 207,
+    "blueprint_id": 1145,
+    "type_id": 83498,
+    "quantity": 1
+  },
+  {
+    "id": 208,
+    "blueprint_id": 1228,
+    "type_id": 82426,
+    "quantity": 1
+  },
+  {
+    "id": 209,
+    "blueprint_id": 1063,
+    "type_id": 82140,
+    "quantity": 100
+  },
+  {
+    "id": 210,
+    "blueprint_id": 1146,
+    "type_id": 83499,
+    "quantity": 1
+  },
+  {
+    "id": 211,
+    "blueprint_id": 1229,
+    "type_id": 81904,
+    "quantity": 1
+  },
+  {
+    "id": 212,
+    "blueprint_id": 1064,
+    "type_id": 82137,
+    "quantity": 100
+  },
+  {
+    "id": 213,
+    "blueprint_id": 1147,
+    "type_id": 83500,
+    "quantity": 1
+  },
+  {
+    "id": 214,
+    "blueprint_id": 1230,
+    "type_id": 81808,
+    "quantity": 1
+  },
+  {
+    "id": 215,
+    "blueprint_id": 1479,
+    "type_id": 92421,
+    "quantity": 1
+  },
+  {
+    "id": 216,
+    "blueprint_id": 1148,
+    "type_id": 83501,
+    "quantity": 1
+  },
+  {
+    "id": 217,
+    "blueprint_id": 1231,
+    "type_id": 82424,
+    "quantity": 1
+  },
+  {
+    "id": 218,
+    "blueprint_id": 1480,
+    "type_id": 78435,
+    "quantity": 3
+  },
+  {
+    "id": 219,
+    "blueprint_id": 1480,
+    "type_id": 92422,
+    "quantity": 26
+  },
+  {
+    "id": 220,
+    "blueprint_id": 1066,
+    "type_id": 88889,
+    "quantity": 1
+  },
+  {
+    "id": 221,
+    "blueprint_id": 1149,
+    "type_id": 83448,
+    "quantity": 1
+  },
+  {
+    "id": 222,
+    "blueprint_id": 1232,
+    "type_id": 81609,
+    "quantity": 1
+  },
+  {
+    "id": 223,
+    "blueprint_id": 1481,
+    "type_id": 77728,
+    "quantity": 3
+  },
+  {
+    "id": 224,
+    "blueprint_id": 1481,
+    "type_id": 92422,
+    "quantity": 26
+  },
+  {
+    "id": 225,
+    "blueprint_id": 1067,
+    "type_id": 87599,
+    "quantity": 1
+  },
+  {
+    "id": 226,
+    "blueprint_id": 1150,
+    "type_id": 82653,
+    "quantity": 1
+  },
+  {
+    "id": 227,
+    "blueprint_id": 1233,
+    "type_id": 82430,
+    "quantity": 1
+  },
+  {
+    "id": 228,
+    "blueprint_id": 1482,
+    "type_id": 92483,
+    "quantity": 1
+  },
+  {
+    "id": 229,
+    "blueprint_id": 1068,
+    "type_id": 78508,
+    "quantity": 1
+  },
+  {
+    "id": 230,
+    "blueprint_id": 1151,
+    "type_id": 83450,
+    "quantity": 1
+  },
+  {
+    "id": 231,
+    "blueprint_id": 1234,
+    "type_id": 81611,
+    "quantity": 1
+  },
+  {
+    "id": 232,
+    "blueprint_id": 1483,
+    "type_id": 82425,
+    "quantity": 1
+  },
+  {
+    "id": 233,
+    "blueprint_id": 1069,
+    "type_id": 82028,
+    "quantity": 1
+  },
+  {
+    "id": 234,
+    "blueprint_id": 1152,
+    "type_id": 82654,
+    "quantity": 1
+  },
+  {
+    "id": 235,
+    "blueprint_id": 1070,
+    "type_id": 82030,
+    "quantity": 1
+  },
+  {
+    "id": 236,
+    "blueprint_id": 1153,
+    "type_id": 83456,
+    "quantity": 1
+  },
+  {
+    "id": 237,
+    "blueprint_id": 1071,
+    "type_id": 81657,
+    "quantity": 1
+  },
+  {
+    "id": 238,
+    "blueprint_id": 1154,
+    "type_id": 82667,
+    "quantity": 1
+  },
+  {
+    "id": 239,
+    "blueprint_id": 1072,
+    "type_id": 82033,
+    "quantity": 1
+  },
+  {
+    "id": 240,
+    "blueprint_id": 1155,
+    "type_id": 83458,
+    "quantity": 1
+  },
+  {
+    "id": 241,
+    "blueprint_id": 1487,
+    "type_id": 91749,
+    "quantity": 1
+  },
+  {
+    "id": 242,
+    "blueprint_id": 1073,
+    "type_id": 82092,
+    "quantity": 1
+  },
+  {
+    "id": 243,
+    "blueprint_id": 1156,
+    "type_id": 83768,
+    "quantity": 1
+  },
+  {
+    "id": 244,
+    "blueprint_id": 1074,
+    "type_id": 82094,
+    "quantity": 1
+  },
+  {
+    "id": 245,
+    "blueprint_id": 1157,
+    "type_id": 83769,
+    "quantity": 1
+  },
+  {
+    "id": 246,
+    "blueprint_id": 1075,
+    "type_id": 82098,
+    "quantity": 1
+  },
+  {
+    "id": 247,
+    "blueprint_id": 1158,
+    "type_id": 83770,
+    "quantity": 1
+  },
+  {
+    "id": 248,
+    "blueprint_id": 1076,
+    "type_id": 82096,
+    "quantity": 1
+  },
+  {
+    "id": 249,
+    "blueprint_id": 1159,
+    "type_id": 83772,
+    "quantity": 1
+  },
+  {
+    "id": 250,
+    "blueprint_id": 1077,
+    "type_id": 82093,
+    "quantity": 1
+  },
+  {
+    "id": 251,
+    "blueprint_id": 1160,
+    "type_id": 83773,
+    "quantity": 1
+  },
+  {
+    "id": 252,
+    "blueprint_id": 1078,
+    "type_id": 82095,
+    "quantity": 1
+  },
+  {
+    "id": 253,
+    "blueprint_id": 1161,
+    "type_id": 83774,
+    "quantity": 1
+  }
+]

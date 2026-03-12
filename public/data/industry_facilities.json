@@ -1,0 +1,74 @@
+[
+  {
+    "facility_type_id": 87119,
+    "facility_name": "",
+    "input_capacity": 1200,
+    "output_capacity": 1000
+  },
+  {
+    "facility_type_id": 87120,
+    "facility_name": "",
+    "input_capacity": 20000,
+    "output_capacity": 20000
+  },
+  {
+    "facility_type_id": 87161,
+    "facility_name": "",
+    "input_capacity": 500,
+    "output_capacity": 500
+  },
+  {
+    "facility_type_id": 87162,
+    "facility_name": "",
+    "input_capacity": 1200,
+    "output_capacity": 1000
+  },
+  {
+    "facility_type_id": 88063,
+    "facility_name": "",
+    "input_capacity": 4000,
+    "output_capacity": 4000
+  },
+  {
+    "facility_type_id": 88064,
+    "facility_name": "",
+    "input_capacity": 20000,
+    "output_capacity": 20000
+  },
+  {
+    "facility_type_id": 88067,
+    "facility_name": "",
+    "input_capacity": 4000,
+    "output_capacity": 4000
+  },
+  {
+    "facility_type_id": 88068,
+    "facility_name": "",
+    "input_capacity": 2500,
+    "output_capacity": 8400
+  },
+  {
+    "facility_type_id": 88069,
+    "facility_name": "",
+    "input_capacity": 2000,
+    "output_capacity": 1000
+  },
+  {
+    "facility_type_id": 88070,
+    "facility_name": "",
+    "input_capacity": 35000,
+    "output_capacity": 5000
+  },
+  {
+    "facility_type_id": 88071,
+    "facility_name": "",
+    "input_capacity": 80000,
+    "output_capacity": 15000
+  },
+  {
+    "facility_type_id": 91978,
+    "facility_name": "",
+    "input_capacity": 100,
+    "output_capacity": 100
+  }
+]

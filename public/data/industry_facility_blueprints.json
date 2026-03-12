@@ -1,0 +1,1780 @@
+[
+  {
+    "id": 1,
+    "facility_type_id": 87120,
+    "blueprint_id": 1056,
+    "max_input_runs": 116,
+    "max_output_runs": 120
+  },
+  {
+    "id": 2,
+    "facility_type_id": 87120,
+    "blueprint_id": 1057,
+    "max_input_runs": 51,
+    "max_output_runs": 51
+  },
+  {
+    "id": 3,
+    "facility_type_id": 87120,
+    "blueprint_id": 1058,
+    "max_input_runs": 13,
+    "max_output_runs": 13
+  },
+  {
+    "id": 4,
+    "facility_type_id": 87120,
+    "blueprint_id": 1059,
+    "max_input_runs": 20,
+    "max_output_runs": 20
+  },
+  {
+    "id": 5,
+    "facility_type_id": 87120,
+    "blueprint_id": 1060,
+    "max_input_runs": 3,
+    "max_output_runs": 4
+  },
+  {
+    "id": 6,
+    "facility_type_id": 87120,
+    "blueprint_id": 1061,
+    "max_input_runs": 287,
+    "max_output_runs": 308
+  },
+  {
+    "id": 7,
+    "facility_type_id": 87120,
+    "blueprint_id": 1062,
+    "max_input_runs": 167,
+    "max_output_runs": 308
+  },
+  {
+    "id": 8,
+    "facility_type_id": 87120,
+    "blueprint_id": 1063,
+    "max_input_runs": 200,
+    "max_output_runs": 308
+  },
+  {
+    "id": 9,
+    "facility_type_id": 87120,
+    "blueprint_id": 1064,
+    "max_input_runs": 25000,
+    "max_output_runs": 16667
+  },
+  {
+    "id": 10,
+    "facility_type_id": 87120,
+    "blueprint_id": 1055,
+    "max_input_runs": 20,
+    "max_output_runs": 20
+  },
+  {
+    "id": 11,
+    "facility_type_id": 88064,
+    "blueprint_id": 1180,
+    "max_input_runs": 360,
+    "max_output_runs": 199500
+  },
+  {
+    "id": 12,
+    "facility_type_id": 88064,
+    "blueprint_id": 1181,
+    "max_input_runs": 336,
+    "max_output_runs": 479
+  },
+  {
+    "id": 13,
+    "facility_type_id": 88064,
+    "blueprint_id": 1188,
+    "max_input_runs": 400,
+    "max_output_runs": 211
+  },
+  {
+    "id": 14,
+    "facility_type_id": 88064,
+    "blueprint_id": 1191,
+    "max_input_runs": 1995,
+    "max_output_runs": 120
+  },
+  {
+    "id": 15,
+    "facility_type_id": 88064,
+    "blueprint_id": 1193,
+    "max_input_runs": 1995,
+    "max_output_runs": 120
+  },
+  {
+    "id": 16,
+    "facility_type_id": 88064,
+    "blueprint_id": 1194,
+    "max_input_runs": 19950,
+    "max_output_runs": 998
+  },
+  {
+    "id": 17,
+    "facility_type_id": 88064,
+    "blueprint_id": 1195,
+    "max_input_runs": 667,
+    "max_output_runs": 678
+  },
+  {
+    "id": 18,
+    "facility_type_id": 88064,
+    "blueprint_id": 1196,
+    "max_input_runs": 667,
+    "max_output_runs": 712
+  },
+  {
+    "id": 19,
+    "facility_type_id": 88064,
+    "blueprint_id": 1197,
+    "max_input_runs": 200,
+    "max_output_runs": 348
+  },
+  {
+    "id": 20,
+    "facility_type_id": 88064,
+    "blueprint_id": 1198,
+    "max_input_runs": 200,
+    "max_output_runs": 222
+  },
+  {
+    "id": 21,
+    "facility_type_id": 88064,
+    "blueprint_id": 1199,
+    "max_input_runs": 200,
+    "max_output_runs": 222
+  },
+  {
+    "id": 22,
+    "facility_type_id": 88064,
+    "blueprint_id": 1200,
+    "max_input_runs": 200,
+    "max_output_runs": 222
+  },
+  {
+    "id": 23,
+    "facility_type_id": 88064,
+    "blueprint_id": 1205,
+    "max_input_runs": 336,
+    "max_output_runs": 336
+  },
+  {
+    "id": 24,
+    "facility_type_id": 88064,
+    "blueprint_id": 1209,
+    "max_input_runs": 336,
+    "max_output_runs": 336
+  },
+  {
+    "id": 25,
+    "facility_type_id": 88064,
+    "blueprint_id": 1212,
+    "max_input_runs": 336,
+    "max_output_runs": 336
+  },
+  {
+    "id": 26,
+    "facility_type_id": 88064,
+    "blueprint_id": 1220,
+    "max_input_runs": 171,
+    "max_output_runs": 171
+  },
+  {
+    "id": 27,
+    "facility_type_id": 88064,
+    "blueprint_id": 1221,
+    "max_input_runs": 171,
+    "max_output_runs": 171
+  },
+  {
+    "id": 28,
+    "facility_type_id": 88064,
+    "blueprint_id": 1222,
+    "max_input_runs": 171,
+    "max_output_runs": 171
+  },
+  {
+    "id": 29,
+    "facility_type_id": 88064,
+    "blueprint_id": 1223,
+    "max_input_runs": 171,
+    "max_output_runs": 171
+  },
+  {
+    "id": 30,
+    "facility_type_id": 88064,
+    "blueprint_id": 1480,
+    "max_input_runs": 100,
+    "max_output_runs": 100
+  },
+  {
+    "id": 31,
+    "facility_type_id": 88064,
+    "blueprint_id": 1481,
+    "max_input_runs": 100,
+    "max_output_runs": 100
+  },
+  {
+    "id": 32,
+    "facility_type_id": 88068,
+    "blueprint_id": 1066,
+    "max_input_runs": 12,
+    "max_output_runs": 105
+  },
+  {
+    "id": 33,
+    "facility_type_id": 88068,
+    "blueprint_id": 1067,
+    "max_input_runs": 12,
+    "max_output_runs": 105
+  },
+  {
+    "id": 34,
+    "facility_type_id": 88068,
+    "blueprint_id": 1068,
+    "max_input_runs": 5,
+    "max_output_runs": 21
+  },
+  {
+    "id": 35,
+    "facility_type_id": 88068,
+    "blueprint_id": 1069,
+    "max_input_runs": 83,
+    "max_output_runs": 105
+  },
+  {
+    "id": 36,
+    "facility_type_id": 88068,
+    "blueprint_id": 1070,
+    "max_input_runs": 59,
+    "max_output_runs": 105
+  },
+  {
+    "id": 37,
+    "facility_type_id": 88068,
+    "blueprint_id": 1071,
+    "max_input_runs": 49,
+    "max_output_runs": 105
+  },
+  {
+    "id": 38,
+    "facility_type_id": 88068,
+    "blueprint_id": 1072,
+    "max_input_runs": 55,
+    "max_output_runs": 105
+  },
+  {
+    "id": 39,
+    "facility_type_id": 88068,
+    "blueprint_id": 1073,
+    "max_input_runs": 65,
+    "max_output_runs": 105
+  },
+  {
+    "id": 40,
+    "facility_type_id": 88068,
+    "blueprint_id": 1074,
+    "max_input_runs": 35,
+    "max_output_runs": 105
+  },
+  {
+    "id": 41,
+    "facility_type_id": 88068,
+    "blueprint_id": 1075,
+    "max_input_runs": 48,
+    "max_output_runs": 105
+  },
+  {
+    "id": 42,
+    "facility_type_id": 88068,
+    "blueprint_id": 1076,
+    "max_input_runs": 44,
+    "max_output_runs": 105
+  },
+  {
+    "id": 43,
+    "facility_type_id": 88068,
+    "blueprint_id": 1077,
+    "max_input_runs": 62,
+    "max_output_runs": 105
+  },
+  {
+    "id": 44,
+    "facility_type_id": 88068,
+    "blueprint_id": 1078,
+    "max_input_runs": 32,
+    "max_output_runs": 105
+  },
+  {
+    "id": 45,
+    "facility_type_id": 88068,
+    "blueprint_id": 1079,
+    "max_input_runs": 41,
+    "max_output_runs": 105
+  },
+  {
+    "id": 46,
+    "facility_type_id": 88068,
+    "blueprint_id": 1080,
+    "max_input_runs": 36,
+    "max_output_runs": 105
+  },
+  {
+    "id": 47,
+    "facility_type_id": 88068,
+    "blueprint_id": 1081,
+    "max_input_runs": 11,
+    "max_output_runs": 27
+  },
+  {
+    "id": 48,
+    "facility_type_id": 88068,
+    "blueprint_id": 1082,
+    "max_input_runs": 11,
+    "max_output_runs": 50
+  },
+  {
+    "id": 49,
+    "facility_type_id": 88068,
+    "blueprint_id": 1083,
+    "max_input_runs": 3,
+    "max_output_runs": 28
+  },
+  {
+    "id": 50,
+    "facility_type_id": 88068,
+    "blueprint_id": 1084,
+    "max_input_runs": 3,
+    "max_output_runs": 14
+  },
+  {
+    "id": 51,
+    "facility_type_id": 88068,
+    "blueprint_id": 1085,
+    "max_input_runs": 3,
+    "max_output_runs": 9
+  },
+  {
+    "id": 52,
+    "facility_type_id": 88068,
+    "blueprint_id": 1086,
+    "max_input_runs": 21,
+    "max_output_runs": 420
+  },
+  {
+    "id": 53,
+    "facility_type_id": 88068,
+    "blueprint_id": 1087,
+    "max_input_runs": 9,
+    "max_output_runs": 42
+  },
+  {
+    "id": 54,
+    "facility_type_id": 88068,
+    "blueprint_id": 1088,
+    "max_input_runs": 8,
+    "max_output_runs": 42
+  },
+  {
+    "id": 55,
+    "facility_type_id": 88068,
+    "blueprint_id": 1089,
+    "max_input_runs": 15,
+    "max_output_runs": 112
+  },
+  {
+    "id": 56,
+    "facility_type_id": 88068,
+    "blueprint_id": 1090,
+    "max_input_runs": 10,
+    "max_output_runs": 77
+  },
+  {
+    "id": 57,
+    "facility_type_id": 88068,
+    "blueprint_id": 1092,
+    "max_input_runs": 22,
+    "max_output_runs": 420
+  },
+  {
+    "id": 58,
+    "facility_type_id": 88068,
+    "blueprint_id": 1094,
+    "max_input_runs": 18,
+    "max_output_runs": 50
+  },
+  {
+    "id": 59,
+    "facility_type_id": 88068,
+    "blueprint_id": 1095,
+    "max_input_runs": 10,
+    "max_output_runs": 50
+  },
+  {
+    "id": 60,
+    "facility_type_id": 88068,
+    "blueprint_id": 1096,
+    "max_input_runs": 72,
+    "max_output_runs": 210
+  },
+  {
+    "id": 61,
+    "facility_type_id": 88068,
+    "blueprint_id": 1098,
+    "max_input_runs": 10,
+    "max_output_runs": 42
+  },
+  {
+    "id": 62,
+    "facility_type_id": 88068,
+    "blueprint_id": 1100,
+    "max_input_runs": 18,
+    "max_output_runs": 17
+  },
+  {
+    "id": 63,
+    "facility_type_id": 88068,
+    "blueprint_id": 1102,
+    "max_input_runs": 10,
+    "max_output_runs": 42
+  },
+  {
+    "id": 64,
+    "facility_type_id": 88068,
+    "blueprint_id": 1103,
+    "max_input_runs": 10,
+    "max_output_runs": 42
+  },
+  {
+    "id": 65,
+    "facility_type_id": 88068,
+    "blueprint_id": 1104,
+    "max_input_runs": 97,
+    "max_output_runs": 420
+  },
+  {
+    "id": 66,
+    "facility_type_id": 88068,
+    "blueprint_id": 1105,
+    "max_input_runs": 70,
+    "max_output_runs": 420
+  },
+  {
+    "id": 67,
+    "facility_type_id": 88068,
+    "blueprint_id": 1106,
+    "max_input_runs": 63,
+    "max_output_runs": 420
+  },
+  {
+    "id": 68,
+    "facility_type_id": 88068,
+    "blueprint_id": 1107,
+    "max_input_runs": 165,
+    "max_output_runs": 420
+  },
+  {
+    "id": 69,
+    "facility_type_id": 88068,
+    "blueprint_id": 1108,
+    "max_input_runs": 129,
+    "max_output_runs": 420
+  },
+  {
+    "id": 70,
+    "facility_type_id": 88068,
+    "blueprint_id": 1109,
+    "max_input_runs": 124,
+    "max_output_runs": 420
+  },
+  {
+    "id": 71,
+    "facility_type_id": 88068,
+    "blueprint_id": 1110,
+    "max_input_runs": 95,
+    "max_output_runs": 420
+  },
+  {
+    "id": 72,
+    "facility_type_id": 88068,
+    "blueprint_id": 1111,
+    "max_input_runs": 81,
+    "max_output_runs": 420
+  },
+  {
+    "id": 73,
+    "facility_type_id": 88068,
+    "blueprint_id": 1112,
+    "max_input_runs": 109,
+    "max_output_runs": 420
+  },
+  {
+    "id": 74,
+    "facility_type_id": 88068,
+    "blueprint_id": 1113,
+    "max_input_runs": 87,
+    "max_output_runs": 420
+  },
+  {
+    "id": 75,
+    "facility_type_id": 88068,
+    "blueprint_id": 1114,
+    "max_input_runs": 72,
+    "max_output_runs": 420
+  },
+  {
+    "id": 76,
+    "facility_type_id": 88068,
+    "blueprint_id": 1115,
+    "max_input_runs": 29,
+    "max_output_runs": 420
+  },
+  {
+    "id": 77,
+    "facility_type_id": 88068,
+    "blueprint_id": 1116,
+    "max_input_runs": 250,
+    "max_output_runs": 420
+  },
+  {
+    "id": 78,
+    "facility_type_id": 88068,
+    "blueprint_id": 1117,
+    "max_input_runs": 250,
+    "max_output_runs": 210
+  },
+  {
+    "id": 79,
+    "facility_type_id": 88068,
+    "blueprint_id": 1118,
+    "max_input_runs": 179,
+    "max_output_runs": 56
+  },
+  {
+    "id": 80,
+    "facility_type_id": 88068,
+    "blueprint_id": 1119,
+    "max_input_runs": 179,
+    "max_output_runs": 56
+  },
+  {
+    "id": 81,
+    "facility_type_id": 88068,
+    "blueprint_id": 1120,
+    "max_input_runs": 250,
+    "max_output_runs": 420
+  },
+  {
+    "id": 82,
+    "facility_type_id": 88068,
+    "blueprint_id": 1121,
+    "max_input_runs": 250,
+    "max_output_runs": 210
+  },
+  {
+    "id": 83,
+    "facility_type_id": 88068,
+    "blueprint_id": 1122,
+    "max_input_runs": 34,
+    "max_output_runs": 120
+  },
+  {
+    "id": 84,
+    "facility_type_id": 88068,
+    "blueprint_id": 1123,
+    "max_input_runs": 21,
+    "max_output_runs": 60
+  },
+  {
+    "id": 85,
+    "facility_type_id": 88068,
+    "blueprint_id": 1124,
+    "max_input_runs": 11,
+    "max_output_runs": 30
+  },
+  {
+    "id": 86,
+    "facility_type_id": 88068,
+    "blueprint_id": 1125,
+    "max_input_runs": 57,
+    "max_output_runs": 420
+  },
+  {
+    "id": 87,
+    "facility_type_id": 88068,
+    "blueprint_id": 1126,
+    "max_input_runs": 34,
+    "max_output_runs": 210
+  },
+  {
+    "id": 88,
+    "facility_type_id": 88068,
+    "blueprint_id": 1127,
+    "max_input_runs": 18,
+    "max_output_runs": 105
+  },
+  {
+    "id": 89,
+    "facility_type_id": 88068,
+    "blueprint_id": 1128,
+    "max_input_runs": 57,
+    "max_output_runs": 420
+  },
+  {
+    "id": 90,
+    "facility_type_id": 88068,
+    "blueprint_id": 1129,
+    "max_input_runs": 40,
+    "max_output_runs": 210
+  },
+  {
+    "id": 91,
+    "facility_type_id": 88068,
+    "blueprint_id": 1130,
+    "max_input_runs": 74,
+    "max_output_runs": 672
+  },
+  {
+    "id": 92,
+    "facility_type_id": 88068,
+    "blueprint_id": 1131,
+    "max_input_runs": 22,
+    "max_output_runs": 105
+  },
+  {
+    "id": 93,
+    "facility_type_id": 88068,
+    "blueprint_id": 1132,
+    "max_input_runs": 34,
+    "max_output_runs": 120
+  },
+  {
+    "id": 94,
+    "facility_type_id": 88068,
+    "blueprint_id": 1133,
+    "max_input_runs": 21,
+    "max_output_runs": 60
+  },
+  {
+    "id": 95,
+    "facility_type_id": 88068,
+    "blueprint_id": 1134,
+    "max_input_runs": 11,
+    "max_output_runs": 30
+  },
+  {
+    "id": 96,
+    "facility_type_id": 88068,
+    "blueprint_id": 1135,
+    "max_input_runs": 35,
+    "max_output_runs": 168
+  },
+  {
+    "id": 97,
+    "facility_type_id": 88068,
+    "blueprint_id": 1136,
+    "max_input_runs": 31,
+    "max_output_runs": 168
+  },
+  {
+    "id": 98,
+    "facility_type_id": 88068,
+    "blueprint_id": 1137,
+    "max_input_runs": 25,
+    "max_output_runs": 168
+  },
+  {
+    "id": 99,
+    "facility_type_id": 88068,
+    "blueprint_id": 1138,
+    "max_input_runs": 23,
+    "max_output_runs": 168
+  },
+  {
+    "id": 100,
+    "facility_type_id": 88068,
+    "blueprint_id": 1139,
+    "max_input_runs": 20,
+    "max_output_runs": 168
+  },
+  {
+    "id": 101,
+    "facility_type_id": 88068,
+    "blueprint_id": 1140,
+    "max_input_runs": 37,
+    "max_output_runs": 168
+  },
+  {
+    "id": 102,
+    "facility_type_id": 88068,
+    "blueprint_id": 1141,
+    "max_input_runs": 33,
+    "max_output_runs": 168
+  },
+  {
+    "id": 103,
+    "facility_type_id": 88068,
+    "blueprint_id": 1142,
+    "max_input_runs": 28,
+    "max_output_runs": 168
+  },
+  {
+    "id": 104,
+    "facility_type_id": 88068,
+    "blueprint_id": 1143,
+    "max_input_runs": 25,
+    "max_output_runs": 168
+  },
+  {
+    "id": 105,
+    "facility_type_id": 88068,
+    "blueprint_id": 1144,
+    "max_input_runs": 22,
+    "max_output_runs": 168
+  },
+  {
+    "id": 106,
+    "facility_type_id": 88068,
+    "blueprint_id": 1145,
+    "max_input_runs": 10,
+    "max_output_runs": 9
+  },
+  {
+    "id": 107,
+    "facility_type_id": 88068,
+    "blueprint_id": 1146,
+    "max_input_runs": 5,
+    "max_output_runs": 5
+  },
+  {
+    "id": 108,
+    "facility_type_id": 88068,
+    "blueprint_id": 1147,
+    "max_input_runs": 3,
+    "max_output_runs": 3
+  },
+  {
+    "id": 109,
+    "facility_type_id": 88068,
+    "blueprint_id": 1148,
+    "max_input_runs": 2,
+    "max_output_runs": 2
+  },
+  {
+    "id": 110,
+    "facility_type_id": 88068,
+    "blueprint_id": 1149,
+    "max_input_runs": 7,
+    "max_output_runs": 28
+  },
+  {
+    "id": 111,
+    "facility_type_id": 88068,
+    "blueprint_id": 1150,
+    "max_input_runs": 19,
+    "max_output_runs": 70
+  },
+  {
+    "id": 112,
+    "facility_type_id": 88068,
+    "blueprint_id": 1151,
+    "max_input_runs": 7,
+    "max_output_runs": 28
+  },
+  {
+    "id": 113,
+    "facility_type_id": 88068,
+    "blueprint_id": 1152,
+    "max_input_runs": 19,
+    "max_output_runs": 70
+  },
+  {
+    "id": 114,
+    "facility_type_id": 88068,
+    "blueprint_id": 1153,
+    "max_input_runs": 7,
+    "max_output_runs": 28
+  },
+  {
+    "id": 115,
+    "facility_type_id": 88068,
+    "blueprint_id": 1154,
+    "max_input_runs": 8,
+    "max_output_runs": 56
+  },
+  {
+    "id": 116,
+    "facility_type_id": 88068,
+    "blueprint_id": 1155,
+    "max_input_runs": 7,
+    "max_output_runs": 56
+  },
+  {
+    "id": 117,
+    "facility_type_id": 88068,
+    "blueprint_id": 1156,
+    "max_input_runs": 14,
+    "max_output_runs": 420
+  },
+  {
+    "id": 118,
+    "facility_type_id": 88068,
+    "blueprint_id": 1157,
+    "max_input_runs": 11,
+    "max_output_runs": 210
+  },
+  {
+    "id": 119,
+    "facility_type_id": 88068,
+    "blueprint_id": 1158,
+    "max_input_runs": 9,
+    "max_output_runs": 105
+  },
+  {
+    "id": 120,
+    "facility_type_id": 88068,
+    "blueprint_id": 1159,
+    "max_input_runs": 21,
+    "max_output_runs": 3360
+  },
+  {
+    "id": 121,
+    "facility_type_id": 88068,
+    "blueprint_id": 1160,
+    "max_input_runs": 16,
+    "max_output_runs": 2800
+  },
+  {
+    "id": 122,
+    "facility_type_id": 88068,
+    "blueprint_id": 1161,
+    "max_input_runs": 14,
+    "max_output_runs": 2400
+  },
+  {
+    "id": 123,
+    "facility_type_id": 88068,
+    "blueprint_id": 1162,
+    "max_input_runs": 12,
+    "max_output_runs": 2100
+  },
+  {
+    "id": 124,
+    "facility_type_id": 88068,
+    "blueprint_id": 1163,
+    "max_input_runs": 21,
+    "max_output_runs": 420
+  },
+  {
+    "id": 125,
+    "facility_type_id": 88068,
+    "blueprint_id": 1164,
+    "max_input_runs": 18,
+    "max_output_runs": 210
+  },
+  {
+    "id": 126,
+    "facility_type_id": 88068,
+    "blueprint_id": 1165,
+    "max_input_runs": 15,
+    "max_output_runs": 105
+  },
+  {
+    "id": 127,
+    "facility_type_id": 88068,
+    "blueprint_id": 1166,
+    "max_input_runs": 32,
+    "max_output_runs": 420
+  },
+  {
+    "id": 128,
+    "facility_type_id": 88068,
+    "blueprint_id": 1167,
+    "max_input_runs": 25,
+    "max_output_runs": 210
+  },
+  {
+    "id": 129,
+    "facility_type_id": 88068,
+    "blueprint_id": 1168,
+    "max_input_runs": 21,
+    "max_output_runs": 105
+  },
+  {
+    "id": 130,
+    "facility_type_id": 88068,
+    "blueprint_id": 1169,
+    "max_input_runs": 36,
+    "max_output_runs": 105
+  },
+  {
+    "id": 131,
+    "facility_type_id": 88068,
+    "blueprint_id": 1170,
+    "max_input_runs": 42,
+    "max_output_runs": 210
+  },
+  {
+    "id": 132,
+    "facility_type_id": 88068,
+    "blueprint_id": 1171,
+    "max_input_runs": 24,
+    "max_output_runs": 105
+  },
+  {
+    "id": 133,
+    "facility_type_id": 88068,
+    "blueprint_id": 1172,
+    "max_input_runs": 34,
+    "max_output_runs": 210
+  },
+  {
+    "id": 134,
+    "facility_type_id": 88068,
+    "blueprint_id": 1173,
+    "max_input_runs": 17,
+    "max_output_runs": 105
+  },
+  {
+    "id": 135,
+    "facility_type_id": 88068,
+    "blueprint_id": 1174,
+    "max_input_runs": 36,
+    "max_output_runs": 105
+  },
+  {
+    "id": 136,
+    "facility_type_id": 88068,
+    "blueprint_id": 1175,
+    "max_input_runs": 37,
+    "max_output_runs": 168
+  },
+  {
+    "id": 137,
+    "facility_type_id": 88068,
+    "blueprint_id": 1176,
+    "max_input_runs": 19,
+    "max_output_runs": 84
+  },
+  {
+    "id": 138,
+    "facility_type_id": 88068,
+    "blueprint_id": 1177,
+    "max_input_runs": 19,
+    "max_output_runs": 84
+  },
+  {
+    "id": 139,
+    "facility_type_id": 88068,
+    "blueprint_id": 1178,
+    "max_input_runs": 19,
+    "max_output_runs": 84
+  },
+  {
+    "id": 140,
+    "facility_type_id": 88068,
+    "blueprint_id": 1001,
+    "max_input_runs": 24,
+    "max_output_runs": 210
+  },
+  {
+    "id": 141,
+    "facility_type_id": 88068,
+    "blueprint_id": 1006,
+    "max_input_runs": 63,
+    "max_output_runs": 420
+  },
+  {
+    "id": 142,
+    "facility_type_id": 88068,
+    "blueprint_id": 1008,
+    "max_input_runs": 48,
+    "max_output_runs": 420
+  },
+  {
+    "id": 143,
+    "facility_type_id": 88068,
+    "blueprint_id": 1011,
+    "max_input_runs": 84,
+    "max_output_runs": 168
+  },
+  {
+    "id": 144,
+    "facility_type_id": 88068,
+    "blueprint_id": 1012,
+    "max_input_runs": 63,
+    "max_output_runs": 210
+  },
+  {
+    "id": 145,
+    "facility_type_id": 88068,
+    "blueprint_id": 1014,
+    "max_input_runs": 19,
+    "max_output_runs": 70
+  },
+  {
+    "id": 146,
+    "facility_type_id": 88068,
+    "blueprint_id": 1479,
+    "max_input_runs": 120,
+    "max_output_runs": 50
+  },
+  {
+    "id": 147,
+    "facility_type_id": 88068,
+    "blueprint_id": 1474,
+    "max_input_runs": 120,
+    "max_output_runs": 50
+  },
+  {
+    "id": 148,
+    "facility_type_id": 88068,
+    "blueprint_id": 1472,
+    "max_input_runs": 120,
+    "max_output_runs": 50
+  },
+  {
+    "id": 149,
+    "facility_type_id": 87161,
+    "blueprint_id": 1184,
+    "max_input_runs": 25,
+    "max_output_runs": 25
+  },
+  {
+    "id": 150,
+    "facility_type_id": 87161,
+    "blueprint_id": 1185,
+    "max_input_runs": 2500,
+    "max_output_runs": 715
+  },
+  {
+    "id": 151,
+    "facility_type_id": 87161,
+    "blueprint_id": 1179,
+    "max_input_runs": 34,
+    "max_output_runs": 50
+  },
+  {
+    "id": 152,
+    "facility_type_id": 87161,
+    "blueprint_id": 1180,
+    "max_input_runs": 9,
+    "max_output_runs": 5000
+  },
+  {
+    "id": 153,
+    "facility_type_id": 87161,
+    "blueprint_id": 1181,
+    "max_input_runs": 9,
+    "max_output_runs": 12
+  },
+  {
+    "id": 154,
+    "facility_type_id": 87161,
+    "blueprint_id": 1182,
+    "max_input_runs": 25,
+    "max_output_runs": 25
+  },
+  {
+    "id": 155,
+    "facility_type_id": 87161,
+    "blueprint_id": 1183,
+    "max_input_runs": 25,
+    "max_output_runs": 25
+  },
+  {
+    "id": 156,
+    "facility_type_id": 87161,
+    "blueprint_id": 1480,
+    "max_input_runs": 100,
+    "max_output_runs": 100
+  },
+  {
+    "id": 157,
+    "facility_type_id": 87161,
+    "blueprint_id": 1481,
+    "max_input_runs": 100,
+    "max_output_runs": 100
+  },
+  {
+    "id": 158,
+    "facility_type_id": 88069,
+    "blueprint_id": 1224,
+    "max_input_runs": 2,
+    "max_output_runs": 1
+  },
+  {
+    "id": 159,
+    "facility_type_id": 88069,
+    "blueprint_id": 1009,
+    "max_input_runs": 6,
+    "max_output_runs": 1
+  },
+  {
+    "id": 160,
+    "facility_type_id": 88069,
+    "blueprint_id": 1226,
+    "max_input_runs": 2,
+    "max_output_runs": 1
+  },
+  {
+    "id": 161,
+    "facility_type_id": 88069,
+    "blueprint_id": 1227,
+    "max_input_runs": 3,
+    "max_output_runs": 2
+  },
+  {
+    "id": 162,
+    "facility_type_id": 88069,
+    "blueprint_id": 1471,
+    "max_input_runs": 1,
+    "max_output_runs": 1
+  },
+  {
+    "id": 163,
+    "facility_type_id": 88069,
+    "blueprint_id": 1470,
+    "max_input_runs": 1,
+    "max_output_runs": 1
+  },
+  {
+    "id": 164,
+    "facility_type_id": 87162,
+    "blueprint_id": 1000,
+    "max_input_runs": 6,
+    "max_output_runs": 8
+  },
+  {
+    "id": 165,
+    "facility_type_id": 87162,
+    "blueprint_id": 1001,
+    "max_input_runs": 12,
+    "max_output_runs": 25
+  },
+  {
+    "id": 166,
+    "facility_type_id": 87162,
+    "blueprint_id": 1002,
+    "max_input_runs": 150,
+    "max_output_runs": 250
+  },
+  {
+    "id": 167,
+    "facility_type_id": 87162,
+    "blueprint_id": 1003,
+    "max_input_runs": 4,
+    "max_output_runs": 5
+  },
+  {
+    "id": 168,
+    "facility_type_id": 87162,
+    "blueprint_id": 1004,
+    "max_input_runs": 3,
+    "max_output_runs": 8
+  },
+  {
+    "id": 169,
+    "facility_type_id": 87162,
+    "blueprint_id": 1005,
+    "max_input_runs": 48,
+    "max_output_runs": 34
+  },
+  {
+    "id": 170,
+    "facility_type_id": 87162,
+    "blueprint_id": 1006,
+    "max_input_runs": 30,
+    "max_output_runs": 50
+  },
+  {
+    "id": 171,
+    "facility_type_id": 87162,
+    "blueprint_id": 1007,
+    "max_input_runs": 400,
+    "max_output_runs": 500
+  },
+  {
+    "id": 172,
+    "facility_type_id": 87162,
+    "blueprint_id": 1008,
+    "max_input_runs": 23,
+    "max_output_runs": 50
+  },
+  {
+    "id": 173,
+    "facility_type_id": 87162,
+    "blueprint_id": 1009,
+    "max_input_runs": 4,
+    "max_output_runs": 1
+  },
+  {
+    "id": 174,
+    "facility_type_id": 87162,
+    "blueprint_id": 1010,
+    "max_input_runs": 50,
+    "max_output_runs": 34
+  },
+  {
+    "id": 175,
+    "facility_type_id": 87162,
+    "blueprint_id": 1011,
+    "max_input_runs": 40,
+    "max_output_runs": 20
+  },
+  {
+    "id": 176,
+    "facility_type_id": 87162,
+    "blueprint_id": 1012,
+    "max_input_runs": 30,
+    "max_output_runs": 25
+  },
+  {
+    "id": 177,
+    "facility_type_id": 87162,
+    "blueprint_id": 1013,
+    "max_input_runs": 37,
+    "max_output_runs": 20
+  },
+  {
+    "id": 178,
+    "facility_type_id": 87162,
+    "blueprint_id": 1014,
+    "max_input_runs": 9,
+    "max_output_runs": 9
+  },
+  {
+    "id": 179,
+    "facility_type_id": 87162,
+    "blueprint_id": 1472,
+    "max_input_runs": 120,
+    "max_output_runs": 50
+  },
+  {
+    "id": 180,
+    "facility_type_id": 87162,
+    "blueprint_id": 1473,
+    "max_input_runs": 120,
+    "max_output_runs": 50
+  },
+  {
+    "id": 181,
+    "facility_type_id": 88070,
+    "blueprint_id": 1228,
+    "max_input_runs": 3,
+    "max_output_runs": 2
+  },
+  {
+    "id": 182,
+    "facility_type_id": 88070,
+    "blueprint_id": 1229,
+    "max_input_runs": 2,
+    "max_output_runs": 2
+  },
+  {
+    "id": 183,
+    "facility_type_id": 88070,
+    "blueprint_id": 1230,
+    "max_input_runs": 2,
+    "max_output_runs": 1
+  },
+  {
+    "id": 184,
+    "facility_type_id": 88070,
+    "blueprint_id": 1231,
+    "max_input_runs": 2,
+    "max_output_runs": 2
+  },
+  {
+    "id": 185,
+    "facility_type_id": 88070,
+    "blueprint_id": 1232,
+    "max_input_runs": 3,
+    "max_output_runs": 2
+  },
+  {
+    "id": 186,
+    "facility_type_id": 88070,
+    "blueprint_id": 1483,
+    "max_input_runs": 2,
+    "max_output_runs": 2
+  },
+  {
+    "id": 187,
+    "facility_type_id": 91978,
+    "blueprint_id": 1487,
+    "max_input_runs": 50,
+    "max_output_runs": 50
+  },
+  {
+    "id": 188,
+    "facility_type_id": 91978,
+    "blueprint_id": 1475,
+    "max_input_runs": 50,
+    "max_output_runs": 50
+  },
+  {
+    "id": 189,
+    "facility_type_id": 91978,
+    "blueprint_id": 1476,
+    "max_input_runs": 50,
+    "max_output_runs": 50
+  },
+  {
+    "id": 190,
+    "facility_type_id": 87119,
+    "blueprint_id": 1026,
+    "max_input_runs": 219,
+    "max_output_runs": 334
+  },
+  {
+    "id": 191,
+    "facility_type_id": 87119,
+    "blueprint_id": 1027,
+    "max_input_runs": 219,
+    "max_output_runs": 334
+  },
+  {
+    "id": 192,
+    "facility_type_id": 87119,
+    "blueprint_id": 1029,
+    "max_input_runs": 28,
+    "max_output_runs": 34
+  },
+  {
+    "id": 193,
+    "facility_type_id": 87119,
+    "blueprint_id": 1030,
+    "max_input_runs": 53,
+    "max_output_runs": 34
+  },
+  {
+    "id": 194,
+    "facility_type_id": 87119,
+    "blueprint_id": 1031,
+    "max_input_runs": 3000,
+    "max_output_runs": 10000
+  },
+  {
+    "id": 195,
+    "facility_type_id": 87119,
+    "blueprint_id": 1032,
+    "max_input_runs": 2000,
+    "max_output_runs": 10000
+  },
+  {
+    "id": 196,
+    "facility_type_id": 87119,
+    "blueprint_id": 1005,
+    "max_input_runs": 48,
+    "max_output_runs": 34
+  },
+  {
+    "id": 197,
+    "facility_type_id": 87119,
+    "blueprint_id": 1007,
+    "max_input_runs": 400,
+    "max_output_runs": 500
+  },
+  {
+    "id": 198,
+    "facility_type_id": 87119,
+    "blueprint_id": 1010,
+    "max_input_runs": 50,
+    "max_output_runs": 34
+  },
+  {
+    "id": 199,
+    "facility_type_id": 87119,
+    "blueprint_id": 1013,
+    "max_input_runs": 37,
+    "max_output_runs": 20
+  },
+  {
+    "id": 200,
+    "facility_type_id": 87119,
+    "blueprint_id": 1015,
+    "max_input_runs": 3,
+    "max_output_runs": 3
+  },
+  {
+    "id": 201,
+    "facility_type_id": 87119,
+    "blueprint_id": 1016,
+    "max_input_runs": 22,
+    "max_output_runs": 18
+  },
+  {
+    "id": 202,
+    "facility_type_id": 87119,
+    "blueprint_id": 1017,
+    "max_input_runs": 204,
+    "max_output_runs": 250
+  },
+  {
+    "id": 203,
+    "facility_type_id": 87119,
+    "blueprint_id": 1019,
+    "max_input_runs": 6,
+    "max_output_runs": 8
+  },
+  {
+    "id": 204,
+    "facility_type_id": 87119,
+    "blueprint_id": 1020,
+    "max_input_runs": 4,
+    "max_output_runs": 5
+  },
+  {
+    "id": 205,
+    "facility_type_id": 87119,
+    "blueprint_id": 1021,
+    "max_input_runs": 6,
+    "max_output_runs": 8
+  },
+  {
+    "id": 206,
+    "facility_type_id": 87119,
+    "blueprint_id": 1022,
+    "max_input_runs": 45,
+    "max_output_runs": 50
+  },
+  {
+    "id": 207,
+    "facility_type_id": 87119,
+    "blueprint_id": 1023,
+    "max_input_runs": 1200,
+    "max_output_runs": 200
+  },
+  {
+    "id": 208,
+    "facility_type_id": 87119,
+    "blueprint_id": 1482,
+    "max_input_runs": 1200,
+    "max_output_runs": 200
+  },
+  {
+    "id": 209,
+    "facility_type_id": 88063,
+    "blueprint_id": 1180,
+    "max_input_runs": 72,
+    "max_output_runs": 40000
+  },
+  {
+    "id": 210,
+    "facility_type_id": 88063,
+    "blueprint_id": 1181,
+    "max_input_runs": 67,
+    "max_output_runs": 96
+  },
+  {
+    "id": 211,
+    "facility_type_id": 88063,
+    "blueprint_id": 1186,
+    "max_input_runs": 200,
+    "max_output_runs": 200
+  },
+  {
+    "id": 212,
+    "facility_type_id": 88063,
+    "blueprint_id": 1188,
+    "max_input_runs": 80,
+    "max_output_runs": 44
+  },
+  {
+    "id": 213,
+    "facility_type_id": 88063,
+    "blueprint_id": 1190,
+    "max_input_runs": 200,
+    "max_output_runs": 200
+  },
+  {
+    "id": 214,
+    "facility_type_id": 88063,
+    "blueprint_id": 1191,
+    "max_input_runs": 400,
+    "max_output_runs": 24
+  },
+  {
+    "id": 215,
+    "facility_type_id": 88063,
+    "blueprint_id": 1192,
+    "max_input_runs": 400,
+    "max_output_runs": 200
+  },
+  {
+    "id": 216,
+    "facility_type_id": 88063,
+    "blueprint_id": 1193,
+    "max_input_runs": 400,
+    "max_output_runs": 24
+  },
+  {
+    "id": 217,
+    "facility_type_id": 88063,
+    "blueprint_id": 1194,
+    "max_input_runs": 4000,
+    "max_output_runs": 200
+  },
+  {
+    "id": 218,
+    "facility_type_id": 88063,
+    "blueprint_id": 1195,
+    "max_input_runs": 136,
+    "max_output_runs": 136
+  },
+  {
+    "id": 219,
+    "facility_type_id": 88063,
+    "blueprint_id": 1196,
+    "max_input_runs": 140,
+    "max_output_runs": 140
+  },
+  {
+    "id": 220,
+    "facility_type_id": 88063,
+    "blueprint_id": 1197,
+    "max_input_runs": 40,
+    "max_output_runs": 70
+  },
+  {
+    "id": 221,
+    "facility_type_id": 88063,
+    "blueprint_id": 1198,
+    "max_input_runs": 40,
+    "max_output_runs": 45
+  },
+  {
+    "id": 222,
+    "facility_type_id": 88063,
+    "blueprint_id": 1199,
+    "max_input_runs": 40,
+    "max_output_runs": 45
+  },
+  {
+    "id": 223,
+    "facility_type_id": 88063,
+    "blueprint_id": 1200,
+    "max_input_runs": 40,
+    "max_output_runs": 45
+  },
+  {
+    "id": 224,
+    "facility_type_id": 88063,
+    "blueprint_id": 1201,
+    "max_input_runs": 100,
+    "max_output_runs": 100
+  },
+  {
+    "id": 225,
+    "facility_type_id": 88063,
+    "blueprint_id": 1202,
+    "max_input_runs": 100,
+    "max_output_runs": 100
+  },
+  {
+    "id": 226,
+    "facility_type_id": 88063,
+    "blueprint_id": 1203,
+    "max_input_runs": 100,
+    "max_output_runs": 100
+  },
+  {
+    "id": 227,
+    "facility_type_id": 88063,
+    "blueprint_id": 1204,
+    "max_input_runs": 100,
+    "max_output_runs": 100
+  },
+  {
+    "id": 228,
+    "facility_type_id": 88063,
+    "blueprint_id": 1480,
+    "max_input_runs": 100,
+    "max_output_runs": 100
+  },
+  {
+    "id": 229,
+    "facility_type_id": 88063,
+    "blueprint_id": 1481,
+    "max_input_runs": 100,
+    "max_output_runs": 100
+  },
+  {
+    "id": 230,
+    "facility_type_id": 88067,
+    "blueprint_id": 1033,
+    "max_input_runs": 24,
+    "max_output_runs": 24
+  },
+  {
+    "id": 231,
+    "facility_type_id": 88067,
+    "blueprint_id": 1034,
+    "max_input_runs": 1540,
+    "max_output_runs": 3336
+  },
+  {
+    "id": 232,
+    "facility_type_id": 88067,
+    "blueprint_id": 1035,
+    "max_input_runs": 40,
+    "max_output_runs": 40
+  },
+  {
+    "id": 233,
+    "facility_type_id": 88067,
+    "blueprint_id": 1037,
+    "max_input_runs": 100,
+    "max_output_runs": 100
+  },
+  {
+    "id": 234,
+    "facility_type_id": 88067,
+    "blueprint_id": 1038,
+    "max_input_runs": 28,
+    "max_output_runs": 28
+  },
+  {
+    "id": 235,
+    "facility_type_id": 88067,
+    "blueprint_id": 1039,
+    "max_input_runs": 40,
+    "max_output_runs": 40
+  },
+  {
+    "id": 236,
+    "facility_type_id": 88067,
+    "blueprint_id": 1040,
+    "max_input_runs": 213,
+    "max_output_runs": 200
+  },
+  {
+    "id": 237,
+    "facility_type_id": 88067,
+    "blueprint_id": 1042,
+    "max_input_runs": 287,
+    "max_output_runs": 200
+  },
+  {
+    "id": 238,
+    "facility_type_id": 88067,
+    "blueprint_id": 1043,
+    "max_input_runs": 7,
+    "max_output_runs": 12
+  },
+  {
+    "id": 239,
+    "facility_type_id": 88067,
+    "blueprint_id": 1044,
+    "max_input_runs": 20,
+    "max_output_runs": 36
+  },
+  {
+    "id": 240,
+    "facility_type_id": 88067,
+    "blueprint_id": 1045,
+    "max_input_runs": 287,
+    "max_output_runs": 200
+  },
+  {
+    "id": 241,
+    "facility_type_id": 88067,
+    "blueprint_id": 1046,
+    "max_input_runs": 287,
+    "max_output_runs": 200
+  },
+  {
+    "id": 242,
+    "facility_type_id": 88067,
+    "blueprint_id": 1047,
+    "max_input_runs": 20,
+    "max_output_runs": 36
+  },
+  {
+    "id": 243,
+    "facility_type_id": 88067,
+    "blueprint_id": 1048,
+    "max_input_runs": 20,
+    "max_output_runs": 36
+  },
+  {
+    "id": 244,
+    "facility_type_id": 88067,
+    "blueprint_id": 1049,
+    "max_input_runs": 667,
+    "max_output_runs": 800
+  },
+  {
+    "id": 245,
+    "facility_type_id": 88067,
+    "blueprint_id": 1050,
+    "max_input_runs": 667,
+    "max_output_runs": 800
+  },
+  {
+    "id": 246,
+    "facility_type_id": 88067,
+    "blueprint_id": 1051,
+    "max_input_runs": 176,
+    "max_output_runs": 136
+  },
+  {
+    "id": 247,
+    "facility_type_id": 88067,
+    "blueprint_id": 1052,
+    "max_input_runs": 93,
+    "max_output_runs": 136
+  },
+  {
+    "id": 248,
+    "facility_type_id": 88067,
+    "blueprint_id": 1053,
+    "max_input_runs": 93,
+    "max_output_runs": 136
+  },
+  {
+    "id": 249,
+    "facility_type_id": 88067,
+    "blueprint_id": 1054,
+    "max_input_runs": 9990,
+    "max_output_runs": 6668
+  },
+  {
+    "id": 250,
+    "facility_type_id": 88067,
+    "blueprint_id": 1022,
+    "max_input_runs": 150,
+    "max_output_runs": 200
+  },
+  {
+    "id": 251,
+    "facility_type_id": 88067,
+    "blueprint_id": 1023,
+    "max_input_runs": 4000,
+    "max_output_runs": 800
+  },
+  {
+    "id": 252,
+    "facility_type_id": 88067,
+    "blueprint_id": 1482,
+    "max_input_runs": 4000,
+    "max_output_runs": 800
+  },
+  {
+    "id": 253,
+    "facility_type_id": 88071,
+    "blueprint_id": 1233,
+    "max_input_runs": 1,
+    "max_output_runs": 2
+  },
+  {
+    "id": 254,
+    "facility_type_id": 88071,
+    "blueprint_id": 1234,
+    "max_input_runs": 1,
+    "max_output_runs": 1
+  }
+]
