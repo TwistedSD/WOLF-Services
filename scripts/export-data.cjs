@@ -62,6 +62,15 @@ fs.writeFileSync(
 );
 console.log(`  Exported ${products.length} products`);
 
+// Export types (basic - for industry data)
+console.log('Exporting types...');
+const types = db.prepare('SELECT type_id, type_name_id, icon_id, base_price FROM types').all();
+fs.writeFileSync(
+  path.join(outputDir, 'types.json'),
+  JSON.stringify(types, null, 2)
+);
+console.log(`  Exported ${types.length} types`);
+
 // Export types (full with extra_data for fitting)
 console.log('Exporting types (full)...');
 const typesFull = db.prepare('SELECT type_id, type_name_id, icon_id, base_price, extra_data FROM types').all();
