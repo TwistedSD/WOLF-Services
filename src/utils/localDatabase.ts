@@ -276,6 +276,7 @@ interface TypeFull {
   icon_id: number | null;
   base_price: number;
   extra_data: string | null;
+  published: number;
 }
 
 // Dogma attribute
@@ -353,7 +354,7 @@ function getShipByTypeId(typeId: number): any {
 // Get all ships
 export function getAllShips() {
   const ships = typesFull
-    .filter(t => t.extra_data)
+    .filter(t => t.extra_data && t.published === 1)
     .map(t => {
       try {
         const extraData = JSON.parse(t.extra_data!);
@@ -390,7 +391,7 @@ export function getAllShips() {
 // Get all modules
 export function getAllModules() {
   const modules = typesFull
-    .filter(t => t.extra_data)
+    .filter(t => t.extra_data && t.published === 1)
     .map(t => {
       try {
         const extraData = JSON.parse(t.extra_data!);
