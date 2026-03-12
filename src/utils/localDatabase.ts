@@ -289,37 +289,23 @@ interface DogmaAttribute {
 let typesFull: TypeFull[] = [];
 let dogmaAttributes: DogmaAttribute[] = [];
 
-// Ship group definitions - based on actual database group IDs with capacitor attribute
+// Ship group definitions
 const SHIP_GROUPS: Record<number, string> = {
-  100: 'FRIGATE',
-  306: 'DESTROYER',
-  319: 'CRUISER',
-  520: 'INDUSTRIAL',
-  522: 'BATTLECRUISER',
-  523: 'BATTLESHIP',
-  544: 'FRIGATE',
-  545: 'FRIGATE',
-  640: 'HAULER',
-  665: 'DESTROYER',
-  668: 'CRUISER',
-  669: 'BATTLECRUISER',
-  677: 'BATTLESHIP',
-  691: 'CAPITAL',
-  705: 'FRIGATE',
-  803: 'INDUSTRIAL',
-  821: 'FRIGATE',
-  1803: 'FRIGATE',
-  1814: 'FRIGATE',
-  1876: 'FRIGATE',
-  4860: 'FRIGATE'
+  25: 'SMALL',
+  26: 'MEDIUM',
+  27: 'LARGE',
+  29: 'CAPSULE',
+  31: 'SPECIALIZED',
+  237: 'FRIGATES',
+  419: 'HEAVY',
+  420: 'TADES'
 };
 
-// Ship size mapping - based on actual database
+// Ship size mapping
 const SHIP_SIZE_MAP: Record<number, 'S' | 'M' | 'L'> = {
-  100: 'S', 306: 'S', 319: 'M', 520: 'M', 522: 'M', 523: 'L',
-  544: 'S', 545: 'S', 640: 'M', 665: 'S', 668: 'M', 669: 'M',
-  677: 'L', 691: 'L', 705: 'S', 803: 'M', 821: 'S',
-  1803: 'S', 1814: 'S', 1876: 'S', 4860: 'S'
+  25: 'S', 29: 'S', 237: 'S',
+  31: 'M', 26: 'M',
+  419: 'L', 27: 'L', 420: 'L'
 };
 
 // Slot type mappings by groupID
@@ -395,16 +381,8 @@ function getShipByTypeId(typeId: number): any {
 
 // Get all ships
 export function getAllShips() {
-  // Filter to only types that have ship attributes (cpu, powergrid, capacitor)
-  // These are the actual ships with fitting data
-  const shipTypeIds = new Set(
-    dogmaAttributes
-      .filter(a => [48, 11, 482].includes(a.attribute_id))
-      .map(a => a.type_id)
-  );
-  
   const ships = typesFull
-    .filter(t => t.extra_data && shipTypeIds.has(t.type_id))
+    .filter(t => t.extra_data && t.published === 1)
     .map(t => {
       try {
         const extraData = JSON.parse(t.extra_data!);
