@@ -1,10 +1,6 @@
 import { useState, useEffect } from 'react';
 import { loadLocalDatabase, getAllShips, getAllModules } from "../utils/localDatabase";
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
-// @ts-ignore
-const USE_LOCAL = import.meta.env.VITE_USE_LOCAL_DATA === 'true';
-
 export interface Ship {
   typeId: number;
   typeName: string;
@@ -89,35 +85,16 @@ export function useFittingData() {
         setIsLoading(true);
         setError(null);
 
-        if (USE_LOCAL) {
-          await loadLocalDatabase();
-          const [shipsData, modulesData] = await Promise.all([
-            Promise.resolve(getAllShips()),
-            Promise.resolve(getAllModules())
-          ]);
-          setShips(shipsData as Ship[]);
-          setModules(modulesData as Module[]);
-        } else {
-          const [shipsRes, modulesRes] = await Promise.all([
-            fetch(`${API_URL}/api/fitting/ships`),
-            fetch(`${API_URL}/api/fitting/modules`)
-          ]);
-
-          if (!shipsRes.ok) {
-            throw new Error(`Failed to fetch ships: ${shipsRes.statusText}`);
-          }
-          if (!modulesRes.ok) {
-            throw new Error(`Failed to fetch modules: ${modulesRes.statusText}`);
-          }
-
-          const shipsData = await shipsRes.json();
-          const modulesData = await modulesRes.json();
-
-          setShips(shipsData);
-          setModules(modulesData);
-        }
+        // Load local data
+        await loadLocalDatabase();
+        const [shipsData, modulesData] = await Promise.all([
+          Promise.resolve(getAllShips()),
+          Promise.resolve(getAllModules())
+        ]);
+        setShips(shipsData as Ship[]);
+        setModules(modulesData as Module[]);
       } catch (err) {
-        console.error('Error fetching fitting data:', err);
+        console.error('Error loading fitting data:', err);
         setError(err instanceof Error ? err.message : 'Unknown error occurred');
       } finally {
         setIsLoading(false);

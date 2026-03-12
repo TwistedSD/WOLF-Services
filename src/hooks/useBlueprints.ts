@@ -1,10 +1,6 @@
 import { useState, useEffect } from "react";
 import { loadLocalDatabase, getFacilities, getBlueprintsByFacility, getBlueprintDetails, getBlueprintsByType } from "../utils/localDatabase";
 
-const API_URL = import.meta.env.VITE_API_URL;
-// @ts-ignore
-const USE_LOCAL = import.meta.env.VITE_USE_LOCAL_DATA === 'true';
-
 export interface Assembly {
   facility_type_id: number;
   facility_name: string;
@@ -52,18 +48,10 @@ export function useAssemblies() {
       try {
         setIsLoading(true);
         
-        if (USE_LOCAL) {
-          await loadLocalDatabase();
-          const data = getFacilities();
-          setAssemblies(data);
-        } else {
-          const response = await fetch(`${API_URL}/api/industry/facilities`);
-          if (!response.ok) {
-            throw new Error(`Failed to fetch facilities: ${response.status} ${response.statusText}`);
-          }
-          const data = await response.json();
-          setAssemblies(data);
-        }
+        // Load local data
+        await loadLocalDatabase();
+        const data = getFacilities();
+        setAssemblies(data);
         setError(null);
       } catch (err) {
         console.error('Error fetching facilities:', err);
@@ -94,18 +82,10 @@ export function useBlueprints(facilityId: number | null) {
       try {
         setIsLoading(true);
         
-        if (USE_LOCAL) {
-          await loadLocalDatabase();
-          const data = getBlueprintsByFacility(facilityId);
-          setBlueprints(data as Blueprint[]);
-        } else {
-          const response = await fetch(`${API_URL}/api/industry/facilities/${facilityId}/blueprints`);
-          if (!response.ok) {
-            throw new Error(`Failed to fetch blueprints: ${response.status} ${response.statusText}`);
-          }
-          const data = await response.json();
-          setBlueprints(data);
-        }
+        // Load local data
+        await loadLocalDatabase();
+        const data = getBlueprintsByFacility(facilityId);
+        setBlueprints(data as Blueprint[]);
         setError(null);
       } catch (err) {
         console.error('Error fetching blueprints:', err);
@@ -136,18 +116,10 @@ export function useBlueprintDetails(blueprintId: number | null) {
       try {
         setIsLoading(true);
         
-        if (USE_LOCAL) {
-          await loadLocalDatabase();
-          const data = getBlueprintDetails(blueprintId);
-          setDetails(data);
-        } else {
-          const response = await fetch(`${API_URL}/api/industry/blueprints/${blueprintId}`);
-          if (!response.ok) {
-            throw new Error(`Failed to fetch blueprint details: ${response.status} ${response.statusText}`);
-          }
-          const data = await response.json();
-          setDetails(data);
-        }
+        // Load local data
+        await loadLocalDatabase();
+        const data = getBlueprintDetails(blueprintId);
+        setDetails(data);
         setError(null);
       } catch (err) {
         console.error('Error fetching blueprint details:', err);
@@ -189,18 +161,10 @@ export function useBlueprintsByType(typeId: number | null) {
       try {
         setIsLoading(true);
         
-        if (USE_LOCAL) {
-          await loadLocalDatabase();
-          const data = getBlueprintsByType(typeId);
-          setBlueprints(data);
-        } else {
-          const response = await fetch(`${API_URL}/api/industry/types/${typeId}/blueprints`);
-          if (!response.ok) {
-            throw new Error(`Failed to fetch blueprints: ${response.status} ${response.statusText}`);
-          }
-          const data = await response.json();
-          setBlueprints(data);
-        }
+        // Load local data
+        await loadLocalDatabase();
+        const data = getBlueprintsByType(typeId);
+        setBlueprints(data);
         setError(null);
       } catch (err) {
         console.error('Error fetching blueprints by type:', err);
@@ -246,32 +210,10 @@ export function useMaterialEfficiency(
       return;
     }
 
-    const fetchEfficiency = async () => {
-      try {
-        setIsLoading(true);
-        const params = new URLSearchParams({
-          quantity: quantity.toString(),
-        });
-        if (blueprintId) {
-          params.append('blueprintId', blueprintId.toString());
-        }
-
-        const response = await fetch(`${API_URL}/api/industry/efficiency/${typeId}?${params}`);
-        if (!response.ok) {
-          throw new Error(`Failed to fetch efficiency: ${response.status} ${response.statusText}`);
-        }
-        const data = await response.json();
-        setEfficiency(data);
-        setError(null);
-      } catch (err) {
-        console.error('Error fetching efficiency:', err);
-        setError(err instanceof Error ? err.message : "Unknown error");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchEfficiency();
+    // Note: Material efficiency calculation is complex and requires 
+    // recursive blueprint analysis. For now, return null.
+    // This could be implemented locally if needed.
+    setEfficiency(null);
   }, [typeId, quantity, blueprintId]);
 
   return { efficiency, isLoading, error };

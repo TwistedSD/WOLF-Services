@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 
-const API_URL = import.meta.env.VITE_API_URL;
-
 export interface Byproduct {
   type_id: number;
   type_name: string;
@@ -60,43 +58,9 @@ export function useProductionCalculator(
       return;
     }
 
-    const fetchProduction = async () => {
-      try {
-        setIsLoading(true);
-
-        let response;
-        if (blueprintOverrides && Object.keys(blueprintOverrides).length > 0) {
-          // Use POST endpoint for blueprint overrides
-          response = await fetch(`${API_URL}/api/industry/efficiency/${typeId}`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              quantity,
-              blueprintOverrides,
-            }),
-          });
-        } else {
-          // Use GET endpoint for default calculation
-          response = await fetch(`${API_URL}/api/industry/efficiency/${typeId}?quantity=${quantity}`);
-        }
-
-        if (!response.ok) {
-          throw new Error(`Failed to fetch production data: ${response.status} ${response.statusText}`);
-        }
-        const data = await response.json();
-        setResult(data);
-        setError(null);
-      } catch (err) {
-        console.error('Error fetching production data:', err);
-        setError(err instanceof Error ? err.message : "Unknown error");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchProduction();
+    // Production calculator requires the backend API which is no longer available
+    setError("Production calculator is not available in offline mode");
+    setIsLoading(false);
   }, [typeId, quantity, JSON.stringify(blueprintOverrides)]);
 
   return { result, isLoading, error };
@@ -113,25 +77,9 @@ export function useBlueprintOptions(typeId: number | null) {
       return;
     }
 
-    const fetchOptions = async () => {
-      try {
-        setIsLoading(true);
-        const response = await fetch(`${API_URL}/api/industry/blueprints/${typeId}/options`);
-        if (!response.ok) {
-          throw new Error(`Failed to fetch blueprint options: ${response.status} ${response.statusText}`);
-        }
-        const data = await response.json();
-        setOptions(data);
-        setError(null);
-      } catch (err) {
-        console.error('Error fetching blueprint options:', err);
-        setError(err instanceof Error ? err.message : "Unknown error");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchOptions();
+    // Blueprint options require the backend API which is no longer available
+    setError("Blueprint options are not available in offline mode");
+    setIsLoading(false);
   }, [typeId]);
 
   return { options, isLoading, error };
@@ -148,25 +96,9 @@ export function useBlueprintComparison(typeId: number | null, quantity: number) 
       return;
     }
 
-    const fetchComparison = async () => {
-      try {
-        setIsLoading(true);
-        const response = await fetch(`${API_URL}/api/industry/blueprints/${typeId}/compare?quantity=${quantity}`);
-        if (!response.ok) {
-          throw new Error(`Failed to fetch comparison: ${response.status} ${response.statusText}`);
-        }
-        const data = await response.json();
-        setComparisons(data);
-        setError(null);
-      } catch (err) {
-        console.error('Error fetching comparison:', err);
-        setError(err instanceof Error ? err.message : "Unknown error");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchComparison();
+    // Blueprint comparison requires the backend API which is no longer available
+    setError("Blueprint comparison is not available in offline mode");
+    setIsLoading(false);
   }, [typeId, quantity]);
 
   return { comparisons, isLoading, error };
@@ -198,33 +130,9 @@ export function useBlueprintProduction(
       return;
     }
 
-    const fetchProduction = async () => {
-      try {
-        setIsLoading(true);
-
-        const overridesParam = blueprintOverrides && Object.keys(blueprintOverrides).length > 0
-          ? `&blueprintOverrides=${encodeURIComponent(JSON.stringify(blueprintOverrides))}`
-          : '';
-
-        const response = await fetch(
-          `${API_URL}/api/industry/blueprints/${blueprintId}/production?runs=${runs}${overridesParam}`
-        );
-
-        if (!response.ok) {
-          throw new Error(`Failed to fetch blueprint production: ${response.status} ${response.statusText}`);
-        }
-        const data = await response.json();
-        setResult(data);
-        setError(null);
-      } catch (err) {
-        console.error('Error fetching blueprint production:', err);
-        setError(err instanceof Error ? err.message : "Unknown error");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchProduction();
+    // Blueprint production requires the backend API which is no longer available
+    setError("Blueprint production is not available in offline mode");
+    setIsLoading(false);
   }, [blueprintId, runs, JSON.stringify(blueprintOverrides)]);
 
   return { result, isLoading, error };

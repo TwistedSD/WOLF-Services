@@ -1,7 +1,5 @@
 import { useState } from "react";
 
-const API_URL = import.meta.env.VITE_API_URL;
-
 export interface MaterialInput {
   typeId: number;
   quantity: number;
@@ -41,31 +39,9 @@ export function useMultiMaterialOptimizer() {
       return;
     }
 
-    try {
-      setIsLoading(true);
-      setError(null);
-
-      const response = await fetch(`${API_URL}/api/industry/optimize-multi`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ materials }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Failed to optimize: ${response.status} ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      setResult(data);
-    } catch (err) {
-      console.error('Error optimizing multi-material production:', err);
-      setError(err instanceof Error ? err.message : "Unknown error");
-      setResult(null);
-    } finally {
-      setIsLoading(false);
-    }
+    // Multi-material optimizer requires the backend API which is no longer available
+    setError("Multi-material optimizer is not available in offline mode");
+    setIsLoading(false);
   };
 
   const reset = () => {
