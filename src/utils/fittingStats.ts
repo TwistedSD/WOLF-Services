@@ -23,6 +23,9 @@ export interface CalculatedStats {
   // Capacitor
   capacitor: number;
   capacitorRecharge: number;
+  capacitorStability: string | number; // "STABLE" or seconds until empty
+  capacitorUsage: number; // Total usage per second
+  capacitorRechargePenalty: number; // Total penalty from modules
 
   // Navigation
   maxVelocity: number;
@@ -91,6 +94,9 @@ export function calculateFittingStats(fitting: Fitting): CalculatedStats | null 
     // Capacitor
     capacitor: ship.capacitor || 0,
     capacitorRecharge: ship.capacitorRecharge || 0,
+    capacitorStability: 0, // Will be calculated
+    capacitorUsage: 0, // Will be calculated
+    capacitorRechargePenalty: 0, // Will be calculated
 
     // Navigation
     maxVelocity: ship.maxVelocity || 0,
@@ -153,6 +159,25 @@ export function calculateFittingStats(fitting: Fitting): CalculatedStats | null 
     // Shield recharge rate multiplier
     if (module.shieldRechargeRateMultiplier) {
       stats.capacitorRecharge *= module.shieldRechargeRateMultiplier;
+    }
+
+    // Capacitor: Engine provides recharge (attribute 55 in GJ/s)
+    if (module.capacitorRecharge) {
+      stats.capacitorRecharge += module.capacitorRecharge;
+    }
+
+    // Capacitor: Modules with recharge penalty (attribute 5619 in GJ/s)
+    if (module.rechargePenalty) {
+      stats.capacitorRechargePenalty += module.rechargePenalty;
+    }
+
+    // Capacitor: Calculate usage per second for this module
+    // usagePerSecond = capacitorNeed (activationCost) * 1000 / duration (ms)
+    // Apply capacitorNeedMultiplier if present
+    if (module.activationCost && module.duration) {
+      const multiplier = module.capacitorNeedMultiplier || 1;
+      const usagePerSecond = (module.activationCost * multiplier * 1000) / module.duration;
+      stats.capacitorUsage += usagePerSecond;
     }
 
     // Resistance bonuses (collect for stacking penalty)
@@ -220,6 +245,22 @@ export function calculateFittingStats(fitting: Fitting): CalculatedStats | null 
     const moduleResonance = 1 - (moduleResistance / 100);
     const totalResonance = shipResonance * moduleResonance;
     stats.explosiveResistance = (1 - totalResonance) * 100;
+  }
+
+  // Calculate capacitor stability
+  // netRecharge = engine recharge - module penalties - module usage
+  // If netRecharge >= 0: STABLE
+  // If netRecharge < 0: timeUntilEmpty = capacity / |netRecharge|
+  const totalRecharge = stats.capacitorRecharge;
+  const totalPenalty = stats.capacitorRechargePenalty;
+  const totalUsage = stats.capacitorUsage;
+  const netRecharge = totalRecharge - totalPenalty - totalUsage;
+  
+  if (netRecharge >= 0) {
+    stats.capacitorStability = 'STABLE';
+  } else {
+    // Time until capacitor runs out in seconds
+    stats.capacitorStability = stats.capacitor / Math.abs(netRecharge);
   }
 
   return stats;

@@ -322,7 +322,7 @@ const MODULE_GROUP_IDS = [39, 46, 52, 55, 62, 63, 65, 77, 326, 765, 1199, 1699, 
 
 // Attribute ID to name mapping - for ships
 const SHIP_ATTR_MAP: Record<number, string> = {
-  48: 'cpu', 11: 'powergrid', 482: 'capacitor', 4: 'mass', 479: 'capacitorRecharge',
+  48: 'cpu', 11: 'powergrid', 482: 'capacitor', 4: 'mass', 55: 'capacitorRecharge',
   552: 'signatureRadius', 37: 'maxVelocity', 192: 'maxLockedTargets', 564: 'scanResolution',
   271: 'emDamageResonance', 272: 'explosiveDamageResonance', 273: 'kineticDamageResonance',
   274: 'thermalDamageResonance', 263: 'shieldCapacity', 265: 'armorHP', 9: 'hullHP',
@@ -335,12 +335,15 @@ const MODULE_ATTR_MAP: Record<number, string> = {
   11: 'powergridBonus',
   30: 'power',
   50: 'cpu',
+  55: 'capacitorRecharge',  // For engines - capacitor recharge in GJ/s
   72: 'shieldCapacity',
   73: 'duration',
   84: 'armorRepairAmount',
   97: 'speedMultiplier',
   128: 'chargeSize',
   134: 'shieldRechargeRateMultiplier',
+  216: 'capacitorNeedMultiplier',  // Multiplier to module capacitor usage
+  5619: 'rechargePenalty',  // Direct reduction to engine recharge (GJ/s)
   604: 'chargeGroup1',
   984: 'emResistanceBonus',
   985: 'explosiveResistanceBonus',

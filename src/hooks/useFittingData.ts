@@ -61,6 +61,11 @@ export interface Module {
   shieldRechargeRateMultiplier?: number;
   shieldCapacity?: number;
   armorHP?: number;
+  // Capacitor-related attributes
+  activationCost?: number;  // capacitorNeed (attr 6) - GJ per activation
+  capacitorRecharge?: number;  // Engine recharge (attr 55) - GJ/s
+  rechargePenalty?: number;  // Module penalty (attr 5619) - GJ/s reduction
+  capacitorNeedMultiplier?: number;  // attr 216 - multiplier to capacitor usage
   emResistanceBonus?: number;
   explosiveResistanceBonus?: number;
   kineticResistanceBonus?: number;
