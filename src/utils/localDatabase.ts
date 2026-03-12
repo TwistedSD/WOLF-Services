@@ -320,8 +320,8 @@ const SLOT_TYPE_MAP: Record<number, string> = {
 // Module group IDs
 const MODULE_GROUP_IDS = [39, 46, 52, 55, 62, 63, 65, 77, 326, 765, 1199, 1699, 1701, 1986, 4619, 4741, 4747, 4765, 4767, 4805, 4806, 4834, 4888];
 
-// Attribute ID to name mapping
-const ATTR_MAP: Record<number, string> = {
+// Attribute ID to name mapping - for ships
+const SHIP_ATTR_MAP: Record<number, string> = {
   48: 'cpu', 11: 'powergrid', 482: 'capacitor', 4: 'mass', 479: 'capacitorRecharge',
   552: 'signatureRadius', 37: 'maxVelocity', 192: 'maxLockedTargets', 564: 'scanResolution',
   271: 'emDamageResonance', 272: 'explosiveDamageResonance', 273: 'kineticDamageResonance',
@@ -329,11 +329,39 @@ const ATTR_MAP: Record<number, string> = {
   12: 'lowSlots', 13: 'midSlots', 14: 'hiSlots', 5652: 'engineSlots'
 };
 
-function getDogmaAttributes(typeId: number): Record<string, number> {
+// Attribute ID to name mapping - for modules
+const MODULE_ATTR_MAP: Record<number, string> = {
+  6: 'activationCost',
+  11: 'powergridBonus',
+  30: 'power',
+  50: 'cpu',
+  72: 'shieldCapacity',
+  73: 'duration',
+  84: 'armorRepairAmount',
+  97: 'speedMultiplier',
+  128: 'chargeSize',
+  134: 'shieldRechargeRateMultiplier',
+  604: 'chargeGroup1',
+  984: 'emResistanceBonus',
+  985: 'explosiveResistanceBonus',
+  986: 'kineticResistanceBonus',
+  987: 'thermalResistanceBonus',
+  1159: 'armorHP',
+  1271: 'maxGroupFitted',
+  1298: 'canFitShipGroup01',
+  1299: 'canFitShipGroup02',
+  1300: 'canFitShipGroup03',
+  1301: 'canFitShipGroup04',
+  1795: 'reloadTime'
+};
+
+function getDogmaAttributes(typeId: number, isModule: boolean = false): Record<string, number> {
   const attrs = dogmaAttributes.filter(a => a.type_id === typeId);
   const result: Record<string, number> = {};
+  const attrMap = isModule ? MODULE_ATTR_MAP : SHIP_ATTR_MAP;
+  
   attrs.forEach(attr => {
-    const name = ATTR_MAP[attr.attribute_id];
+    const name = attrMap[attr.attribute_id];
     if (name) result[name] = attr.value;
   });
   return result;
@@ -407,13 +435,21 @@ export function getAllModules() {
     })
     .filter((m): m is NonNullable<typeof m> => m !== null && m.groupId !== undefined && MODULE_GROUP_IDS.includes(m.groupId))
     .map(m => {
-      const dogma = getDogmaAttributes(m.typeId);
+      const dogma = getDogmaAttributes(m.typeId, true);
       const slotType = SLOT_TYPE_MAP[m.groupId] || 'unknown';
+      
+      // Detect ship size compatibility from name (e.g., "Module Name (S)")
+      let shipSize: 'S' | 'M' | 'L' | undefined;
+      if (m.typeName.includes('(S)')) shipSize = 'S';
+      else if (m.typeName.includes('(M)')) shipSize = 'M';
+      else if (m.typeName.includes('(L)')) shipSize = 'L';
+      
       return {
         typeId: m.typeId,
         typeName: m.typeName,
         groupId: m.groupId,
         slotType,
+        ...(shipSize && { shipSize }),
         ...dogma
       };
     });
