@@ -1,8 +1,24 @@
 // Local database service that loads data from JSON files
 // This replaces the remote API calls with local data
 
+// Get facility name dynamically from types_full and localization
+function getFacilityNameFromId(facilityTypeId: number): string {
+  // First check the types_full for the type_name_id
+  const typeFull = typesFull?.find((t: any) => t.type_id === facilityTypeId);
+  if (typeFull?.type_name_id) {
+    const loc = localization.find(l => l.loc_id === typeFull.type_name_id);
+    if (loc?.text) {
+      return loc.text;
+    }
+  }
+  return `Facility ${facilityTypeId}`;
+}
+
 // Facility name and category mappings - ordered by size (portable -> S -> M -> L)
 const getFacilityInfo = (typeId: number): { name: string; category: string; sortOrder: number } => {
+  // Try to get the name dynamically first
+  const dynamicName = getFacilityNameFromId(typeId);
+  
   const facilities: Record<number, { name: string; category: string; sortOrder: number }> = {
     // Printers - ordered by size
     87162: { name: 'Portable Printer', category: 'Printers', sortOrder: 1 },
@@ -23,7 +39,14 @@ const getFacilityInfo = (typeId: number): { name: string; category: string; sort
     // Assembler
     88068: { name: 'Assembler', category: 'Assembler', sortOrder: 11 }
   };
-  return facilities[typeId] || { name: `Facility ${typeId}`, category: 'Other', sortOrder: 99 };
+  
+  const known = facilities[typeId];
+  if (known) {
+    return known;
+  }
+  
+  // Use dynamic name for unknown facilities
+  return { name: dynamicName, category: 'Other', sortOrder: 99 };
 };
 
 // Data interfaces
@@ -85,6 +108,7 @@ let blueprintOutputs: IndustryBlueprintOutput[] = [];
 let types: TypeInfo[] = [];
 let localization: Localization[] = [];
 let icons: Icon[] = [];
+let typesFull: TypeFull[] = [];
 let isLoaded = false;
 
 // Load all data from JSON files
@@ -286,7 +310,6 @@ interface DogmaAttribute {
   value: number;
 }
 
-let typesFull: TypeFull[] = [];
 let dogmaAttributes: DogmaAttribute[] = [];
 
 // Ship group definitions
