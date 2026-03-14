@@ -596,12 +596,11 @@ function buildProductionTree(
   }
   
   const typeName = getTypeName(typeId);
-  const isBase = isBaseMaterial(typeId);
   
-  // Get all possible blueprints for this type
+  // Get all possible blueprints for this type (blueprints that PRODUCE this type)
   const allBlueprints = getBlueprintsForType(typeId);
   
-  // If no blueprints available, this is a base material
+  // If no blueprints available, this is a base material (must be mined/purchased)
   if (allBlueprints.length === 0) {
     return {
       type_id: typeId,
@@ -712,8 +711,6 @@ function buildProductionTree(
     is_base_material: inputNodes.length === 0
   };
 }
-
-// Main function to calculate production
 export function calculateProduction(
   typeId: number,
   quantity: number,
