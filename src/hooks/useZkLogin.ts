@@ -195,9 +195,12 @@ export function useZkLogin(): ZkLoginState {
       }
     }
 
-    // Check for OAuth callback
+    // Check for OAuth callback - either from URL params or sessionStorage
     const params = new URLSearchParams(window.location.search);
-    if (params.has('id_token') || params.has('jwt')) {
+    const idTokenFromUrl = params.get('id_token');
+    const idTokenFromSession = sessionStorage.getItem('zklogin-id_token');
+    
+    if (idTokenFromUrl || idTokenFromSession) {
       processOAuthCallback();
     }
   }, []);
@@ -208,8 +211,9 @@ export function useZkLogin(): ZkLoginState {
     setError(null);
 
     try {
+      // Check URL params first, then sessionStorage
       const params = new URLSearchParams(window.location.search);
-      const idToken = params.get('id_token') || params.get('jwt');
+      const idToken = params.get('id_token') || params.get('jwt') || sessionStorage.getItem('zklogin-id_token');
 
       if (!idToken) {
         throw new Error('No identity token received');
@@ -229,8 +233,10 @@ export function useZkLogin(): ZkLoginState {
         tribeId: playerData.tribeId,
       };
 
-      // Clear URL params
+      // Clear URL params and session storage
       window.history.replaceState({}, '', window.location.pathname);
+      sessionStorage.removeItem('zklogin-id_token');
+      sessionStorage.removeItem('zklogin-state');
 
       setUser(zkLoginUser);
       localStorage.setItem('wolf-zklogin-user', JSON.stringify(zkLoginUser));

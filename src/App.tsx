@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
 import { ZkLoginButton } from "./components/wallet/ZkLoginButton";
+import { ZkLoginCallback } from "./components/wallet/ZkLoginCallback";
 import { TribeTabs, TabId } from "./components/layout/TribeTabs";
 import { SmartAssembliesTab } from "./components/assemblies/SmartAssembliesTab";
 import { BlueprintsSection } from "./components/blueprints/BlueprintsSection";
@@ -8,8 +9,16 @@ import { KillboardTab } from "./components/killboard/KillboardTab";
 import { FittingTab } from "./components/fitting/FittingTab";
 
 function App() {
+  // Check if this is the callback page
+  const isCallback = window.location.pathname === "/zklogin-callback";
+
   // TEMPORARY: Disable MetaMask login and tribe check, always show main content
   const [activeTab, setActiveTab] = useState<TabId>("assemblies");
+
+  // If this is the callback page, show the callback component
+  if (isCallback) {
+    return <ZkLoginCallback />;
+  }
 
   return (
     <div className="mx-auto w-full max-w-[85%] px-4 py-4">
