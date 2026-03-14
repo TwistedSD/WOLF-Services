@@ -33,45 +33,109 @@ const getWorldApiUrl = (): string => {
   return import.meta.env.VITE_WORLD_API_HTTP || 'https://world-api-stillness.live.tech.evefrontier.com';
 };
 
-// GraphQL queries for player/tribe data
-const PLAYER_PROFILE_QUERY = `
-  query GetPlayerProfile($address: String!) {
-    player(where: { walletAddress: { _eq: $address } }) {
-      id
-      name
-      tribeId
-      tribe {
-        id
-        name
-      }
-    }
-  }
-`;
+// Sui GraphQL endpoint (for querying player data)
+const getSuiGraphQLUrl = (): string => {
+  return import.meta.env.VITE_SUI_GRAPHQL_URL || 'https://graphql.testnet.sui.io';
+};
 
-const CHARACTER_QUERY = `
-  query GetCharacter($address: String!) {
-    character(where: { owner: { walletAddress: { _eq: $address } } }) {
-      id
-      name
-      tribe {
-        id
-        name
-      }
-    }
-  }
-`;
+// World Package ID (network-specific)
+const getWorldPackageId = (): string => {
+  return import.meta.env.VITE_WORLD_PACKAGE_ID || '0x2';
+};
 
-// Fetch player/character data from World API
+// Query character by wallet address using Sui GraphQL
 async function fetchPlayerData(address: string): Promise<{ characterName?: string; tribeName?: string; tribeId?: number; characterId?: string }> {
   const worldApiUrl = getWorldApiUrl();
+  const suiGraphQLUrl = getSuiGraphQLUrl();
+  const worldPackageId = getWorldPackageId();
 
   try {
-    // Try player profile first
+    // First try: Query via Sui GraphQL (as per documentation)
+    const profileType = `${worldPackageId}::character::PlayerProfile`;
+    
+    const suiQuery = {
+      query: `
+        query GetCharacterDetails($address: SuiAddress!, $profileType: String!) {
+          address(address: $address) {
+            objects(last: 10, filter: { type: $profileType }) {
+              nodes {
+                contents {
+                  ... on MoveObject {
+                    contents {
+                      type { repr }
+                      json
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      `,
+      variables: {
+        address: address,
+        profileType: profileType
+      }
+    };
+
+    const suiResponse = await fetch(`${suiGraphQLUrl}/graphql`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(suiQuery),
+    });
+
+    if (suiResponse.ok) {
+      const suiData = await suiResponse.json();
+      const objects = suiData?.data?.address?.objects?.nodes;
+      
+      if (objects && objects.length > 0) {
+        // Get character_id from the first PlayerProfile
+        const profile = objects[0];
+        const json = profile?.contents?.contents?.json;
+        if (json?.character_id) {
+          // Now fetch the full character
+          const charId = json.character_id;
+          const charQuery = {
+            query: `
+              query GetCharacter($id: SuiAddress!) {
+                object(address: $id) {
+                  contents {
+                    ... on MoveObject {
+                      contents {
+                        json
+                      }
+                    }
+                  }
+                }
+              }
+            `,
+            variables: { id: charId }
+          };
+          
+          const charResponse = await fetch(`${suiGraphQLUrl}/graphql`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(charQuery),
+          });
+          
+          if (charResponse.ok) {
+            const charData = await charResponse.json();
+            const charJson = charData?.data?.object?.contents?.contents?.json;
+            if (charJson) {
+              return {
+                characterId: charId,
+                characterName: charJson.name || 'Unknown',
+              };
+            }
+          }
+        }
+      }
+    }
+
+    // Fallback: Try World API GraphQL (if available)
     const playerResponse = await fetch(`${worldApiUrl}/graphql`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         query: PLAYER_PROFILE_QUERY,
         variables: { address },
@@ -86,31 +150,6 @@ async function fetchPlayerData(address: string): Promise<{ characterName?: strin
           characterName: player.name,
           tribeName: player.tribe?.name,
           tribeId: player.tribe?.id,
-        };
-      }
-    }
-
-    // Try character query as fallback
-    const charResponse = await fetch(`${worldApiUrl}/graphql`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        query: CHARACTER_QUERY,
-        variables: { address },
-      }),
-    });
-
-    if (charResponse.ok) {
-      const charData = await charResponse.json();
-      if (charData.data?.character?.[0]) {
-        const character = charData.data.character[0];
-        return {
-          characterId: character.id,
-          characterName: character.name,
-          tribeName: character.tribe?.name,
-          tribeId: character.tribe?.id,
         };
       }
     }

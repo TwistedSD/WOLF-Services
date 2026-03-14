@@ -10,6 +10,8 @@ interface ImportMetaEnv {
   readonly VITE_ZKLOGIN_REDIRECT_URI: string;
   readonly VITE_ZKLOGIN_NETWORK: string;
   readonly VITE_ZKLOGIN_OAUTH_PROVIDER: string;
+  readonly VITE_SUI_GRAPHQL_URL: string;
+  readonly VITE_WORLD_PACKAGE_ID: string;
 }
 
 interface ImportMeta {

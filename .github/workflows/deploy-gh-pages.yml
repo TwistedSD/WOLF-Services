@@ -38,6 +38,9 @@ jobs:
           VITE_WORLD_API_HTTP: ${{ secrets.WORLD_API_HTTP || 'https://world-api-stillness.live.tech.evefrontier.com' }}
           VITE_GATEWAY_HTTP: ${{ secrets.GATEWAY_HTTP || 'https://blockchain-gateway-stillness.live.tech.evefrontier.com' }}
           VITE_MAP_URL: ${{ secrets.MAP_URL || 'https://ef-map.com' }}
+          VITE_USE_LOCAL_DATA: ${{ secrets.USE_LOCAL_DATA || 'true' }}
+          VITE_SUI_GRAPHQL_URL: ${{ secrets.SUI_GRAPHQL_URL || 'https://graphql-sui-stillness.mystenlabs.com' }}
+          VITE_WORLD_PACKAGE_ID: ${{ secrets.WORLD_PACKAGE_ID || '0x2' }}
           VITE_ZKLOGIN_CLIENT_ID: ${{ secrets.VITE_ZKLOGIN_CLIENT_ID }}
           VITE_ZKLOGIN_REDIRECT_URI: ${{ secrets.VITE_ZKLOGIN_REDIRECT_URI }}
           VITE_ZKLOGIN_NETWORK: ${{ secrets.VITE_ZKLOGIN_NETWORK || 'testnet' }}
