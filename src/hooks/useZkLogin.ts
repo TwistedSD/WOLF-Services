@@ -347,27 +347,12 @@ export function useZkLogin(): ZkLoginState {
       return;
     }
 
-    // Default: Try EVE Vault, fall back to demo mode
+    // Default: Try EVE Vault, show error if not available
     const hasVault = checkEveVaultAvailable();
     if (hasVault) {
       await connectWithEveVault();
     } else {
-      // Demo mode - use manual entry
-      const demoAddress = prompt('Enter your Sui wallet address (demo mode):');
-      if (demoAddress) {
-        const playerData = await fetchPlayerData(demoAddress);
-        
-        const demoUser: ZkLoginUser = {
-          address: demoAddress,
-          characterId: 'demo-character-id',
-          characterName: playerData.characterName || 'Demo Character',
-          tribeName: playerData.tribeName || 'Demo Tribe',
-          tribeId: playerData.tribeId || 1,
-        };
-
-        setUser(demoUser);
-        localStorage.setItem('wolf-zklogin-user', JSON.stringify(demoUser));
-      }
+      setError('EVE Vault extension not found. Please install EVE Vault from https://github.com/evefrontier/evevault/releases');
     }
     setIsLoading(false);
   }, [connectWithEveVault]);
