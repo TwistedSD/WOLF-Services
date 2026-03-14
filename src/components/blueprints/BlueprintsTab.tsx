@@ -1,6 +1,12 @@
-import React, { useState } from "react";
-import { useAssemblies, useBlueprints, useBlueprintDetails, type Material } from "../../hooks/useBlueprints";
-import { useBlueprintProduction } from "../../hooks/useEfficiency";
+import React, { useState, useMemo } from "react";
+import {
+  useAssemblies,
+  useBlueprints,
+  useBlueprintDetails,
+  type Blueprint,
+  type Material,
+} from "../../hooks/useBlueprints";
+import { useProductionCalculator } from "../../hooks/useEfficiency";
 import { EnhancedMaterialRow } from "./EnhancedMaterialRow";
 import { ProductionSummary } from "./ProductionSummary";
 
@@ -15,7 +21,10 @@ interface MaterialRowProps {
 
 const MaterialRow: React.FC<MaterialRowProps> = ({ material, depth }) => {
   return (
-    <div className="border-b" style={{ borderColor: "var(--background-lighter)" }}>
+    <div
+      className="border-b"
+      style={{ borderColor: "var(--background-lighter)" }}
+    >
       <div
         className="flex items-center justify-between py-2 px-3 hover:bg-background-lighter transition-colors"
         style={{ paddingLeft: `${depth * 16 + 12}px` }}
@@ -33,22 +42,64 @@ const MaterialRow: React.FC<MaterialRowProps> = ({ material, depth }) => {
 };
 
 export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
-  const { assemblies, isLoading: loadingAssemblies, error: assembliesError } = useAssemblies();
-  const [selectedFacilityId, setSelectedFacilityId] = useState<number | null>(null);
-  const [selectedBlueprintId, setSelectedBlueprintId] = useState<number | null>(null);
+  const {
+    assemblies,
+    isLoading: loadingAssemblies,
+    error: assembliesError,
+  } = useAssemblies();
+  const [selectedFacilityId, setSelectedFacilityId] = useState<number | null>(
+    null,
+  );
+  const [selectedBlueprintId, setSelectedBlueprintId] = useState<number | null>(
+    null,
+  );
   const [runs, setRuns] = useState<number>(1);
-  const [blueprintOverrides, setBlueprintOverrides] = useState<{ [typeId: number]: number }>({});
+  const [blueprintOverrides, setBlueprintOverrides] = useState<{
+    [typeId: number]: number;
+  }>({});
 
-  const { blueprints, isLoading: loadingBlueprints, error: blueprintsError } = useBlueprints(selectedFacilityId);
+  const {
+    blueprints,
+    isLoading: loadingBlueprints,
+    error: blueprintsError,
+  } = useBlueprints(selectedFacilityId);
 
   // Fetch blueprint details to show raw inputs/outputs
-  const { details: blueprintDetails, isLoading: loadingDetails, error: detailsError } = useBlueprintDetails(selectedBlueprintId);
+  const {
+    details: blueprintDetails,
+    isLoading: loadingDetails,
+    error: detailsError,
+  } = useBlueprintDetails(selectedBlueprintId);
 
-  // Calculate production tree for ALL input materials using the blueprint production endpoint
-  const { result: productionResult, isLoading: loadingProduction } = useBlueprintProduction(
-    selectedBlueprintId,
-    runs,
-    blueprintOverrides
+  // Get the selected blueprint to access its typeId
+  const selectedBlueprint = blueprints.find(
+    (b) => b.blueprint_id === selectedBlueprintId,
+  );
+
+  // Calculate actual quantity from runs × output_quantity
+  const quantity = useMemo(() => {
+    if (
+      !blueprintDetails ||
+      blueprintDetails.outputs.length === 0 ||
+      !selectedBlueprint
+    )
+      return runs;
+    const primaryOutput = blueprintDetails.outputs.find(
+      (o) => o.type_id === blueprintDetails.primary_type_id,
+    );
+    if (!primaryOutput) return runs;
+    return runs * primaryOutput.quantity;
+  }, [runs, blueprintDetails, selectedBlueprint]);
+
+  // Calculate production tree for ALL input materials using local calculator
+  const {
+    result: productionResult,
+    isLoading: loadingProduction,
+    error: productionError,
+  } = useProductionCalculator(
+    selectedBlueprint?.primary_type_id || null,
+    quantity,
+    blueprintOverrides,
   );
 
   const handleBlueprintSelect = (blueprintId: number) => {
@@ -81,15 +132,29 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
     if (minutes > 0) parts.push(`${minutes}m`);
     if (secs > 0 || parts.length === 0) parts.push(`${secs}s`);
 
-    return parts.join(' ');
+    return parts.join(" ");
   };
 
   return (
     <div className="flex gap-4 h-[calc(100vh-200px)]">
       {/* Assembly Types List */}
-      <div className="w-64 border-2 overflow-y-auto" style={{ borderColor: "var(--primary)", backgroundColor: "var(--background-light)" }}>
-        <div className="px-3 py-2 border-b-2" style={{ borderColor: "var(--primary)", backgroundColor: "var(--background-lighter)" }}>
-          <h3 className="text-sm font-semibold text-foreground">Assembly Types</h3>
+      <div
+        className="w-64 border-2 overflow-y-auto"
+        style={{
+          borderColor: "var(--primary)",
+          backgroundColor: "var(--background-light)",
+        }}
+      >
+        <div
+          className="px-3 py-2 border-b-2"
+          style={{
+            borderColor: "var(--primary)",
+            backgroundColor: "var(--background-lighter)",
+          }}
+        >
+          <h3 className="text-sm font-semibold text-foreground">
+            Assembly Types
+          </h3>
         </div>
         {assembliesError ? (
           <div className="p-3 text-sm text-error">{assembliesError}</div>
@@ -119,8 +184,20 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
       </div>
 
       {/* Blueprints List */}
-      <div className="w-64 border-2 overflow-y-auto" style={{ borderColor: "var(--primary)", backgroundColor: "var(--background-light)" }}>
-        <div className="px-3 py-2 border-b-2" style={{ borderColor: "var(--primary)", backgroundColor: "var(--background-lighter)" }}>
+      <div
+        className="w-64 border-2 overflow-y-auto"
+        style={{
+          borderColor: "var(--primary)",
+          backgroundColor: "var(--background-light)",
+        }}
+      >
+        <div
+          className="px-3 py-2 border-b-2"
+          style={{
+            borderColor: "var(--primary)",
+            backgroundColor: "var(--background-lighter)",
+          }}
+        >
           <h3 className="text-sm font-semibold text-foreground">Blueprints</h3>
         </div>
         {!selectedFacilityId ? (
@@ -152,7 +229,13 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
       </div>
 
       {/* Blueprint Details */}
-      <div className="flex-1 border-2 overflow-y-auto" style={{ borderColor: "var(--primary)", backgroundColor: "var(--background-light)" }}>
+      <div
+        className="flex-1 border-2 overflow-y-auto"
+        style={{
+          borderColor: "var(--primary)",
+          backgroundColor: "var(--background-light)",
+        }}
+      >
         {!selectedBlueprintId ? (
           <div className="p-6 text-center text-foreground-muted">
             Select a blueprint to view details
@@ -160,15 +243,26 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
         ) : (
           <div>
             {/* Header with Quantity Input */}
-            <div className="px-4 py-3 border-b-2" style={{ borderColor: "var(--primary)", backgroundColor: "var(--background-lighter)" }}>
+            <div
+              className="px-4 py-3 border-b-2"
+              style={{
+                borderColor: "var(--primary)",
+                backgroundColor: "var(--background-lighter)",
+              }}
+            >
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-lg font-semibold text-foreground">
-                    {blueprints.find(b => b.blueprint_id === selectedBlueprintId)?.primary_type_name}
+                    {
+                      blueprints.find(
+                        (b) => b.blueprint_id === selectedBlueprintId,
+                      )?.primary_type_name
+                    }
                   </h3>
                   {blueprintDetails && (
                     <p className="text-xs text-foreground-muted mt-1">
-                      Production Time: {formatDuration(blueprintDetails.run_time)} per run
+                      Production Time:{" "}
+                      {formatDuration(blueprintDetails.run_time)} per run
                     </p>
                   )}
                 </div>
@@ -200,37 +294,65 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
             ) : blueprintDetails ? (
               <>
                 {/* Blueprint Info */}
-                <div className="border-b-2" style={{ borderColor: "var(--primary)" }}>
-                  <div className="px-3 py-2" style={{ backgroundColor: "var(--background-lighter)" }}>
-                    <h4 className="text-xs font-semibold text-foreground-muted uppercase">Blueprint Info</h4>
+                <div
+                  className="border-b-2"
+                  style={{ borderColor: "var(--primary)" }}
+                >
+                  <div
+                    className="px-3 py-2"
+                    style={{ backgroundColor: "var(--background-lighter)" }}
+                  >
+                    <h4 className="text-xs font-semibold text-foreground-muted uppercase">
+                      Blueprint Info
+                    </h4>
                   </div>
                   <div className="px-3 py-2 space-y-1 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-foreground-muted">Time per run:</span>
-                      <span className="text-foreground font-mono">{formatDuration(blueprintDetails.run_time)}</span>
+                      <span className="text-foreground-muted">
+                        Time per run:
+                      </span>
+                      <span className="text-foreground font-mono">
+                        {formatDuration(blueprintDetails.run_time)}
+                      </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-foreground-muted">Total time ({runs} runs):</span>
-                      <span className="text-foreground font-mono">{formatDuration(blueprintDetails.run_time * runs)}</span>
+                      <span className="text-foreground-muted">
+                        Total time ({runs} runs):
+                      </span>
+                      <span className="text-foreground font-mono">
+                        {formatDuration(blueprintDetails.run_time * runs)}
+                      </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-foreground-muted">Max input capacity:</span>
-                      <span className="text-foreground font-mono">{blueprintDetails.max_input_capacity.toLocaleString()}</span>
+                      <span className="text-foreground-muted">
+                        Max input capacity:
+                      </span>
+                      <span className="text-foreground font-mono">
+                        {blueprintDetails.max_input_capacity.toLocaleString()}
+                      </span>
                     </div>
                   </div>
                 </div>
 
                 {/* Outputs */}
-                <div className="border-b-2" style={{ borderColor: "var(--primary)" }}>
-                  <div className="px-3 py-2" style={{ backgroundColor: "var(--background-lighter)" }}>
-                    <h4 className="text-xs font-semibold text-foreground-muted uppercase">Outputs (per run)</h4>
+                <div
+                  className="border-b-2"
+                  style={{ borderColor: "var(--primary)" }}
+                >
+                  <div
+                    className="px-3 py-2"
+                    style={{ backgroundColor: "var(--background-lighter)" }}
+                  >
+                    <h4 className="text-xs font-semibold text-foreground-muted uppercase">
+                      Outputs (per run)
+                    </h4>
                   </div>
                   {blueprintDetails.outputs.map((output) => (
                     <MaterialRow
                       key={output.type_id}
                       material={{
                         ...output,
-                        quantity: output.quantity * runs
+                        quantity: output.quantity * runs,
                       }}
                       depth={0}
                     />
@@ -238,42 +360,26 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
                 </div>
 
                 {/* Inputs - Production Tree */}
-                {blueprintDetails.inputs.length > 0 && (
-                  <div className="border-b-2" style={{ borderColor: "var(--primary)" }}>
-                    <div className="px-3 py-2" style={{ backgroundColor: "var(--background-lighter)" }}>
-                      <h4 className="text-xs font-semibold text-foreground-muted uppercase">Input Materials</h4>
-                    </div>
-                    {loadingProduction ? (
-                      <div className="p-6 text-center text-foreground-muted">
-                        Calculating production tree...
-                      </div>
-                    ) : productionResult && productionResult.inputs.length > 0 ? (
-                      productionResult.inputs.map((input, index) => (
-                        <EnhancedMaterialRow
-                          key={`${input.type_id}-${index}`}
-                          node={input}
-                          depth={0}
-                          onBlueprintChange={handleBlueprintChange}
-                        />
-                      ))
-                    ) : (
-                      blueprintDetails.inputs.map((input) => (
-                        <MaterialRow
-                          key={input.type_id}
-                          material={{
-                            ...input,
-                            quantity: input.quantity * runs
-                          }}
-                          depth={0}
-                        />
-                      ))
-                    )}
+                {loadingProduction ? (
+                  <div className="p-6 text-center text-foreground-muted">
+                    Calculating production tree...
                   </div>
-                )}
+                ) : productionResult ? (
+                  <>
+                    {/* Production Tree with full recursive breakdown */}
+                    <EnhancedMaterialRow
+                      node={productionResult}
+                      depth={0}
+                      onBlueprintChange={handleBlueprintChange}
+                    />
 
-                {/* Production Summary */}
-                {productionResult && productionResult.inputs.length > 0 && (
-                  <ProductionSummary inputs={productionResult.inputs} />
+                    {/* Production Summary with base materials */}
+                    <ProductionSummary rootNode={productionResult} />
+                  </>
+                ) : (
+                  <div className="p-6 text-center text-foreground-muted">
+                    Production calculation not available
+                  </div>
                 )}
               </>
             ) : null}
