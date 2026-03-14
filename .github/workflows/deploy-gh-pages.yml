@@ -25,8 +25,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm install
@@ -38,6 +38,10 @@ jobs:
           VITE_WORLD_API_HTTP: ${{ secrets.WORLD_API_HTTP || 'https://world-api-stillness.live.tech.evefrontier.com' }}
           VITE_GATEWAY_HTTP: ${{ secrets.GATEWAY_HTTP || 'https://blockchain-gateway-stillness.live.tech.evefrontier.com' }}
           VITE_MAP_URL: ${{ secrets.MAP_URL || 'https://ef-map.com' }}
+          VITE_ZKLOGIN_CLIENT_ID: ${{ secrets.VITE_ZKLOGIN_CLIENT_ID }}
+          VITE_ZKLOGIN_REDIRECT_URI: ${{ secrets.VITE_ZKLOGIN_REDIRECT_URI }}
+          VITE_ZKLOGIN_NETWORK: ${{ secrets.VITE_ZKLOGIN_NETWORK || 'testnet' }}
+          VITE_ZKLOGIN_OAUTH_PROVIDER: ${{ secrets.VITE_ZKLOGIN_OAUTH_PROVIDER || 'google' }}
         run: npm run build
 
       - name: Upload artifact
