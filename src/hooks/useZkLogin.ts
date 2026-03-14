@@ -24,7 +24,7 @@ const getZkLoginConfig = () => {
     clientId: import.meta.env.VITE_ZKLOGIN_CLIENT_ID || '',
     redirectUri: import.meta.env.VITE_ZKLOGIN_REDIRECT_URI || `${window.location.origin}/zklogin-callback`,
     network: import.meta.env.VITE_ZKLOGIN_NETWORK || 'testnet',
-    oauthProvider: import.meta.env.VITE_ZKLOGIN_OAUTH_PROVIDER || 'google',
+    oauthProvider: import.meta.env.VITE_ZKLOGIN_OAUTH_PROVIDER || 'fusionauth',
   };
 };
 
@@ -122,26 +122,21 @@ async function fetchPlayerData(address: string): Promise<{ characterName?: strin
   }
 }
 
-// Generate OAuth URL for redirect
+// Generate OAuth URL for FusionAuth (EVE Frontier)
 function generateOAuthUrl(config: {
   clientId: string;
   redirectUri: string;
   provider: string;
   nonce: string;
 }): string {
-  const baseUrl = config.provider === 'google' 
-    ? 'https://accounts.google.com/o/oauth2/v2/auth'
-    : config.provider === 'twitch'
-    ? 'https://id.twitch.tv/oauth2/authorize'
-    : 'https://accounts.google.com/o/oauth2/v2/auth';
-
+  // FusionAuth OAuth endpoint (EVE Frontier's auth server)
+  const baseUrl = 'https://auth.uterra.io/oauth2/authorize';
+  
   const params = new URLSearchParams({
     client_id: config.clientId,
     redirect_uri: config.redirectUri,
-    response_type: 'id_token',
-    scope: config.provider === 'google' 
-      ? 'openid email profile'
-      : 'openid user:read:email',
+    response_type: 'code',
+    scope: 'openid email profile',
     nonce: config.nonce,
     state: config.nonce,
   });
@@ -163,7 +158,6 @@ function createZkLoginSession(): { keypair: Ed25519Keypair; randomness: string; 
 // Derive Sui address from JWT token
 function deriveAddressFromJwt(jwt: string, userSalt: string = 'salt'): string {
   try {
-    // Use jwtToAddress from Sui zkLogin
     return jwtToAddress(jwt, userSalt);
   } catch (error) {
     console.error('Failed to derive address from JWT:', error);
@@ -175,6 +169,36 @@ function deriveAddressFromJwt(jwt: string, userSalt: string = 'salt'): string {
       hash = hash & hash;
     }
     return `0x${Math.abs(hash).toString(16).padStart(40, '0').slice(0, 40)}`;
+  }
+}
+
+// Check if EVE Vault extension is available
+function checkEveVaultAvailable(): boolean {
+  return typeof window !== 'undefined' && !!(window as unknown as { evevault?: unknown }).evevault;
+}
+
+// Get wallet address from EVE Vault extension
+async function getEveVaultAddress(): Promise<string | null> {
+  try {
+    // Check for EVE Vault in window
+    const vault = (window as unknown as { evevault?: { getAddress?: () => Promise<string> } }).evevault;
+    if (vault?.getAddress) {
+      return await vault.getAddress();
+    }
+    
+    // Check for generic Sui wallet (EVE Vault uses standard Sui wallet interface)
+    if ((window as unknown as { sui?: unknown }).sui) {
+      const sui = (window as unknown as { sui: { getAccounts?: () => Promise<string[]> } }).sui;
+      if (sui?.getAccounts) {
+        const accounts = await sui.getAccounts();
+        return accounts?.[0] || null;
+      }
+    }
+    
+    return null;
+  } catch (error) {
+    console.error('Failed to get EVE Vault address:', error);
+    return null;
   }
 }
 
@@ -197,10 +221,12 @@ export function useZkLogin(): ZkLoginState {
 
     // Check for OAuth callback - either from URL params or sessionStorage
     const params = new URLSearchParams(window.location.search);
+    const hashParams = new URLSearchParams(window.location.hash.substring(1));
     const idTokenFromUrl = params.get('id_token');
+    const idTokenFromHash = hashParams.get('id_token');
     const idTokenFromSession = sessionStorage.getItem('zklogin-id_token');
     
-    if (idTokenFromUrl || idTokenFromSession) {
+    if (idTokenFromUrl || idTokenFromHash || idTokenFromSession) {
       processOAuthCallback();
     }
   }, []);
@@ -213,7 +239,7 @@ export function useZkLogin(): ZkLoginState {
     try {
       // Check URL params first (query string), then sessionStorage, then URL hash
       const params = new URLSearchParams(window.location.search);
-      const hashParams = new URLSearchParams(window.location.hash.substring(1)); // Remove leading #
+      const hashParams = new URLSearchParams(window.location.hash.substring(1));
       
       const idToken = params.get('id_token') || params.get('jwt') || 
                       sessionStorage.getItem('zklogin-id_token') ||
@@ -252,45 +278,64 @@ export function useZkLogin(): ZkLoginState {
     }
   };
 
+  // Connect with EVE Vault extension
+  const connectWithEveVault = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      // Try to get address from EVE Vault extension
+      const address = await getEveVaultAddress();
+      
+      if (!address) {
+        throw new Error('EVE Vault extension not found. Please install EVE Vault.');
+      }
+
+      // Fetch player/character data
+      const playerData = await fetchPlayerData(address);
+      
+      const vaultUser: ZkLoginUser = {
+        address,
+        characterId: playerData.characterId,
+        characterName: playerData.characterName || 'EVE Vault User',
+        tribeName: playerData.tribeName || 'No Tribe',
+        tribeId: playerData.tribeId,
+      };
+
+      setUser(vaultUser);
+      localStorage.setItem('wolf-zklogin-user', JSON.stringify(vaultUser));
+    } catch (err) {
+      console.error('EVE Vault connection error:', err);
+      setError(err instanceof Error ? err.message : 'Failed to connect to EVE Vault');
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
   // Connect with zkLogin - redirects to OAuth provider
   const connect = useCallback(async () => {
     setIsLoading(true);
     setError(null);
 
-    try {
-      const config = getZkLoginConfig();
+    const config = getZkLoginConfig();
 
-      if (!config.clientId || config.clientId === 'your-google-client-id') {
-        // Demo mode - use manual entry
-        const demoAddress = prompt('Enter your Sui wallet address (demo mode):');
-        if (demoAddress) {
-          // Try to fetch player data
-          const playerData = await fetchPlayerData(demoAddress);
-          
-          const demoUser: ZkLoginUser = {
-            address: demoAddress,
-            characterId: 'demo-character-id',
-            characterName: playerData.characterName || 'Demo Character',
-            tribeName: playerData.tribeName || 'Demo Tribe',
-            tribeId: playerData.tribeId || 1,
-          };
+    // First, try EVE Vault extension
+    const vaultAddress = await getEveVaultAddress();
+    if (vaultAddress) {
+      // Already has EVE Vault - connect directly
+      await connectWithEveVault();
+      return;
+    }
 
-          setUser(demoUser);
-          localStorage.setItem('wolf-zklogin-user', JSON.stringify(demoUser));
-        }
-        setIsLoading(false);
-        return;
-      }
-
-      // Real zkLogin flow - create session
+    // Check if we should use FusionAuth OAuth or EVE Vault
+    if (config.oauthProvider === 'fusionauth' && config.clientId) {
+      // Use FusionAuth OAuth
       const { randomness, nonce } = createZkLoginSession();
       
-      // Store session data for verification
       sessionStorage.setItem('zklogin-randomness', randomness);
       sessionStorage.setItem('zklogin-nonce', nonce);
       sessionStorage.setItem('zklogin-config', JSON.stringify(config));
 
-      // Generate OAuth URL
       const oauthUrl = generateOAuthUrl({
         clientId: config.clientId,
         redirectUri: config.redirectUri,
@@ -298,14 +343,34 @@ export function useZkLogin(): ZkLoginState {
         nonce,
       });
 
-      // Redirect to OAuth provider
       window.location.href = oauthUrl;
-    } catch (err) {
-      console.error('zkLogin error:', err);
-      setError(err instanceof Error ? err.message : 'Failed to connect with zkLogin');
-      setIsLoading(false);
+      return;
     }
-  }, []);
+
+    // Default: Try EVE Vault, fall back to demo mode
+    const hasVault = checkEveVaultAvailable();
+    if (hasVault) {
+      await connectWithEveVault();
+    } else {
+      // Demo mode - use manual entry
+      const demoAddress = prompt('Enter your Sui wallet address (demo mode):');
+      if (demoAddress) {
+        const playerData = await fetchPlayerData(demoAddress);
+        
+        const demoUser: ZkLoginUser = {
+          address: demoAddress,
+          characterId: 'demo-character-id',
+          characterName: playerData.characterName || 'Demo Character',
+          tribeName: playerData.tribeName || 'Demo Tribe',
+          tribeId: playerData.tribeId || 1,
+        };
+
+        setUser(demoUser);
+        localStorage.setItem('wolf-zklogin-user', JSON.stringify(demoUser));
+      }
+    }
+    setIsLoading(false);
+  }, [connectWithEveVault]);
 
   // Disconnect
   const disconnect = useCallback(() => {
@@ -314,6 +379,7 @@ export function useZkLogin(): ZkLoginState {
     sessionStorage.removeItem('zklogin-randomness');
     sessionStorage.removeItem('zklogin-nonce');
     sessionStorage.removeItem('zklogin-config');
+    sessionStorage.removeItem('zklogin-id_token');
   }, []);
 
   return {
