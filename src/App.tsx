@@ -9,14 +9,20 @@ import { KillboardTab } from "./components/killboard/KillboardTab";
 import { FittingTab } from "./components/fitting/FittingTab";
 
 function App() {
+  // Check if URL has OAuth response in hash or query params
+  const urlParams = new URLSearchParams(window.location.search);
+  const hashParams = new URLSearchParams(window.location.hash.substring(1));
+  const hasOAuthResponse =
+    urlParams.has("id_token") || hashParams.has("id_token");
+
   // Check if this is the callback page
   const isCallback = window.location.pathname === "/zklogin-callback";
 
   // TEMPORARY: Disable MetaMask login and tribe check, always show main content
   const [activeTab, setActiveTab] = useState<TabId>("assemblies");
 
-  // If this is the callback page, show the callback component
-  if (isCallback) {
+  // If this is the callback page or there's an OAuth response, show the callback component
+  if (isCallback || hasOAuthResponse) {
     return <ZkLoginCallback />;
   }
 
