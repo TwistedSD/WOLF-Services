@@ -174,30 +174,56 @@ function deriveAddressFromJwt(jwt: string, userSalt: string = 'salt'): string {
 
 // Check if EVE Vault extension is available
 function checkEveVaultAvailable(): boolean {
-  return typeof window !== 'undefined' && !!(window as unknown as { evevault?: unknown }).evevault;
+  // EVE Vault might be available as window.evevault or window.sui (Sui standard)
+  if (typeof window === 'undefined') return false;
+  
+  // Check for EVE Vault specifically
+  const hasEveVault = !!(window as unknown as { evevault?: unknown }).evevault;
+  
+  // Check for Sui wallet standard (EVE Vault supports this)
+  const hasSui = !!(window as unknown as { sui?: unknown }).sui;
+  
+  console.log('Wallet check:', { hasEveVault, hasSui, keys: Object.keys(window).filter(k => k.includes('sui') || k.includes('vault') || k.includes('wallet')) });
+  
+  return hasEveVault || hasSui;
 }
 
 // Get wallet address from EVE Vault extension
 async function getEveVaultAddress(): Promise<string | null> {
   try {
-    // Check for EVE Vault in window
+    // Try EVE Vault first
     const vault = (window as unknown as { evevault?: { getAddress?: () => Promise<string> } }).evevault;
     if (vault?.getAddress) {
+      console.log('Using EVE Vault');
       return await vault.getAddress();
     }
     
-    // Check for generic Sui wallet (EVE Vault uses standard Sui wallet interface)
-    if ((window as unknown as { sui?: unknown }).sui) {
-      const sui = (window as unknown as { sui: { getAccounts?: () => Promise<string[]> } }).sui;
-      if (sui?.getAccounts) {
-        const accounts = await sui.getAccounts();
-        return accounts?.[0] || null;
+    // Try Sui standard interface
+    const sui = (window as unknown as { sui?: { getAccounts?: () => Promise<string[]> } }).sui;
+    if (sui?.getAccounts) {
+      console.log('Using Sui wallet');
+      const accounts = await sui.getAccounts();
+      return accounts?.[0] || null;
+    }
+    
+    // Try ethereum (some wallets inject here)
+    const ethereum = (window as unknown as { ethereum?: { request?: (args: { method: string }) => Promise<string[]> } }).ethereum;
+    if (ethereum?.request) {
+      try {
+        const accounts = await ethereum.request({ method: 'eth_accounts' });
+        if (accounts?.[0]) {
+          // Convert ETH address to Sui address if needed
+          return accounts[0];
+        }
+      } catch (e) {
+        // Ignore
       }
     }
     
+    console.log('No wallet found');
     return null;
   } catch (error) {
-    console.error('Failed to get EVE Vault address:', error);
+    console.error('Failed to get wallet address:', error);
     return null;
   }
 }
