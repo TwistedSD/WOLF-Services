@@ -1,10 +1,6 @@
 import React, { useState } from "react";
 import "./App.css";
-import ConnectWallet from "./components/wallet/ConnectWallet";
-import { useWalletConnection } from "./hooks/useWalletConnection";
-import { useTribeVerification } from "./hooks/useTribeVerification";
-import { useSmartCharacter } from "./hooks/useSmartCharacter";
-import { TribeHeader } from "./components/layout/TribeHeader";
+import { ZkLoginButton } from "./components/wallet/ZkLoginButton";
 import { TribeTabs, TabId } from "./components/layout/TribeTabs";
 import { SmartAssembliesTab } from "./components/assemblies/SmartAssembliesTab";
 import { BlueprintsSection } from "./components/blueprints/BlueprintsSection";
@@ -17,12 +13,10 @@ function App() {
 
   return (
     <div className="mx-auto w-full max-w-[85%] px-4 py-4">
-      {/* Tribal Header (disabled) */}
-      {/* <TribeHeader
-        address={walletAddress!}
-        characterName={characterName}
-        onDisconnect={handleDisconnect}
-      /> */}
+      {/* Header with zkLogin Button */}
+      <div className="flex justify-end items-center gap-4 mb-4">
+        <ZkLoginButton />
+      </div>
 
       {/* Tab Navigation */}
       <TribeTabs activeTab={activeTab} onTabChange={setActiveTab} />
@@ -30,11 +24,11 @@ function App() {
       {/* Tab Content */}
       <div className="mt-4">
         {activeTab === "assemblies" && (
-          <SmartAssembliesTab walletAddress={undefined} />
+          <SmartAssembliesTab walletAddress={null} />
         )}
         {activeTab === "fitting" && <FittingTab />}
         {activeTab === "blueprints" && (
-          <BlueprintsSection walletAddress={undefined} />
+          <BlueprintsSection walletAddress={null} />
         )}
         {activeTab === "killboard" && <KillboardTab />}
       </div>
