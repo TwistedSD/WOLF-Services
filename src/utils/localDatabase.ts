@@ -654,7 +654,9 @@ function buildProductionTree(
   const baseMaterialBreakdown: { [typeId: number]: number } = {};
   const baseMaterialNames: { [typeId: number]: string } = {};
   
-  if (!isBase) {
+  // Always recursively process inputs if there are any blueprints - 
+  // we want to trace all the way down to raw materials
+  if (inputs.length > 0) {
     visited.add(typeId);
     
     for (const input of inputs) {
@@ -683,7 +685,7 @@ function buildProductionTree(
     
     visited.delete(typeId);
   } else {
-    // This is a base material
+    // No inputs - this is a raw material (could be an asteroid or bought material)
     baseMaterialBreakdown[typeId] = quantityNeeded;
     baseMaterialNames[typeId] = typeName;
   }
@@ -707,7 +709,7 @@ function buildProductionTree(
     byproducts: byproducts,
     alternative_blueprints: allBlueprints.length,
     inputs: inputNodes,
-    is_base_material: isBase
+    is_base_material: inputNodes.length === 0
   };
 }
 
