@@ -521,6 +521,18 @@ function isBaseMaterial(typeId: number): boolean {
   return oreIndicators.some(indicator => typeName.includes(indicator));
 }
 
+// Type IDs for materials that take 1000x longer to collect (should be penalized in efficiency calculation)
+// Only Salvaged Materials - not Mummified Clone (per user request)
+const SLOW_MATERIAL_TYPE_IDS = new Set([
+  88764, // Salvaged Materials
+]);
+
+// Check if a blueprint uses slow materials (that take 1000x longer to collect)
+function blueprintUsesSlowMaterials(bpId: number): boolean {
+  const inputs = blueprintInputs.filter(i => i.blueprint_id === bpId);
+  return inputs.some(input => SLOW_MATERIAL_TYPE_IDS.has(input.type_id));
+}
+
 // Get all blueprints that can produce a given type (using only inputs/outputs tables)
 function getBlueprintsForType(typeId: number): Array<{
   blueprint_id: number;
@@ -606,6 +618,10 @@ function calculateBlueprintEfficiency(
   const baseMaterialBreakdown: { [typeId: number]: number } = {};
   const baseMaterialNames: { [typeId: number]: string } = {};
   
+  // Check if this blueprint uses slow materials (takes 1000x longer to collect)
+  const usesSlowMaterials = blueprintUsesSlowMaterials(bp.blueprint_id);
+  const slowPenalty = usesSlowMaterials ? 1000 : 1;
+  
   for (const input of inputs) {
     const scaledQuantity = input.quantity * runsNeeded;
     
@@ -614,9 +630,12 @@ function calculateBlueprintEfficiency(
     
     if (inputBpOptions.length === 0) {
       // This is a base material
-      baseMaterialBreakdown[input.type_id] = (baseMaterialBreakdown[input.type_id] || 0) + scaledQuantity;
+      // Apply penalty if this input is a slow material
+      const inputPenalty = SLOW_MATERIAL_TYPE_IDS.has(input.type_id) ? 1000 : 1;
+      const adjustedQuantity = scaledQuantity * inputPenalty;
+      baseMaterialBreakdown[input.type_id] = (baseMaterialBreakdown[input.type_id] || 0) + adjustedQuantity;
       baseMaterialNames[input.type_id] = input.type_name;
-      totalBaseMaterials += scaledQuantity;
+      totalBaseMaterials += adjustedQuantity;
     } else {
       // Need to find the best option for this input
       const inputVisited = new Set(visited);
@@ -645,9 +664,11 @@ function calculateBlueprintEfficiency(
       
       // If no valid option found, treat as base material
       if (bestCost === Infinity) {
-        baseMaterialBreakdown[input.type_id] = (baseMaterialBreakdown[input.type_id] || 0) + scaledQuantity;
+        const inputPenalty = SLOW_MATERIAL_TYPE_IDS.has(input.type_id) ? 1000 : 1;
+        const adjustedQuantity = scaledQuantity * inputPenalty;
+        baseMaterialBreakdown[input.type_id] = (baseMaterialBreakdown[input.type_id] || 0) + adjustedQuantity;
         baseMaterialNames[input.type_id] = input.type_name;
-        totalBaseMaterials += scaledQuantity;
+        totalBaseMaterials += adjustedQuantity;
       } else {
         // Add the best option's breakdown
         for (const [matId, qty] of Object.entries(bestBreakdown)) {
@@ -660,7 +681,10 @@ function calculateBlueprintEfficiency(
     }
   }
   
-  return { baseMaterialCost: totalBaseMaterials, breakdown: baseMaterialBreakdown, names: baseMaterialNames };
+  // Apply the slow material penalty to the total
+  const finalCost = totalBaseMaterials * slowPenalty;
+  
+  return { baseMaterialCost: finalCost, breakdown: baseMaterialBreakdown, names: baseMaterialNames };
 }
 
 // Recursive function to build production tree
