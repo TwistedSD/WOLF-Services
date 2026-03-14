@@ -13,7 +13,7 @@ export const ProductionSummary: React.FC<ProductionSummaryProps> = ({
   rootNode,
 }) => {
   const [openSections, setOpenSections] = useState<Set<string>>(
-    new Set(["base", "excess"]),
+    new Set(["base", "excess", "time"]),
   );
 
   if (!rootNode) return null;
@@ -112,42 +112,62 @@ export const ProductionSummary: React.FC<ProductionSummaryProps> = ({
         </div>
       </div>
 
-      {/* Base Materials Section */}
-      <div
-        className="border-b"
-        style={{ borderColor: "var(--background-lighter)" }}
-      >
+      {/* Base Materials Section - Always visible at bottom */}
+      <div className="border-b-2" style={{ borderColor: "var(--primary)" }}>
         <button
           onClick={() => toggleSection("base")}
-          className="w-full flex items-center justify-between px-3 py-2 hover:bg-background-lighter transition-colors"
+          className="w-full flex items-center justify-between px-3 py-3 hover:bg-background-lighter transition-colors"
+          style={{ backgroundColor: "var(--background-lighter)" }}
         >
-          <span className="text-xs font-semibold text-foreground-muted uppercase">
-            Base Materials Required
+          <span className="text-sm font-bold text-foreground uppercase">
+            ▼ Base Materials (Asteroids/Ores)
           </span>
           <span className="text-foreground-muted text-xs">
-            {openSections.has("base") ? "−" : "+"}
+            {openSections.has("base") ? "−" : "+"} (
+            {Object.keys(baseMaterialBreakdown).length} types)
           </span>
         </button>
 
         {openSections.has("base") && (
-          <div className="px-3 pb-2">
-            {Object.entries(baseMaterialBreakdown).map(([name, quantity]) => (
-              <div key={name} className="flex justify-between py-1 text-sm">
-                <span className="text-foreground">{name}</span>
-                <span className="text-foreground-muted font-mono">
-                  {quantity.toLocaleString()}
-                </span>
+          <div
+            className="px-3 pb-3 bg-background"
+            style={{ maxHeight: "300px", overflowY: "auto" }}
+          >
+            {Object.keys(baseMaterialBreakdown).length === 0 ? (
+              <div className="text-sm text-foreground-muted py-2">
+                No base materials found
               </div>
-            ))}
-            <div
-              className="flex justify-between py-1 mt-2 pt-2 border-t text-sm font-semibold"
-              style={{ borderColor: "var(--background-lighter)" }}
-            >
-              <span className="text-foreground">Total</span>
-              <span className="text-foreground font-mono">
-                {totalBaseMaterials.toLocaleString()}
-              </span>
-            </div>
+            ) : (
+              <>
+                {Object.entries(baseMaterialBreakdown)
+                  .sort((a, b) => b[1] - a[1]) // Sort by quantity descending
+                  .map(([name, quantity]) => (
+                    <div
+                      key={name}
+                      className="flex justify-between py-1 text-sm border-b"
+                      style={{ borderColor: "var(--background-lighter)" }}
+                    >
+                      <span className="text-foreground font-medium">
+                        {name}
+                      </span>
+                      <span className="text-primary font-mono font-bold">
+                        {quantity.toLocaleString()}
+                      </span>
+                    </div>
+                  ))}
+                <div
+                  className="flex justify-between py-2 mt-2 pt-2 border-t-2 text-sm font-bold"
+                  style={{ borderColor: "var(--primary)" }}
+                >
+                  <span className="text-foreground">
+                    Total Materials Needed
+                  </span>
+                  <span className="text-primary font-mono">
+                    {totalBaseMaterials.toLocaleString()}
+                  </span>
+                </div>
+              </>
+            )}
           </div>
         )}
       </div>
