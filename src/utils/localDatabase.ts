@@ -521,40 +521,48 @@ function isBaseMaterial(typeId: number): boolean {
   return oreIndicators.some(indicator => typeName.includes(indicator));
 }
 
-// Get all blueprints that can produce a given type
+// Get all blueprints that can produce a given type (using only inputs/outputs tables)
 function getBlueprintsForType(typeId: number): Array<{
   blueprint_id: number;
-  primary_type_id: number;
   run_time: number;
   facility_type_id: number;
   facility_name: string;
   output_quantity: number;
 }> {
-  const typeBlueprints = blueprints.filter(b => b.primary_type_id === typeId);
+  // Find all blueprints that produce this type (as primary product OR byproduct)
+  const outputEntries = blueprintOutputs.filter(o => o.type_id === typeId);
+  
+  if (outputEntries.length === 0) {
+    return [];
+  }
+  
+  const bpIdSet = new Set<number>();
+  outputEntries.forEach(o => bpIdSet.add(o.blueprint_id));
   
   const result: Array<{
     blueprint_id: number;
-    primary_type_id: number;
     run_time: number;
     facility_type_id: number;
     facility_name: string;
     output_quantity: number;
   }> = [];
   
-  for (const bp of typeBlueprints) {
-    const facilityBPs = facilityBlueprints.filter(fb => fb.blueprint_id === bp.blueprint_id);
-    const outputs = blueprintOutputs.filter(o => o.blueprint_id === bp.blueprint_id);
-    const primaryOutput = outputs.find(o => o.type_id === bp.primary_type_id);
+  for (const bpId of bpIdSet) {
+    const bp = blueprints.find(b => b.blueprint_id === bpId);
+    if (!bp) continue;
+    
+    const facilityBPs = facilityBlueprints.filter(fb => fb.blueprint_id === bpId);
+    const outputs = blueprintOutputs.filter(o => o.blueprint_id === bpId);
+    const outputForType = outputs.find(o => o.type_id === typeId);
     
     for (const fb of facilityBPs) {
       const info = getFacilityInfo(fb.facility_type_id);
       result.push({
         blueprint_id: bp.blueprint_id,
-        primary_type_id: bp.primary_type_id,
         run_time: bp.run_time,
         facility_type_id: fb.facility_type_id,
         facility_name: info.name,
-        output_quantity: primaryOutput?.quantity || 1
+        output_quantity: outputForType?.quantity || 1
       });
     }
   }
@@ -599,7 +607,6 @@ function buildProductionTree(
   
   // Get all possible blueprints for this type (blueprints that PRODUCE this type)
   const allBlueprints = getBlueprintsForType(typeId);
-  console.log(`[${typeName}] Found ${allBlueprints.length} blueprints:`, allBlueprints.map(bp => `${bp.facility_name} (bp ${bp.blueprint_id})`));
   
   // If no blueprints available, this is a base material (must be mined/purchased)
   if (allBlueprints.length === 0) {
