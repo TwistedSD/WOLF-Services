@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { calculateProduction, aggregateBaseMaterials, collectByproducts, getBlueprintOptionsForType, loadLocalDatabase } from "../utils/localDatabase";
 
 export interface Byproduct {
   type_id: number;
@@ -25,6 +26,7 @@ export interface ProductionNode {
   byproducts: Byproduct[];
   alternative_blueprints: number;
   inputs: ProductionNode[];
+  is_base_material?: boolean;
 }
 
 export interface BlueprintOptionSimple {
@@ -58,9 +60,32 @@ export function useProductionCalculator(
       return;
     }
 
-    // Production calculator requires the backend API which is no longer available
-    setError("Production calculator is not available in offline mode");
-    setIsLoading(false);
+    const calculate = async () => {
+      setIsLoading(true);
+      setError(null);
+      
+      try {
+        // Ensure database is loaded
+        await loadLocalDatabase();
+        
+        // Calculate production using local database
+        const productionResult = calculateProduction(typeId, quantity, blueprintOverrides || {});
+        
+        if (productionResult) {
+          // Cast to our interface - they should be compatible now
+          setResult(productionResult as ProductionNode);
+        } else {
+          setError("Could not calculate production for this item");
+        }
+      } catch (err) {
+        console.error('Production calculation error:', err);
+        setError(err instanceof Error ? err.message : "Unknown error");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    calculate();
   }, [typeId, quantity, JSON.stringify(blueprintOverrides)]);
 
   return { result, isLoading, error };
@@ -77,9 +102,33 @@ export function useBlueprintOptions(typeId: number | null) {
       return;
     }
 
-    // Blueprint options require the backend API which is no longer available
-    setError("Blueprint options are not available in offline mode");
-    setIsLoading(false);
+    const fetchOptions = async () => {
+      setIsLoading(true);
+      setError(null);
+      
+      try {
+        // Ensure database is loaded
+        await loadLocalDatabase();
+        
+        // Get blueprint options from local database
+        const blueprintOptions = getBlueprintOptionsForType(typeId);
+        
+        setOptions(blueprintOptions.map(bp => ({
+          blueprint_id: bp.blueprint_id,
+          output_quantity: bp.output_quantity,
+          time_seconds: bp.run_time,
+          facility_type_id: bp.facility_type_id,
+          facility_name: bp.facility_name
+        })));
+      } catch (err) {
+        console.error('Blueprint options error:', err);
+        setError(err instanceof Error ? err.message : "Unknown error");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchOptions();
   }, [typeId]);
 
   return { options, isLoading, error };
