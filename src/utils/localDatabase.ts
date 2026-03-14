@@ -15,34 +15,30 @@ function getFacilityNameFromId(facilityTypeId: number): string {
 }
 
 // Facility name and category mappings - ordered by size (portable -> S -> M -> L)
+// These are fallback categories only - names are now dynamic
 const getFacilityInfo = (typeId: number): { name: string; category: string; sortOrder: number } => {
-  // Try to get the name dynamically first
+  // Always try to get the name dynamically first
   const dynamicName = getFacilityNameFromId(typeId);
   
-  const facilities: Record<number, { name: string; category: string; sortOrder: number }> = {
-    // Printers - ordered by size
-    87162: { name: 'Portable Printer', category: 'Printers', sortOrder: 1 },
-    87119: { name: 'Printer S', category: 'Printers', sortOrder: 2 },
-    88067: { name: 'Printer M', category: 'Printers', sortOrder: 3 },
-    87120: { name: 'Printer L', category: 'Printers', sortOrder: 4 },
-
-    // Refineries - ordered by size
-    87161: { name: 'Portable Refinery', category: 'Refineries', sortOrder: 5 },
-    88063: { name: 'Refinery M', category: 'Refineries', sortOrder: 6 },
-    88064: { name: 'Refinery L', category: 'Refineries', sortOrder: 7 },
-
-    // Shipyards - ordered by size
-    88069: { name: 'Shipyard S', category: 'Shipyards', sortOrder: 8 },
-    88070: { name: 'Shipyard M', category: 'Shipyards', sortOrder: 9 },
-    88071: { name: 'Shipyard L', category: 'Shipyards', sortOrder: 10 },
-
-    // Assembler
-    88068: { name: 'Assembler', category: 'Assembler', sortOrder: 11 }
+  // Known category mappings (for sorting)
+  const categories: Record<number, { category: string; sortOrder: number }> = {
+    87162: { category: 'Printers', sortOrder: 1 },
+    87119: { category: 'Printers', sortOrder: 2 },
+    88067: { category: 'Printers', sortOrder: 3 },
+    87120: { category: 'Printers', sortOrder: 4 },
+    87161: { category: 'Refineries', sortOrder: 5 },
+    88063: { category: 'Refineries', sortOrder: 6 },
+    88064: { category: 'Refineries', sortOrder: 7 },
+    88069: { category: 'Shipyards', sortOrder: 8 },
+    88070: { category: 'Shipyards', sortOrder: 9 },
+    88071: { category: 'Shipyards', sortOrder: 10 },
+    88068: { category: 'Assembler', sortOrder: 11 },
+    91978: { category: 'Nursery', sortOrder: 12 }
   };
   
-  const known = facilities[typeId];
+  const known = categories[typeId];
   if (known) {
-    return known;
+    return { name: dynamicName, category: known.category, sortOrder: known.sortOrder };
   }
   
   // Use dynamic name for unknown facilities
