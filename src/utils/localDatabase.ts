@@ -590,6 +590,79 @@ function getBlueprintOutputsList(bpId: number): Array<{ type_id: number; type_na
   }));
 }
 
+// Helper function to calculate base material cost for a single blueprint option
+function calculateBlueprintEfficiency(
+  bp: { blueprint_id: number; output_quantity: number },
+  quantityNeeded: number,
+  blueprintOverrides: { [typeId: number]: number },
+  visited: Set<number>
+): { baseMaterialCost: number; breakdown: { [typeId: number]: number }, names: { [typeId: number]: string } } {
+  const outputQty = bp.output_quantity || 1;
+  const runsNeeded = Math.ceil(quantityNeeded / outputQty);
+  
+  const inputs = getBlueprintInputs(bp.blueprint_id);
+  
+  let totalBaseMaterials = 0;
+  const baseMaterialBreakdown: { [typeId: number]: number } = {};
+  const baseMaterialNames: { [typeId: number]: string } = {};
+  
+  for (const input of inputs) {
+    const scaledQuantity = input.quantity * runsNeeded;
+    
+    // Recursively calculate for each input
+    const inputBpOptions = getBlueprintsForType(input.type_id);
+    
+    if (inputBpOptions.length === 0) {
+      // This is a base material
+      baseMaterialBreakdown[input.type_id] = (baseMaterialBreakdown[input.type_id] || 0) + scaledQuantity;
+      baseMaterialNames[input.type_id] = input.type_name;
+      totalBaseMaterials += scaledQuantity;
+    } else {
+      // Need to find the best option for this input
+      const inputVisited = new Set(visited);
+      if (inputVisited.has(input.type_id)) continue; // Avoid cycles
+      inputVisited.add(input.type_id);
+      
+      // Calculate cost for each option and pick the best
+      let bestCost = Infinity;
+      let bestBreakdown: { [typeId: number]: number } = {};
+      let bestNames: { [typeId: number]: string } = {};
+      
+      for (const inputBp of inputBpOptions) {
+        const result = calculateBlueprintEfficiency(
+          { blueprint_id: inputBp.blueprint_id, output_quantity: inputBp.output_quantity },
+          scaledQuantity,
+          blueprintOverrides,
+          inputVisited
+        );
+        
+        if (result.baseMaterialCost < bestCost) {
+          bestCost = result.baseMaterialCost;
+          bestBreakdown = result.breakdown;
+          bestNames = result.names;
+        }
+      }
+      
+      // If no valid option found, treat as base material
+      if (bestCost === Infinity) {
+        baseMaterialBreakdown[input.type_id] = (baseMaterialBreakdown[input.type_id] || 0) + scaledQuantity;
+        baseMaterialNames[input.type_id] = input.type_name;
+        totalBaseMaterials += scaledQuantity;
+      } else {
+        // Add the best option's breakdown
+        for (const [matId, qty] of Object.entries(bestBreakdown)) {
+          const mid = parseInt(matId);
+          baseMaterialBreakdown[mid] = (baseMaterialBreakdown[mid] || 0) + (qty as number);
+        }
+        Object.assign(baseMaterialNames, bestNames);
+        totalBaseMaterials += bestCost;
+      }
+    }
+  }
+  
+  return { baseMaterialCost: totalBaseMaterials, breakdown: baseMaterialBreakdown, names: baseMaterialNames };
+}
+
 // Recursive function to build production tree
 function buildProductionTree(
   typeId: number,
@@ -633,11 +706,34 @@ function buildProductionTree(
     };
   }
   
-  // Determine which blueprint to use
+  // Determine which blueprint to use - select the most efficient one
   let selectedBp = allBlueprints[0];
+  
+  // If user has explicitly selected a blueprint, use that
   if (blueprintOverrides[typeId]) {
     const override = allBlueprints.find(bp => bp.blueprint_id === blueprintOverrides[typeId]);
     if (override) selectedBp = override;
+  } else if (allBlueprints.length > 1) {
+    // Auto-select the most efficient blueprint based on base material cost
+    let bestCost = Infinity;
+    let bestBp = allBlueprints[0];
+    const visitedCopy = new Set(visited);
+    visitedCopy.add(typeId);
+    
+    for (const bp of allBlueprints) {
+      const efficiency = calculateBlueprintEfficiency(
+        { blueprint_id: bp.blueprint_id, output_quantity: bp.output_quantity },
+        quantityNeeded,
+        blueprintOverrides,
+        visitedCopy
+      );
+      
+      if (efficiency.baseMaterialCost < bestCost) {
+        bestCost = efficiency.baseMaterialCost;
+        bestBp = bp;
+      }
+    }
+    selectedBp = bestBp;
   }
   
   const outputQty = selectedBp.output_quantity || 1;
