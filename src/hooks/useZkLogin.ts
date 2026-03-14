@@ -211,9 +211,13 @@ export function useZkLogin(): ZkLoginState {
     setError(null);
 
     try {
-      // Check URL params first, then sessionStorage
+      // Check URL params first (query string), then sessionStorage, then URL hash
       const params = new URLSearchParams(window.location.search);
-      const idToken = params.get('id_token') || params.get('jwt') || sessionStorage.getItem('zklogin-id_token');
+      const hashParams = new URLSearchParams(window.location.hash.substring(1)); // Remove leading #
+      
+      const idToken = params.get('id_token') || params.get('jwt') || 
+                      sessionStorage.getItem('zklogin-id_token') ||
+                      hashParams.get('id_token');
 
       if (!idToken) {
         throw new Error('No identity token received');
