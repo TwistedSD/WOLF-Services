@@ -33,7 +33,7 @@ jobs:
 
       - name: Build
         env:
-          VITE_BASE_PATH: ${{ secrets.BASE_PATH || '/WOLF-Website/' }}
+          VITE_BASE_PATH: ${{ secrets.BASE_PATH || '/' }}
           VITE_API_URL: ${{ secrets.API_URL }}
           VITE_WORLD_API_HTTP: ${{ secrets.WORLD_API_HTTP || 'https://world-api-stillness.live.tech.evefrontier.com' }}
           VITE_GATEWAY_HTTP: ${{ secrets.GATEWAY_HTTP || 'https://blockchain-gateway-stillness.live.tech.evefrontier.com' }}
