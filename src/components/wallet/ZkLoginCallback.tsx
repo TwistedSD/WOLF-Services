@@ -8,10 +8,20 @@ export const ZkLoginCallback: React.FC = () => {
 
   useEffect(() => {
     const handleCallback = async () => {
+      console.log(
+        "Processing OAuth callback, hash:",
+        window.location.hash.slice(0, 50),
+      );
+
+      // Check both query params and hash params
       const params = new URLSearchParams(window.location.search);
-      const idToken = params.get("id_token");
-      const error = params.get("error");
-      const state = params.get("state");
+      const hashParams = new URLSearchParams(window.location.hash.substring(1));
+
+      const idToken = params.get("id_token") || hashParams.get("id_token");
+      const error = params.get("error") || hashParams.get("error");
+      const state = params.get("state") || hashParams.get("state");
+
+      console.log("Token found:", !!idToken, "Error:", error);
 
       if (error) {
         setStatus("error");
@@ -26,15 +36,13 @@ export const ZkLoginCallback: React.FC = () => {
       }
 
       // Store the token and redirect back to home
-      // The useZkLogin hook will pick up from localStorage
       try {
-        // Store the JWT for the hook to process
         sessionStorage.setItem("zklogin-id_token", idToken);
         if (state) {
           sessionStorage.setItem("zklogin-state", state);
         }
 
-        // Redirect to home page - the hook will handle authentication
+        // Redirect to home page
         window.location.href = "/";
       } catch (err) {
         setStatus("error");
