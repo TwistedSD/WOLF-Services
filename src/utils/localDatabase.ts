@@ -541,9 +541,10 @@ function isBaseMaterial(typeId: number): boolean {
 }
 
 // Type IDs for materials that take 1000x longer to collect (should be penalized in efficiency calculation)
-// Only Salvaged Materials - not Mummified Clone (per user request)
+// Both Salvaged Materials and Mummified Clone
 const SLOW_MATERIAL_TYPE_IDS = new Set([
   88764, // Salvaged Materials
+  88765, // Mummified Clone
 ]);
 
 // Check if a blueprint uses slow materials (that take 1000x longer to collect)
