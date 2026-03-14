@@ -68,13 +68,18 @@ export function useProductionCalculator(
         // Ensure database is loaded
         await loadLocalDatabase();
         
+        console.log('useProductionCalculator: calculating for typeId:', typeId, 'quantity:', quantity);
+        
         // Calculate production using local database
         const productionResult = calculateProduction(typeId, quantity, blueprintOverrides || {});
+        
+        console.log('useProductionCalculator: result:', productionResult);
         
         if (productionResult) {
           // Cast to our interface - they should be compatible now
           setResult(productionResult as ProductionNode);
         } else {
+          console.error('Production result is null for typeId:', typeId);
           setError("Could not calculate production for this item");
         }
       } catch (err) {

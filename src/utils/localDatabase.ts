@@ -599,6 +599,7 @@ function buildProductionTree(
   
   // Get all possible blueprints for this type (blueprints that PRODUCE this type)
   const allBlueprints = getBlueprintsForType(typeId);
+  console.log(`[${typeName}] Found ${allBlueprints.length} blueprints:`, allBlueprints.map(bp => `${bp.facility_name} (bp ${bp.blueprint_id})`));
   
   // If no blueprints available, this is a base material (must be mined/purchased)
   if (allBlueprints.length === 0) {
