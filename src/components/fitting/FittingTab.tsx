@@ -1,9 +1,15 @@
-import React, { useState } from 'react';
-import { useFittingData, Ship, Module, Charge } from '../../hooks/useFittingData';
-import { ShipList } from './ShipList';
-import { FittingWindow } from './FittingWindow';
-import { StatsPanel } from './StatsPanel';
-import { ImportExportModal } from './ImportExportModal';
+import React, { useState } from "react";
+import {
+  useFittingData,
+  Ship,
+  Module,
+  Charge,
+} from "../../hooks/useFittingData";
+import { ShipList } from "./ShipList";
+import { FittingWindow } from "./FittingWindow";
+import { StatsPanel } from "./StatsPanel";
+import { ImportExportModal } from "./ImportExportModal";
+import { StatHelpPanel } from "./StatHelpPanel";
 
 export interface FittedModule {
   module: Module;
@@ -27,12 +33,13 @@ export function FittingTab() {
     highSlots: [],
     midSlots: [],
     lowSlots: [],
-    engineSlots: []
+    engineSlots: [],
   });
   const [importExportModal, setImportExportModal] = useState<{
     isOpen: boolean;
-    mode: 'import' | 'export';
-  }>({ isOpen: false, mode: 'export' });
+    mode: "import" | "export";
+  }>({ isOpen: false, mode: "export" });
+  const [showStatHelp, setShowStatHelp] = useState(false);
 
   const handleShipSelect = (ship: Ship) => {
     setSelectedShip(ship);
@@ -43,14 +50,18 @@ export function FittingTab() {
       highSlots: Array(ship.hiSlots || 0).fill(null),
       midSlots: Array(ship.midSlots || 0).fill(null),
       lowSlots: Array(ship.lowSlots || 0).fill(null),
-      engineSlots: Array(ship.engineSlots || 0).fill(null)
+      engineSlots: Array(ship.engineSlots || 0).fill(null),
     });
   };
 
-  const handleModuleFit = (module: Module, slotType: string, slotIndex: number) => {
-    setFitting(prev => {
+  const handleModuleFit = (
+    module: Module,
+    slotType: string,
+    slotIndex: number,
+  ) => {
+    setFitting((prev) => {
       const newFitting = { ...prev };
-      const slotKey = `${slotType}Slots` as keyof Omit<Fitting, 'ship'>;
+      const slotKey = `${slotType}Slots` as keyof Omit<Fitting, "ship">;
       const slots = [...(newFitting[slotKey] as (FittedModule | null)[])];
 
       // Replace module in slot (whether empty or occupied)
@@ -62,9 +73,9 @@ export function FittingTab() {
   };
 
   const handleModuleRemove = (slotType: string, slotIndex: number) => {
-    setFitting(prev => {
+    setFitting((prev) => {
       const newFitting = { ...prev };
-      const slotKey = `${slotType}Slots` as keyof Omit<Fitting, 'ship'>;
+      const slotKey = `${slotType}Slots` as keyof Omit<Fitting, "ship">;
       const slots = [...(newFitting[slotKey] as (FittedModule | null)[])];
       slots[slotIndex] = null;
       newFitting[slotKey] = slots as any;
@@ -73,16 +84,20 @@ export function FittingTab() {
     });
   };
 
-  const handleChargeFit = (charge: Charge, slotType: string, slotIndex: number) => {
-    setFitting(prev => {
+  const handleChargeFit = (
+    charge: Charge,
+    slotType: string,
+    slotIndex: number,
+  ) => {
+    setFitting((prev) => {
       const newFitting = { ...prev };
-      const slotKey = `${slotType}Slots` as keyof Omit<Fitting, 'ship'>;
+      const slotKey = `${slotType}Slots` as keyof Omit<Fitting, "ship">;
       const slots = [...(newFitting[slotKey] as (FittedModule | null)[])];
 
       if (slots[slotIndex]) {
         slots[slotIndex] = {
           ...slots[slotIndex]!,
-          charge
+          charge,
         };
       }
 
@@ -92,15 +107,15 @@ export function FittingTab() {
   };
 
   const handleChargeRemove = (slotType: string, slotIndex: number) => {
-    setFitting(prev => {
+    setFitting((prev) => {
       const newFitting = { ...prev };
-      const slotKey = `${slotType}Slots` as keyof Omit<Fitting, 'ship'>;
+      const slotKey = `${slotType}Slots` as keyof Omit<Fitting, "ship">;
       const slots = [...(newFitting[slotKey] as (FittedModule | null)[])];
 
       if (slots[slotIndex]) {
         slots[slotIndex] = {
           ...slots[slotIndex]!,
-          charge: null
+          charge: null,
         };
       }
 
@@ -143,13 +158,19 @@ export function FittingTab() {
       {/* Import/Export Buttons */}
       <div className="mb-4 flex gap-2 justify-end">
         <button
-          onClick={() => setImportExportModal({ isOpen: true, mode: 'import' })}
+          onClick={() => setShowStatHelp(true)}
+          className="px-4 py-2 border-2 border-info bg-info/10 hover:bg-info/20 text-info transition-colors"
+        >
+          Stat Help
+        </button>
+        <button
+          onClick={() => setImportExportModal({ isOpen: true, mode: "import" })}
           className="px-4 py-2 border-2 border-primary bg-primary/10 hover:bg-primary/20 text-primary transition-colors"
         >
           Import Fitting
         </button>
         <button
-          onClick={() => setImportExportModal({ isOpen: true, mode: 'export' })}
+          onClick={() => setImportExportModal({ isOpen: true, mode: "export" })}
           disabled={!fitting.ship}
           className="px-4 py-2 border-2 border-secondary bg-secondary/10 hover:bg-secondary/20 text-secondary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
@@ -157,7 +178,10 @@ export function FittingTab() {
         </button>
       </div>
 
-      <div className="grid grid-cols-12 gap-4" style={{ height: 'calc(100vh - 200px)' }}>
+      <div
+        className="grid grid-cols-12 gap-4"
+        style={{ height: "calc(100vh - 200px)" }}
+      >
         {/* Ship List - Left Panel */}
         <div className="col-span-3 h-full">
           <ShipList
@@ -188,12 +212,20 @@ export function FittingTab() {
       {/* Import/Export Modal */}
       <ImportExportModal
         isOpen={importExportModal.isOpen}
-        onClose={() => setImportExportModal({ ...importExportModal, isOpen: false })}
+        onClose={() =>
+          setImportExportModal({ ...importExportModal, isOpen: false })
+        }
         mode={importExportModal.mode}
         fitting={fitting}
         ships={ships}
         modules={modules}
         onImport={handleImportFitting}
+      />
+
+      {/* Stat Help Modal */}
+      <StatHelpPanel
+        isOpen={showStatHelp}
+        onClose={() => setShowStatHelp(false)}
       />
     </div>
   );
