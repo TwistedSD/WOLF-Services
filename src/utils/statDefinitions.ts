@@ -209,6 +209,109 @@ export const SHIP_STAT_DEFINITIONS: Record<string, StatDefinition> = {
     higherIsBetter: true,
     applicableTo: 'ship'
   },
+
+  // Offense - DPS
+  weaponDPS: {
+    id: 'weaponDPS',
+    name: 'Weapon DPS',
+    description: 'Damage per second from projectile and energy weapons. Calculated from weapon damage, damage multiplier, and cycle time.',
+    unit: 'DPS',
+    category: 'offense',
+    higherIsBetter: true,
+    applicableTo: 'module'
+  },
+  missileDPS: {
+    id: 'missileDPS',
+    name: 'Missile DPS',
+    description: 'Damage per second from missile weapons. Calculated from missile damage and flight time.',
+    unit: 'DPS',
+    category: 'offense',
+    higherIsBetter: true,
+    applicableTo: 'module'
+  },
+  emDPS: {
+    id: 'emDPS',
+    name: 'EM DPS',
+    description: 'EM (Electromagnetic) damage component of total DPS. Effective against shields.',
+    unit: 'DPS',
+    category: 'offense',
+    higherIsBetter: true,
+    applicableTo: 'module'
+  },
+  thermalDPS: {
+    id: 'thermalDPS',
+    name: 'Thermal DPS',
+    description: 'Thermal damage component of total DPS. Effective against armor.',
+    unit: 'DPS',
+    category: 'offense',
+    higherIsBetter: true,
+    applicableTo: 'module'
+  },
+  kineticDPS: {
+    id: 'kineticDPS',
+    name: 'Kinetic DPS',
+    description: 'Kinetic damage component of total DPS. Effective against shields and armor.',
+    unit: 'DPS',
+    category: 'offense',
+    higherIsBetter: true,
+    applicableTo: 'module'
+  },
+  explosiveDPS: {
+    id: 'explosiveDPS',
+    name: 'Explosive DPS',
+    description: 'Explosive damage component of total DPS. Effective against hull.',
+    unit: 'DPS',
+    category: 'offense',
+    higherIsBetter: true,
+    applicableTo: 'module'
+  },
+  alphaDamage: {
+    id: 'alphaDamage',
+    name: 'Alpha Damage',
+    description: 'Total damage from one volley of all equipped weapons. Also known as "alpha" - the burst damage capability of your ship.',
+    unit: 'Dmg',
+    category: 'offense',
+    higherIsBetter: true,
+    applicableTo: 'module'
+  },
+  damageProfile: {
+    id: 'damageProfile',
+    name: 'Damage Profile',
+    description: 'Percentage breakdown of damage types (EM, Thermal, Kinetic, Explosive) in your ships total damage output. Useful for selecting the right damage type for enemies resistances.',
+    unit: '%',
+    category: 'offense',
+    higherIsBetter: true,
+    applicableTo: 'module'
+  },
+
+  // Mining
+  miningRate: {
+    id: 'miningRate',
+    name: 'Mining Rate',
+    description: 'Volume of ore extracted per second. Higher is better for mining efficiency.',
+    unit: 'm³/s',
+    category: 'offense',
+    higherIsBetter: true,
+    applicableTo: 'module'
+  },
+  miningYield: {
+    id: 'miningYield',
+    name: 'Mining Yield',
+    description: 'Volume of ore extracted per mining cycle. Combined with cycle time to determine mining rate.',
+    unit: 'm³',
+    category: 'offense',
+    higherIsBetter: true,
+    applicableTo: 'module'
+  },
+  miningCycleTime: {
+    id: 'miningCycleTime',
+    name: 'Mining Cycle Time',
+    description: 'Time in milliseconds for one mining cycle. Lower is better as it means faster extraction.',
+    unit: 'ms',
+    category: 'offense',
+    higherIsBetter: false,
+    applicableTo: 'module'
+  },
 };
 
 // Module stat definitions

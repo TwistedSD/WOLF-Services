@@ -271,6 +271,134 @@ export function StatsPanel({ fitting }: StatsPanelProps) {
           {renderStatRow("Scan Resolution", ship.scanResolution || 0, "mm")}
         </div>
 
+        {/* Offense - DPS */}
+        {(stats?.weaponDPS || 0) > 0 || (stats?.missileDPS || 0) > 0 ? (
+          <div className="mb-6">
+            <h3 className="text-sm font-bold text-primary mb-2">Offense</h3>
+            {renderStatRow(
+              "Total DPS",
+              ((stats?.weaponDPS || 0) + (stats?.missileDPS || 0)).toFixed(1),
+              "DPS",
+            )}
+            {(stats?.alphaDamage || 0) > 0 &&
+              renderStatRow(
+                "Alpha (Volley)",
+                (stats?.alphaDamage || 0).toFixed(1),
+                "Dmg",
+              )}
+            {/* Damage Profile */}
+            {stats?.damageProfile &&
+              (stats.damageProfile.em > 0 ||
+                stats.damageProfile.thermal > 0 ||
+                stats.damageProfile.kinetic > 0 ||
+                stats.damageProfile.explosive > 0) && (
+                <div className="mt-2 mb-2">
+                  <div className="text-xs text-foreground-muted mb-1">
+                    Damage Profile
+                  </div>
+                  <div className="flex gap-1">
+                    {stats.damageProfile.em > 0 && (
+                      <div
+                        className="h-3 flex items-center justify-center text-xs text-white"
+                        style={{
+                          width: `${stats.damageProfile.em}%`,
+                          backgroundColor: "#9333ea", // purple for EM
+                        }}
+                        title={`EM: ${stats.damageProfile.em.toFixed(1)}%`}
+                      >
+                        {stats.damageProfile.em >= 15
+                          ? `${stats.damageProfile.em.toFixed(0)}%`
+                          : ""}
+                      </div>
+                    )}
+                    {stats.damageProfile.thermal > 0 && (
+                      <div
+                        className="h-3 flex items-center justify-center text-xs text-white"
+                        style={{
+                          width: `${stats.damageProfile.thermal}%`,
+                          backgroundColor: "#ef4444", // red for Thermal
+                        }}
+                        title={`Thermal: ${stats.damageProfile.thermal.toFixed(1)}%`}
+                      >
+                        {stats.damageProfile.thermal >= 15
+                          ? `${stats.damageProfile.thermal.toFixed(0)}%`
+                          : ""}
+                      </div>
+                    )}
+                    {stats.damageProfile.kinetic > 0 && (
+                      <div
+                        className="h-3 flex items-center justify-center text-xs text-white"
+                        style={{
+                          width: `${stats.damageProfile.kinetic}%`,
+                          backgroundColor: "#3b82f6", // blue for Kinetic
+                        }}
+                        title={`Kinetic: ${stats.damageProfile.kinetic.toFixed(1)}%`}
+                      >
+                        {stats.damageProfile.kinetic >= 15
+                          ? `${stats.damageProfile.kinetic.toFixed(0)}%`
+                          : ""}
+                      </div>
+                    )}
+                    {stats.damageProfile.explosive > 0 && (
+                      <div
+                        className="h-3 flex items-center justify-center text-xs text-white"
+                        style={{
+                          width: `${stats.damageProfile.explosive}%`,
+                          backgroundColor: "#f59e0b", // orange for Explosive
+                        }}
+                        title={`Explosive: ${stats.damageProfile.explosive.toFixed(1)}%`}
+                      >
+                        {stats.damageProfile.explosive >= 15
+                          ? `${stats.damageProfile.explosive.toFixed(0)}%`
+                          : ""}
+                      </div>
+                    )}
+                  </div>
+                  {/* Legend */}
+                  <div className="flex gap-3 mt-1 text-xs">
+                    {stats.damageProfile.em > 0 && (
+                      <span style={{ color: "#9333ea" }}>
+                        EM: {stats.damageProfile.em.toFixed(1)}%
+                      </span>
+                    )}
+                    {stats.damageProfile.thermal > 0 && (
+                      <span style={{ color: "#ef4444" }}>
+                        Therm: {stats.damageProfile.thermal.toFixed(1)}%
+                      </span>
+                    )}
+                    {stats.damageProfile.kinetic > 0 && (
+                      <span style={{ color: "#3b82f6" }}>
+                        Kin: {stats.damageProfile.kinetic.toFixed(1)}%
+                      </span>
+                    )}
+                    {stats.damageProfile.explosive > 0 && (
+                      <span style={{ color: "#f59e0b" }}>
+                        Exp: {stats.damageProfile.explosive.toFixed(1)}%
+                      </span>
+                    )}
+                  </div>
+                </div>
+              )}
+          </div>
+        ) : null}
+
+        {/* Mining */}
+        {(stats?.miningRate || 0) > 0 ? (
+          <div className="mb-6">
+            <h3 className="text-sm font-bold text-primary mb-2">Mining</h3>
+            {renderStatRow(
+              "Mining Rate",
+              (stats?.miningRate || 0).toFixed(1),
+              "m³/s",
+            )}
+            {renderStatRow(
+              "Yield per Cycle",
+              (stats?.miningYield || 0).toFixed(0),
+              "m³",
+            )}
+          </div>
+        ) : null}
+
         {/* Fitted Modules */}
         <div className="mb-6">
           <h3 className="text-sm font-bold text-primary mb-2">

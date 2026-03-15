@@ -39,6 +39,34 @@ export interface CalculatedStats {
   // Targeting
   maxLockedTargets: number;
   scanResolution: number;
+
+  // Offense - DPS
+  weaponDPS: number;          // Total DPS from weapons
+  missileDPS: number;         // Missile DPS
+  emDPS: number;              // EM damage component
+  explosiveDPS: number;       // Explosive damage component
+  kineticDPS: number;         // Kinetic damage component
+  thermalDPS: number;         // Thermal damage component
+
+  // Alpha (volley) damage
+  alphaDamage: number;        // Total damage from one volley
+  alphaEm: number;
+  alphaThermal: number;
+  alphaKinetic: number;
+  alphaExplosive: number;
+
+  // Damage profile (percentage breakdown)
+  damageProfile: {
+    em: number;
+    thermal: number;
+    kinetic: number;
+    explosive: number;
+  };
+
+  // Mining
+  miningYield: number;        // Total mining yield per cycle
+  miningCycleTime: number;    // Effective cycle time in seconds
+  miningRate: number;         // Mining per second
 }
 
 /**
@@ -109,7 +137,35 @@ export function calculateFittingStats(fitting: Fitting): CalculatedStats | null 
 
     // Targeting
     maxLockedTargets: ship.maxLockedTargets || 0,
-    scanResolution: ship.scanResolution || 0
+    scanResolution: ship.scanResolution || 0,
+
+    // Offense - DPS (will be calculated from weapons)
+    weaponDPS: 0,
+    missileDPS: 0,
+    emDPS: 0,
+    explosiveDPS: 0,
+    kineticDPS: 0,
+    thermalDPS: 0,
+
+    // Mining (will be calculated from mining modules)
+    miningYield: 0,
+    miningCycleTime: 0,
+    miningRate: 0,
+
+    // Alpha damage (will be calculated from weapons)
+    alphaDamage: 0,
+    alphaEm: 0,
+    alphaThermal: 0,
+    alphaKinetic: 0,
+    alphaExplosive: 0,
+
+    // Damage profile
+    damageProfile: {
+      em: 0,
+      thermal: 0,
+      kinetic: 0,
+      explosive: 0
+    }
   };
 
   // Collect resistance bonuses for stacking penalty calculation
@@ -245,6 +301,121 @@ export function calculateFittingStats(fitting: Fitting): CalculatedStats | null 
     const moduleResonance = 1 - (moduleResistance / 100);
     const totalResonance = shipResonance * moduleResonance;
     stats.explosiveResistance = (1 - totalResonance) * 100;
+  }
+
+  // Calculate DPS from weapons
+  // For each weapon module, calculate damage per second
+  let totalAlphaEm = 0;
+  let totalAlphaThermal = 0;
+  let totalAlphaKinetic = 0;
+  let totalAlphaExplosive = 0;
+  
+  fittedModules.forEach(fm => {
+    const module = fm.module;
+    const charge = fm.charge;
+    
+    // Check if this is a weapon (has damage attributes)
+    const hasWeaponDamage = module.emDamage || module.explosiveDamage || 
+                           module.kineticDamage || module.thermalDamage ||
+                           module.weaponDPS || module.missileDamage;
+    
+    if (hasWeaponDamage) {
+      // Get duration (in milliseconds) - default to 1 second if not specified
+      const duration = module.duration || 1000;
+      
+      // Calculate damage per cycle
+      let cycleDamage = 0;
+      
+      // Apply damage multiplier if present
+      const multiplier = module.damageMultiplier || 1;
+      
+      // Add damage components (with charge modifiers if applicable)
+      if (module.emDamage) {
+        let emDmg = module.emDamage * multiplier;
+        if (charge?.emResistanceBonusMod) {
+          emDmg *= (1 + charge.emResistanceBonusMod / 100);
+        }
+        cycleDamage += emDmg;
+        stats.emDPS += (emDmg * 1000) / duration;
+        totalAlphaEm += emDmg;
+      }
+      
+      if (module.explosiveDamage) {
+        let expDmg = module.explosiveDamage * multiplier;
+        if (charge?.explosiveResistanceBonusMod) {
+          expDmg *= (1 + charge.explosiveResistanceBonusMod / 100);
+        }
+        cycleDamage += expDmg;
+        stats.explosiveDPS += (expDmg * 1000) / duration;
+        totalAlphaExplosive += expDmg;
+      }
+      
+      if (module.kineticDamage) {
+        let kinDmg = module.kineticDamage * multiplier;
+        if (charge?.kineticResistanceBonusMod) {
+          kinDmg *= (1 + charge.kineticResistanceBonusMod / 100);
+        }
+        cycleDamage += kinDmg;
+        stats.kineticDPS += (kinDmg * 1000) / duration;
+        totalAlphaKinetic += kinDmg;
+      }
+      
+      if (module.thermalDamage) {
+        let thermDmg = module.thermalDamage * multiplier;
+        if (charge?.thermalResistanceBonusMod) {
+          thermDmg *= (1 + charge.thermalResistanceBonusMod / 100);
+        }
+        cycleDamage += thermDmg;
+        stats.thermalDPS += (thermDmg * 1000) / duration;
+        totalAlphaThermal += thermDmg;
+      }
+      
+      // Add missile damage
+      if (module.missileDamage) {
+        stats.missileDPS += (module.missileDamage * 1000) / duration;
+      }
+      
+      // Add weapon DPS directly if specified
+      if (module.weaponDPS) {
+        stats.weaponDPS += module.weaponDPS;
+      }
+      
+      // Calculate total DPS for projectile/energy weapons
+      if (cycleDamage > 0) {
+        stats.weaponDPS += (cycleDamage * 1000) / duration;
+      }
+    }
+    
+    // Check if this is a mining module
+    if (module.miningAmount) {
+      // Get mining cycle time
+      const cycleTime = module.miningCycleTime || module.miningDuration || module.duration || 60000; // default 60s
+      const miningAmount = module.miningAmount;
+      
+      stats.miningYield += miningAmount;
+      stats.miningRate += (miningAmount * 1000) / cycleTime;
+      
+      // Use the longest cycle time as effective cycle time
+      if (cycleTime > stats.miningCycleTime) {
+        stats.miningCycleTime = cycleTime;
+      }
+    }
+  });
+
+  // Calculate alpha damage (damage from one volley)
+  stats.alphaEm = totalAlphaEm;
+  stats.alphaThermal = totalAlphaThermal;
+  stats.alphaKinetic = totalAlphaKinetic;
+  stats.alphaExplosive = totalAlphaExplosive;
+  stats.alphaDamage = totalAlphaEm + totalAlphaThermal + totalAlphaKinetic + totalAlphaExplosive;
+
+  // Calculate damage profile percentages
+  const totalDamage = stats.alphaDamage;
+  if (totalDamage > 0) {
+    stats.damageProfile.em = (totalAlphaEm / totalDamage) * 100;
+    stats.damageProfile.thermal = (totalAlphaThermal / totalDamage) * 100;
+    stats.damageProfile.kinetic = (totalAlphaKinetic / totalDamage) * 100;
+    stats.damageProfile.explosive = (totalAlphaExplosive / totalDamage) * 100;
   }
 
   // Calculate capacitor stability

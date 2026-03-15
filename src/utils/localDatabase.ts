@@ -355,12 +355,24 @@ const MODULE_ATTR_MAP: Record<number, string> = {
   30: 'power',
   50: 'cpu',
   55: 'capacitorRecharge',  // For engines - capacitor recharge in GJ/s
+  64: 'damageMultiplier',
   72: 'shieldCapacity',
   73: 'duration',
   84: 'armorRepairAmount',
   97: 'speedMultiplier',
+  116: 'emDamage',
+  117: 'explosiveDamage',
+  118: 'kineticDamage',
+  119: 'thermalDamage',
   128: 'chargeSize',
   134: 'shieldRechargeRateMultiplier',
+  204: 'weaponDPS',         // Base weapon DPS
+  205: 'missileDamage',     // Missile damage
+  208: 'weaponRange',       // Maximum range
+  209: 'falloff',           // Falloff range
+  210: 'trackingSpeed',     // Tracking speed
+  211: 'maxRange',          // Alternative max range
+  212: 'reloadTime',
   216: 'capacitorNeedMultiplier',  // Multiplier to module capacitor usage
   5619: 'rechargePenalty',  // Direct reduction to engine recharge (GJ/s)
   604: 'chargeGroup1',
@@ -374,7 +386,11 @@ const MODULE_ATTR_MAP: Record<number, string> = {
   1299: 'canFitShipGroup02',
   1300: 'canFitShipGroup03',
   1301: 'canFitShipGroup04',
-  1795: 'reloadTime'
+  1795: 'reloadTime',
+  // Mining attributes
+   102: 'miningAmount',      // Mining laser amount
+  103: 'miningCycleTime',   // Mining cycle time
+  104: 'miningDuration',    // Alternative mining duration
 };
 
 function getDogmaAttributes(typeId: number, isModule: boolean = false): Record<string, number> {

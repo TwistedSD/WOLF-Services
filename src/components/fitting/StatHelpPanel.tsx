@@ -21,6 +21,7 @@ export function StatHelpPanel({ isOpen, onClose }: StatHelpPanelProps) {
     { id: "navigation", label: "Navigation" },
     { id: "targeting", label: "Targeting" },
     { id: "resources", label: "Resources" },
+    { id: "offense", label: "Offense" },
   ];
 
   const currentStats = getStatsByCategory(

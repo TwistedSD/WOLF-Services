@@ -66,10 +66,28 @@ export interface Module {
   capacitorRecharge?: number;  // Engine recharge (attr 55) - GJ/s
   rechargePenalty?: number;  // Module penalty (attr 5619) - GJ/s reduction
   capacitorNeedMultiplier?: number;  // attr 216 - multiplier to capacitor usage
+  // Resistance bonuses
   emResistanceBonus?: number;
   explosiveResistanceBonus?: number;
   kineticResistanceBonus?: number;
   thermalResistanceBonus?: number;
+  // Weapon stats
+  damageMultiplier?: number;
+  emDamage?: number;
+  explosiveDamage?: number;
+  kineticDamage?: number;
+  thermalDamage?: number;
+  weaponDPS?: number;
+  missileDamage?: number;
+  weaponRange?: number;
+  falloff?: number;
+  trackingSpeed?: number;
+  maxRange?: number;
+  // Mining stats
+  miningAmount?: number;
+  miningCycleTime?: number;
+  miningDuration?: number;
+  // Other
   maxGroupFitted?: number;
   canFitShipGroup01?: number;
   canFitShipGroup02?: number;
