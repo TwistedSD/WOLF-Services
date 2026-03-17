@@ -359,6 +359,37 @@ export const BlueprintsTab: React.FC<BlueprintsTabProps> = () => {
                   ))}
                 </div>
 
+                {/* Direct Inputs - from blueprint */}
+                <div
+                  className="border-b-2"
+                  style={{ borderColor: "var(--primary)" }}
+                >
+                  <div
+                    className="px-3 py-2"
+                    style={{ backgroundColor: "var(--background-lighter)" }}
+                  >
+                    <h4 className="text-xs font-semibold text-foreground-muted uppercase">
+                      Inputs (per run)
+                    </h4>
+                  </div>
+                  {blueprintDetails.inputs.length > 0 ? (
+                    blueprintDetails.inputs.map((input) => (
+                      <MaterialRow
+                        key={input.type_id}
+                        material={{
+                          ...input,
+                          quantity: input.quantity * runs,
+                        }}
+                        depth={0}
+                      />
+                    ))
+                  ) : (
+                    <div className="px-3 py-2 text-sm text-foreground-muted">
+                      No inputs required
+                    </div>
+                  )}
+                </div>
+
                 {/* Inputs - Production Tree */}
                 {loadingProduction ? (
                   <div className="p-6 text-center text-foreground-muted">
