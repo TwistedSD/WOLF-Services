@@ -376,6 +376,10 @@ const MODULE_ATTR_MAP: Record<number, string> = {
   216: 'capacitorNeedMultiplier',  // Multiplier to module capacitor usage
   5619: 'rechargePenalty',  // Direct reduction to engine recharge (GJ/s)
   604: 'chargeGroup1',
+  605: 'chargeGroup2',
+  606: 'chargeGroup3',
+  607: 'chargeGroup4',
+  608: 'chargeGroup5',
   984: 'emResistanceBonus',
   985: 'explosiveResistanceBonus',
   986: 'kineticResistanceBonus',
@@ -456,6 +460,32 @@ export function getAllShips() {
 
 // Get all modules
 export function getAllModules() {
+  // First get all charges that exist in the game
+  const allCharges: Array<{typeId: number, typeName: string, groupId: number, chargeSize?: number}> = [];
+  
+  // Get charges from typesFull - items that have charge-related attributes
+  typesFull.forEach(t => {
+    if (!t.extra_data || t.published !== 1) return;
+    
+    try {
+      const extraData = JSON.parse(t.extra_data!);
+      // Check if this is a charge/ammunition type (has chargeSize or is in known charge groups)
+      const dogma = getDogmaAttributes(t.type_id, false);
+      
+      // Charges typically have chargeSize attribute
+      if (dogma.chargeSize !== undefined) {
+        allCharges.push({
+          typeId: t.type_id,
+          typeName: getTypeName(t.type_id),
+          groupId: extraData.groupID,
+          chargeSize: dogma.chargeSize
+        });
+      }
+    } catch {
+      // Skip invalid entries
+    }
+  });
+  
   const modules = typesFull
     .filter(t => t.extra_data && t.published === 1)
     .map(t => {
@@ -482,13 +512,40 @@ export function getAllModules() {
       else if (m.typeName.includes('(M)')) shipSize = 'M';
       else if (m.typeName.includes('(L)')) shipSize = 'L';
       
+      // Find compatible charges based on charge groups and charge size
+      const compatibleCharges: Array<{typeId: number, typeName: string, groupId: number, chargeSize?: number}> = [];
+      const moduleChargeGroups = [
+        dogma.chargeGroup1,
+        dogma.chargeGroup2,
+        dogma.chargeGroup3,
+        dogma.chargeGroup4,
+        dogma.chargeGroup5
+      ].filter(Boolean);
+      
+      if (moduleChargeGroups.length > 0 || dogma.chargeSize !== undefined) {
+        // Module accepts charges - find compatible ones
+        allCharges.forEach(charge => {
+          // Check if charge group matches
+          const groupMatch = moduleChargeGroups.includes(charge.groupId);
+          // Check if charge size matches (0 means any size, or match specific size)
+          const sizeMatch = dogma.chargeSize === undefined || 
+                          dogma.chargeSize === 0 || 
+                          dogma.chargeSize === charge.chargeSize;
+          
+          if (groupMatch && sizeMatch) {
+            compatibleCharges.push(charge);
+          }
+        });
+      }
+      
       return {
         typeId: m.typeId,
         typeName: m.typeName,
         groupId: m.groupId,
         slotType,
         ...(shipSize && { shipSize }),
-        ...dogma
+        ...dogma,
+        compatibleCharges: compatibleCharges.length > 0 ? compatibleCharges : undefined
       };
     });
 

@@ -271,21 +271,19 @@ export function StatsPanel({ fitting }: StatsPanelProps) {
           {renderStatRow("Scan Resolution", ship.scanResolution || 0, "mm")}
         </div>
 
-        {/* Offense - DPS */}
-        {(stats?.weaponDPS || 0) > 0 || (stats?.missileDPS || 0) > 0 ? (
-          <div className="mb-6">
-            <h3 className="text-sm font-bold text-primary mb-2">Offense</h3>
-            {renderStatRow(
-              "Total DPS",
-              ((stats?.weaponDPS || 0) + (stats?.missileDPS || 0)).toFixed(1),
-              "DPS",
-            )}
-            {(stats?.alphaDamage || 0) > 0 &&
-              renderStatRow(
-                "Alpha (Volley)",
-                (stats?.alphaDamage || 0).toFixed(1),
-                "Dmg",
-              )}
+        {/* Offense - DPS - Always show when ship is fitted */}
+        <div className="mb-6">
+          <h3 className="text-sm font-bold text-primary mb-2">Offense</h3>
+          {renderStatRow(
+            "Total DPS",
+            ((stats?.weaponDPS || 0) + (stats?.missileDPS || 0)).toFixed(1),
+            "DPS",
+          )}
+          {renderStatRow(
+            "Alpha (Volley)",
+            (stats?.alphaDamage || 0).toFixed(1),
+            "Dmg",
+          )}
             {/* Damage Profile */}
             {stats?.damageProfile &&
               (stats.damageProfile.em > 0 ||
@@ -379,8 +377,7 @@ export function StatsPanel({ fitting }: StatsPanelProps) {
                   </div>
                 </div>
               )}
-          </div>
-        ) : null}
+        </div>
 
         {/* Mining */}
         {(stats?.miningRate || 0) > 0 ? (
