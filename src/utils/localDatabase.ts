@@ -522,20 +522,23 @@ export function getAllModules() {
         dogma.chargeGroup5
       ].filter(Boolean);
       
+      // If module has charge groups or charge size, find compatible charges
       if (moduleChargeGroups.length > 0 || dogma.chargeSize !== undefined) {
-        // Module accepts charges - find compatible ones
         allCharges.forEach(charge => {
-          // Check if charge group matches
-          const groupMatch = moduleChargeGroups.includes(charge.groupId);
-          // Check if charge size matches (0 means any size, or match specific size)
           const sizeMatch = dogma.chargeSize === undefined || 
                           dogma.chargeSize === 0 || 
                           dogma.chargeSize === charge.chargeSize;
+          const groupMatch = moduleChargeGroups.length === 0 || 
+                          moduleChargeGroups.includes(charge.groupId);
           
           if (groupMatch && sizeMatch) {
             compatibleCharges.push(charge);
           }
         });
+      } else if (slotType === 'high') {
+        // For high slot modules without explicit charge groups, 
+        // show all charges as potential options (user can filter)
+        compatibleCharges.push(...allCharges.slice(0, 50));
       }
       
       return {
